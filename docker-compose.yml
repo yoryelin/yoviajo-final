@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: yoviajo-db
+    environment:
+      - POSTGRES_USER=yoviajo
+      - POSTGRES_PASSWORD=yoviajorocks
+      - POSTGRES_DB=yoviajodb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Optional: allow local access for tools like DBeaver
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    container_name: yoviajo-backend
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql://yoviajo:yoviajorocks@db:5432/yoviajodb
+      - SECRET_KEY=dev_secret_key_change_in_production_9988776655
+      - ACCESS_TOKEN_EXPIRE_MINUTES=10080
+      - DEBUG=True
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: yoviajo-frontend
+    ports:
+      - "5173:80" # Map host 5173 to container 80 (nginx)
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
