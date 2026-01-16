@@ -7,7 +7,7 @@ export default function Login() {
   // Modos: 'login' | 'register' | 'select_role'
   const [viewMode, setViewMode] = useState('login')
 
-  const [formData, setFormData] = useState({ dni: '', password: '', name: '', role: 'P', email: '' })
+  const [formData, setFormData] = useState({ dni: '', password: '', name: '', role: 'P', email: '', gender: 'M' })
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -69,7 +69,7 @@ export default function Login() {
       }
 
       if (isRegister) {
-        payload = { ...payload, name: formData.name, role: formData.role, email: formData.email }
+        payload = { ...payload, name: formData.name, role: formData.role, email: formData.email, gender: formData.gender }
       }
 
       // Si forzamos un rol (caso login con múltiple elección)
@@ -122,7 +122,7 @@ export default function Login() {
         if (isRegister) {
           alert("¡Cuenta creada! Por favor inicia sesión.")
           setViewMode('login')
-          setFormData({ dni: formData.dni, password: '', name: '', role: 'P', email: '' })
+          setFormData({ dni: formData.dni, password: '', name: '', role: 'P', email: '', gender: 'M' })
           setLoading(false)
         } else {
           login(data.user, data.access_token)
@@ -232,82 +232,106 @@ export default function Login() {
                 />
               </div>
             </>
+            </>
           )}
 
-          {/* CAMPO DNI (Común) */}
+        {/* CAMPO GÉNERO (Solo Registro) */}
+        {viewMode === 'register' && (
           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-400 ml-1 uppercase">DNI</label>
-            <input
-              className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold tracking-widest"
-              type="number"
-              placeholder="Ej: 30123456"
-              value={formData.dni}
-              onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
-            />
-          </div>
-
-          {/* CAMPO PASSWORD (Común) */}
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Contraseña</label>
-            <input
-              className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold"
-              type="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            />
-          </div>
-
-          {/* SELECTOR DE ROL (Solo Registro) */}
-          {viewMode === 'register' && (
-            <div className="pt-2">
-              <label className="text-xs font-bold text-slate-400 ml-1 uppercase block mb-2">¿Cómo vas a participar?</label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: 'P' })}
-                  className={`p-3 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1 ${formData.role === 'P' ? 'border-pink-500 bg-pink-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
-                >
-                  <span className="text-xl">🙋‍♂️</span> Pasajero
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: 'C' })}
-                  className={`p-3 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1 ${formData.role === 'C' ? 'border-cyan-500 bg-cyan-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
-                >
-                  <span className="text-xl">🚗</span> Conductor
-                </button>
-              </div>
+            <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Género</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, gender: 'M' })}
+                className={`p-3 rounded-xl border-2 text-sm font-bold transition ${formData.gender === 'M' ? 'border-blue-500 bg-blue-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
+              >
+                Masculino
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, gender: 'F' })}
+                className={`p-3 rounded-xl border-2 text-sm font-bold transition ${formData.gender === 'F' ? 'border-pink-500 bg-pink-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
+              >
+                Femenino
+              </button>
             </div>
-          )}
+          </div>
+        )}
 
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center">
-              <p className="text-red-300 text-xs">{error}</p>
-            </div>
-          )}
-
-          <button
-            className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] mt-4 uppercase tracking-widest disabled:opacity-50"
-            disabled={loading}
-          >
-            {loading ? 'Procesando...' : (viewMode === 'register' ? 'Registrar Identidad' : 'Ingresar')}
-          </button>
-        </form>
-
-        <div className="mt-8 text-center pt-4 border-t border-slate-700/50">
-          <button
-            onClick={() => {
-              setViewMode(viewMode === 'login' ? 'register' : 'login');
-              setError(null);
-            }}
-            className="text-slate-400 text-sm font-bold hover:text-white transition"
-          >
-            {viewMode === 'login' ? '¿No tienes cuenta? Regístrate hoy' : '¿Ya tienes cuenta? Inicia sesión'}
-          </button>
+        {/* CAMPO DNI (Común) */}
+        <div className="space-y-1">
+          <label className="text-xs font-bold text-slate-400 ml-1 uppercase">DNI</label>
+          <input
+            className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold tracking-widest"
+            type="number"
+            placeholder="Ej: 30123456"
+            value={formData.dni}
+            onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
+          />
         </div>
 
+        {/* CAMPO PASSWORD (Común) */}
+        <div className="space-y-1">
+          <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Contraseña</label>
+          <input
+            className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold"
+            type="password"
+            placeholder="••••••••"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          />
+        </div>
+
+        {/* SELECTOR DE ROL (Solo Registro) */}
+        {viewMode === 'register' && (
+          <div className="pt-2">
+            <label className="text-xs font-bold text-slate-400 ml-1 uppercase block mb-2">¿Cómo vas a participar?</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, role: 'P' })}
+                className={`p-3 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1 ${formData.role === 'P' ? 'border-pink-500 bg-pink-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
+              >
+                <span className="text-xl">🙋‍♂️</span> Pasajero
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, role: 'C' })}
+                className={`p-3 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1 ${formData.role === 'C' ? 'border-cyan-500 bg-cyan-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
+              >
+                <span className="text-xl">🚗</span> Conductor
+              </button>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center">
+            <p className="text-red-300 text-xs">{error}</p>
+          </div>
+        )}
+
+        <button
+          className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] mt-4 uppercase tracking-widest disabled:opacity-50"
+          disabled={loading}
+        >
+          {loading ? 'Procesando...' : (viewMode === 'register' ? 'Registrar Identidad' : 'Ingresar')}
+        </button>
+      </form>
+
+      <div className="mt-8 text-center pt-4 border-t border-slate-700/50">
+        <button
+          onClick={() => {
+            setViewMode(viewMode === 'login' ? 'register' : 'login');
+            setError(null);
+          }}
+          className="text-slate-400 text-sm font-bold hover:text-white transition"
+        >
+          {viewMode === 'login' ? '¿No tienes cuenta? Regístrate hoy' : '¿Ya tienes cuenta? Inicia sesión'}
+        </button>
       </div>
+
     </div>
+    </div >
   )
 }
