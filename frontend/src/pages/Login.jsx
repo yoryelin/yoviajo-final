@@ -59,7 +59,7 @@ export default function Login() {
 
     try {
       const isRegister = viewMode === 'register'
-      const endpoint = isRegister ? '/register' : '/login'
+      const endpoint = isRegister ? '/api/register' : '/api/login'
       const url = `${API_URL}${endpoint}`
 
       // Payload base
