@@ -9,8 +9,14 @@ class RideBase(BaseModel):
     origin: str
     destination: str
     departure_time: str
-    price: int
+    price: float
     available_seats: int
+    
+    # Amenities
+    women_only: bool = False
+    allow_pets: bool = False
+    allow_smoking: bool = False
+    allow_luggage: bool = True
     origin_lat: Optional[float] = None
     origin_lng: Optional[float] = None
     destination_lat: Optional[float] = None
@@ -30,5 +36,4 @@ class RideResponse(RideBase):
     matches_count: int = 0 # Matches with active requests
 
     class Config:
-        from_attributes = True
 

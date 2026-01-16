@@ -20,6 +20,17 @@ class User(Base):
     cancellation_count = Column(Integer, default=0)
     reputation_score = Column(Integer, default=100)
 
+    # Trust & Safety
+    gender = Column(String, nullable=True) # M, F, O
+    is_verified = Column(Boolean, default=False)
+    verification_status = Column(String, default="unverified") # unverified, pending, verified, rejected
+    
+    # Driver Profile
+    car_model = Column(String, nullable=True)
+    car_plate = Column(String, nullable=True)
+    phone_verified = Column(Boolean, default=False)
+    email_verified = Column(Boolean, default=False)
+
     rides_offered = relationship("Ride", back_populates="driver")
     rides_requested = relationship("RideRequest", back_populates="passenger")
     bookings = relationship("Booking", back_populates="passenger")

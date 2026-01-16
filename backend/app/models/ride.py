@@ -15,8 +15,13 @@ class Ride(Base):
     departure_time = Column(String)
     price = Column(Integer)
     available_seats = Column(Integer)
-    status = Column(String, default="active") # active, cancelled
+    status = Column(String, default="active") # active, cancelled, completed
     
+    # Filters & Amenities
+    women_only = Column(Boolean, default=False)
+    allow_pets = Column(Boolean, default=False)
+    allow_smoking = Column(Boolean, default=False)
+    allow_luggage = Column(Boolean, default=True)   
     # Geolocalización - coordenadas opcionales
     origin_lat = Column(Float, nullable=True)
     origin_lng = Column(Float, nullable=True)

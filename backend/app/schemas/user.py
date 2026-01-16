@@ -14,6 +14,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     dni: str
     password: str
+    gender: str = "O" # Default to Other if not specified, or force frontend to send it
     role: str = "user"
 
     @field_validator('dni')
@@ -46,7 +47,15 @@ class UserResponse(UserBase):
     role: str
     is_active: bool
     cancellation_count: int = 0
+    cancellation_count: int = 0
     reputation_score: int = 100
+    
+    # New Fields
+    gender: str | None = None
+    is_verified: bool = False
+    verification_status: str = "unverified"
+    car_model: str | None = None
+    car_plate: str | None = None
 
     class Config:
         from_attributes = True

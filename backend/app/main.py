@@ -44,6 +44,9 @@ app.include_router(bookings.router)
 app.include_router(reports.router)
 app.include_router(geocode.router)
 
+from app.api.routes import debug
+app.include_router(debug.router)
+
 
 @app.get("/")
 def read_root():

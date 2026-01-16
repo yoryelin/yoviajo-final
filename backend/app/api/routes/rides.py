@@ -17,14 +17,40 @@ router = APIRouter(prefix="/api/rides", tags=["rides"])
 
 
 @router.get("/", response_model=List[RideResponse])
-def get_rides(db: Session = Depends(get_db)):
+def get_rides(
+    women_only: bool = False,
+    allow_pets: bool = False,
+    allow_smoking: bool = False,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user) # Now we need user to filter women_only safety
+):
     """
     Obtener todas las ofertas de viajes activas.
+    Soporta filtros por atributos de confianza.
     """
-    rides = db.query(Ride).all()
+    query = db.query(Ride)
+    
+    # 1. Filtros básicos
+    if women_only:
+        query = query.filter(Ride.women_only == True)
+    if allow_pets:
+        query = query.filter(Ride.allow_pets == True)
+    if allow_smoking:
+        query = query.filter(Ride.allow_smoking == True)
+
+    # 2. Safety Filter (Women Only)
+    # Si el usuario es Hombre, NO puede ver viajes 'Solo Mujeres'
+    # Si el usuario es Mujer, puede ver todo (o filtrar si quiere)
+    if current_user.gender == 'M':
+         # Excluir explícitamente los viajes de solo mujeres
+         query = query.filter(Ride.women_only == False)
+
+    rides = query.all()
+    
     result = []
     for ride in rides:
         ride_dict = RideResponse.from_orm(ride).dict()
+        # ... (rest of mapper) ...
         ride_dict['maps_url'] = utils.generate_google_maps_url(
             ride.origin,
             ride.destination,
@@ -69,13 +95,18 @@ def create_ride(
         raise HTTPException(status_code=400, detail="Solo se pueden publicar viajes dentro de las próximas 72 horas")
 
     ride_data = ride.dict()
+    
+    # Asegurar que solo conductoras mujeres puedan activar 'women_only'
+    if ride_data.get('women_only') and current_user.gender != 'F':
+         raise HTTPException(status_code=400, detail="Solo conductoras mujeres pueden crear viajes exclusivos para mujeres")
+
     new_ride = Ride(**ride_data, driver_id=current_user.id, status="active")
     db.add(new_ride)
     db.commit()
     db.refresh(new_ride)
     
     # AUDIT LOG
-    utils.log_audit(db, "RIDE_CREATED", {"ride_id": new_ride.id, "origin": new_ride.origin, "destination": new_ride.destination}, current_user.id)
+    utils.log_audit(db, "RIDE_CREATED", {"ride_id": new_ride.id, "origin": new_ride.origin, "women_only": new_ride.women_only}, current_user.id)
     
     # Agregar enlace de Maps a la respuesta
     result = RideResponse.from_orm(new_ride).dict()
