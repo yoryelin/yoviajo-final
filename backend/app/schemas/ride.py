@@ -36,4 +36,5 @@ class RideResponse(RideBase):
     matches_count: int = 0 # Matches with active requests
 
     class Config:
+        from_attributes = True
 
