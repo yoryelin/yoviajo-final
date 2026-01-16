@@ -29,7 +29,39 @@ def get_rides(
     Soporta filtros por atributos de confianza.
     """
     query = db.query(Ride)
-    # ... existing implementation ...
+    
+    # 1. Filtros básicos
+    if women_only:
+        query = query.filter(Ride.women_only == True)
+    if allow_pets:
+        query = query.filter(Ride.allow_pets == True)
+    if allow_smoking:
+        query = query.filter(Ride.allow_smoking == True)
+
+    # 2. Safety Filter (Women Only)
+    # Si el usuario es Hombre, NO puede ver viajes 'Solo Mujeres'
+    if current_user.gender == 'M':
+         query = query.filter(Ride.women_only == False)
+
+    rides = query.all()
+    
+    result = []
+    for ride in rides:
+        ride_dict = RideResponse.from_orm(ride).dict()
+        ride_dict['maps_url'] = utils.generate_google_maps_url(
+            ride.origin,
+            ride.destination,
+            ride.origin_lat,
+            ride.origin_lng,
+            ride.destination_lat,
+            ride.destination_lng
+
+        )
+        # Calcular reservas activas
+        active_bookings = [b for b in ride.bookings if b.status != BookingStatus.CANCELLED.value]
+        ride_dict['bookings_count'] = len(active_bookings)
+        result.append(ride_dict)
+    return result
 
 @router.post("", response_model=RideResponse)
 def create_ride(
