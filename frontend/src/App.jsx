@@ -3,6 +3,7 @@ import Layout from './layouts/Layout'
 import Dashboard from './pages/Dashboard'
 import MyTrips from './pages/MyTrips'
 import Login from './pages/Login'
+import Landing from './pages/Landing'
 import { useAuth } from './context/AuthContext'
 
 export default function App() {
