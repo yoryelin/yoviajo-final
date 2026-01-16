@@ -59,8 +59,16 @@ export default function Login() {
 
     try {
       const isRegister = viewMode === 'register'
-      const endpoint = isRegister ? '/api/register' : '/api/login'
-      const url = `${API_URL}${endpoint}`
+      const isRegister = viewMode === 'register'
+
+      // Normalizar URL base
+      const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
+      const API_BASE = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
+
+      // Endpoints (ya tienen /api en el backend router prefix, pero verifiquemos)
+      // Si API_BASE ya es ".../api", entonces endpoints deben ser "/register"
+      const endpoint = isRegister ? '/register' : '/login'
+      const url = `${API_BASE}${endpoint}`
 
       // Payload base
       let payload = {
