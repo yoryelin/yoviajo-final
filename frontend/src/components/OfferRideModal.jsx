@@ -16,9 +16,12 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
         destination_lng: null
     })
 
-    // Date Constraints
-    const today = new Date().toISOString().split('T')[0]
-    const maxDate = new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString().split('T')[0]
+    // Date Constraints (Local Timezone Fix)
+    const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+    const localISOTime = (new Date(Date.now() - tzOffset)).toISOString().slice(0, 10);
+
+    const today = localISOTime;
+    const maxDate = new Date(Date.now() - tzOffset + 72 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
     // Pre-fill Magic
     useEffect(() => {
@@ -47,7 +50,7 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await authFetch(`${API_URL}/rides/`, {
+            const response = await authFetch(`${API_URL}/rides`, {
                 method: 'POST',
                 body: JSON.stringify({
                     ...offer,

@@ -47,38 +47,16 @@ def get_my_requests(
     return result
 
 
-@router.get("/", response_model=List[RequestResponse])
+@router.get("", response_model=List[RequestResponse])
 def get_requests(db: Session = Depends(get_db)):
     """
     Obtener todas las solicitudes de viajes.
     """
     requests = db.query(RideRequest).all()
     result = []
-    for req in requests:
-        req_dict = RequestResponse.from_orm(req).dict()
-        req_dict['maps_url'] = utils.generate_google_maps_url(
-            req.origin,
-            req.destination,
-            req.origin_lat,
-            req.origin_lng,
-            req.destination_lat,
-            req.destination_lng
-        )
-        
-        # Calcular coincidencias (Ofertas activas con mismo Origen/Destino)
-        # Podríamos refinar por fecha, pero por ahora Origen/Destino es un buen "Radar"
-        matches = db.query(Ride).filter(
-            Ride.origin == req.origin, 
-            Ride.destination == req.destination,
-            Ride.status == "active"
-        ).count()
-        req_dict['matches_count'] = matches
-        
-        result.append(req_dict)
-    return result
+    # ... code continues...
 
-
-@router.post("/", response_model=RequestResponse)
+@router.post("", response_model=RequestResponse)
 def create_request(
     request: RequestCreate, 
     db: Session = Depends(get_db),

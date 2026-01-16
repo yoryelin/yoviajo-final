@@ -15,9 +15,12 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
         destination_lng: null
     })
 
-    // Date Constraints
-    const today = new Date().toISOString().split('T')[0]
-    const maxDate = new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString().split('T')[0]
+    // Date Constraints (Local Timezone Fix)
+    const tzOffset = (new Date()).getTimezoneOffset() * 60000; // offset in milliseconds
+    const localISOTime = (new Date(Date.now() - tzOffset)).toISOString().slice(0, 10);
+
+    const today = localISOTime;
+    const maxDate = new Date(Date.now() - tzOffset + 72 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
     // Handlers
     const handleChange = (e) => setReqData({ ...reqData, [e.target.name]: e.target.value })
@@ -25,7 +28,7 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await authFetch(`${API_URL}/requests/`, {
+            const response = await authFetch(`${API_URL}/requests`, {
                 method: 'POST',
                 body: JSON.stringify({
                     ...reqData,
