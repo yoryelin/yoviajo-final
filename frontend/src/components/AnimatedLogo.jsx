@@ -16,17 +16,19 @@ export default function AnimatedLogo({ size = "text-5xl" }) {
         })
     };
 
-    // Configuración del Pin (caída)
+    // Configuración del Pin (caída dramática)
     const pinVariant = {
-        hidden: { y: -50, opacity: 0 },
+        hidden: { y: -200, opacity: 0, scale: 2 }, // Empieza muy arriba y grande
         visible: {
             y: 0,
             opacity: 1,
+            scale: 1,
             transition: {
                 type: "spring",
-                stiffness: 200,
-                damping: 10,
-                delay: 1.5 // Cae después de la primera ola
+                stiffness: 300, // Más rebote
+                damping: 15,
+                mass: 1.5,
+                delay: 1.2 // Sincronizado mejor con el texto
             }
         }
     };
@@ -45,7 +47,7 @@ export default function AnimatedLogo({ size = "text-5xl" }) {
                         initial="hidden"
                         animate="visible"
                         className={`inline-block origin-bottom ${index < 2 ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500" : // Yo
-                                "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-500" // Viajo
+                            "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-500" // Viajo
                             }`}
                     >
                         {char}
