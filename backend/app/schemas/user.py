@@ -47,7 +47,7 @@ class UserResponse(UserBase):
     role: str
     is_active: bool
     cancellation_count: int = 0
-    cancellation_count: int = 0
+
     reputation_score: int = 100
     
     # New Fields
