@@ -25,7 +25,7 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await authFetch(`${API_URL}/requests`, {
+            const response = await authFetch(`${API_URL}/requests/`, {
                 method: 'POST',
                 body: JSON.stringify({
                     ...reqData,
