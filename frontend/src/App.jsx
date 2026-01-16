@@ -17,15 +17,38 @@ export default function App() {
     )
   }
 
-  // Si no hay usuario, mostrar Login (Landing)
-  if (!user) {
-    return <Login />
-  }
-
-  // Si hay usuario, mostrar Dashboard dentro del Layout
   return (
-    <Layout>
-      <Dashboard />
-    </Layout>
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={!user ? <Landing /> : <Navigate to="/dashboard" />} />
+      <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+      <Route path="/register" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+
+      {/* Private Routes */}
+      <Route
+        path="/dashboard"
+        element={
+          user ? (
+            <Layout>
+              <Dashboard />
+            </Layout>
+          ) : <Navigate to="/login" />
+        }
+      />
+
+      <Route
+        path="/my-trips"
+        element={
+          user ? (
+            <Layout>
+              <MyTrips />
+            </Layout>
+          ) : <Navigate to="/login" />
+        }
+      />
+
+      {/* Catch-all Redirect */}
+      <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} />} />
+    </Routes>
   )
 }
