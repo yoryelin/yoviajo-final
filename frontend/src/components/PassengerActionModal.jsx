@@ -19,7 +19,7 @@ export default function PassengerActionModal({ isOpen, onClose, actionType, book
         const diffHours = (departure - now) / (1000 * 60 * 60)
 
         return {
-            isPenalty: diffHours < 6 && diffHours > 0, // Penalty if < 6h (and not past)
+            isPenalty: diffHours < 24 && diffHours > 0, // Penalty if < 24h (and not past)
             hours: diffHours
         }
     }
@@ -57,8 +57,8 @@ export default function PassengerActionModal({ isOpen, onClose, actionType, book
                                     </h4>
                                     <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                                         {isPenalty
-                                            ? 'Faltan menos de 6 horas para el viaje. Si cancelas ahora, se te descontarán 5 puntos de reputación.'
-                                            : 'Faltan más de 6 horas. Puedes cancelar gratuitamente sin afectar tu reputación.'
+                                            ? 'Faltan menos de 24 horas para el viaje. Si cancelas ahora, se te descontarán 20 puntos de reputación.'
+                                            : 'Faltan más de 24 horas. Puedes cancelar gratuitamente sin afectar tu reputación.'
                                         }
                                     </p>
                                 </div>
@@ -94,8 +94,8 @@ export default function PassengerActionModal({ isOpen, onClose, actionType, book
                     <button
                         onClick={handleConfirm}
                         className={`flex-1 py-3 rounded-xl font-bold text-white text-sm shadow-lg transition-all active:scale-95 ${isCancel
-                                ? 'bg-red-600 hover:bg-red-500 shadow-red-900/20'
-                                : 'bg-orange-600 hover:bg-orange-500 shadow-orange-900/20'
+                            ? 'bg-red-600 hover:bg-red-500 shadow-red-900/20'
+                            : 'bg-orange-600 hover:bg-orange-500 shadow-orange-900/20'
                             }`}
                     >
                         {isCancel ? (isPenalty ? 'Aceptar Penalización' : 'Confirmar Cancelación') : 'Enviar Reporte'}

@@ -263,68 +263,8 @@ export default function Login() {
             </div>
           )}
 
-          {/* CAMPOS ESPECÍFICOS DE CONDUCTOR (PREFERENCIAS Y AUTO) */}
-          {viewMode === 'register' && formData.role === 'C' && (
-            <div className="border border-cyan-500/30 bg-cyan-900/10 rounded-xl p-4 space-y-3 animate-fade-in">
-              <h3 className="text-sm font-black text-cyan-400 uppercase tracking-widest border-b border-cyan-500/20 pb-2 mb-2">
-                🚙 Datos del Vehículo
-              </h3>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Marca y Modelo</label>
-                  <input className="input-field text-xs" list="car_models" placeholder="Ej: Fiat Cronos" value={formData.car_model} onChange={(e) => setFormData({ ...formData, car_model: e.target.value })} />
-                  <datalist id="car_models">
-                    <option value="Fiat Cronos" />
-                    <option value="Peugeot 208" />
-                    <option value="Toyota Hilux" />
-                    <option value="Volkswagen Amarok" />
-                    <option value="Ford Ranger" />
-                    <option value="Renault Kangoo" />
-                    <option value="Chevrolet Tracker" />
-                    <option value="Volkswagen Gol Trend" />
-                    <option value="Toyota Etios" />
-                    <option value="Renault Sandero" />
-                  </datalist>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Patente</label>
-                  <input className="input-field text-xs uppercase" placeholder="AA 123 BB" value={formData.car_plate} onChange={(e) => setFormData({ ...formData, car_plate: e.target.value.toUpperCase() })} />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase">Color</label>
-                <input className="input-field text-xs" placeholder="Ej: Blanco" value={formData.car_color} onChange={(e) => setFormData({ ...formData, car_color: e.target.value })} />
-              </div>
-
-              <div className="flex justify-between items-center py-2 border-t border-cyan-500/10">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.prefs_smoking} onChange={(e) => setFormData({ ...formData, prefs_smoking: e.target.checked })} className="accent-cyan-500" />
-                  <span className="text-xs text-slate-300">🚬 Fuma</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.prefs_pets} onChange={(e) => setFormData({ ...formData, prefs_pets: e.target.checked })} className="accent-cyan-500" />
-                  <span className="text-xs text-slate-300">🐾 Mascotas</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.prefs_luggage} onChange={(e) => setFormData({ ...formData, prefs_luggage: e.target.checked })} className="accent-cyan-500" />
-                  <span className="text-xs text-slate-300">🧳 Baúl</span>
-                </label>
-              </div>
-
-              <div className="space-y-2 pt-2 border-t border-cyan-500/10">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.check_license} onChange={(e) => setFormData({ ...formData, check_license: e.target.checked })} className="accent-green-500 w-4 h-4" />
-                  <span className="text-[10px] font-bold text-green-400 uppercase"> Licencia Vigente</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.check_insurance} onChange={(e) => setFormData({ ...formData, check_insurance: e.target.checked })} className="accent-green-500 w-4 h-4" />
-                  <span className="text-[10px] font-bold text-green-400 uppercase"> Seguro al Día</span>
-                </label>
-              </div>
-            </div>
-          )}
+          {/* CAMPOS DE CONDUCTOR (Eliminados de Registro Inicial - Se completan en Perfil) */}
+          {/* Driver fields removed */}
 
           {/* CAMPO DNI (Común) */}
           <div className="space-y-1">
@@ -350,28 +290,8 @@ export default function Login() {
             />
           </div>
 
-          {/* SELECTOR DE ROL (Solo Registro) */}
-          {viewMode === 'register' && (
-            <div className="pt-2">
-              <label className="text-xs font-bold text-slate-400 ml-1 uppercase block mb-2">¿Cómo vas a participar?</label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: 'P' })}
-                  className={`p-3 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1 ${formData.role === 'P' ? 'border-pink-500 bg-pink-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
-                >
-                  <span className="text-xl">🙋‍♂️</span> Pasajero
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: 'C' })}
-                  className={`p-3 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1 ${formData.role === 'C' ? 'border-cyan-500 bg-cyan-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
-                >
-                  <span className="text-xl">🚗</span> Conductor
-                </button>
-              </div>
-            </div>
-          )}
+          {/* SELECTOR DE ROL (Eliminado para Single Account - Todos inician como Pasajeros) */}
+          {/* Default role is 'P' in formData state */}
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center">

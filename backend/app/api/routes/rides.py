@@ -145,8 +145,8 @@ def cancel_ride(
     Esto cancelará todas las reservas asociadas.
     
     Regla de Negocio:
-    - Si faltan MENOS de 6 horas: Penalización completa (Reputación -10).
-    - Si faltan MÁS de 6 horas: Sin penalización.
+    - Si faltan MENOS de 24 horas: Penalización SEVERA (Reputación -20).
+    - Si faltan MÁS de 24 horas: Sin penalización.
     """
     ride = db.query(Ride).filter(Ride.id == ride_id).first()
     if not ride:
@@ -179,14 +179,14 @@ def cancel_ride(
         # Fallback safe (asumir penalización si la fecha está corrupta? o no? Mejor proteger al usuario)
         curr_departure_dt = datetime.now() # Esto haría que is_within sea True siempre si es pasado o muy cercano
     
-    is_penalty_time = utils.is_within_penalty_window(curr_departure_dt, hours=6)
+    is_penalty_time = utils.is_within_penalty_window(curr_departure_dt, hours=24)
 
     # Aplicar penalización si había reservas afectadas Y estamos en ventana de castigo
     penalty_applied = False
     new_reputation = current_user.reputation_score
     
     if count_affected > 0 and is_penalty_time:
-        new_reputation = utils.apply_reputation_penalty(current_user, 10)
+        new_reputation = utils.apply_reputation_penalty(current_user, 20)
         penalty_applied = True
         
     db.commit()

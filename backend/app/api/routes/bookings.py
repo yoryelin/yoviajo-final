@@ -248,8 +248,8 @@ def update_booking(
                 logger.error(f"Error parsing date: {e}")
                 dep_dt = datetime.now() # Fallback safe
             
-            if utils.is_within_penalty_window(dep_dt, hours=6):
-                utils.apply_reputation_penalty(current_user, 5)
+            if utils.is_within_penalty_window(dep_dt, hours=24):
+                utils.apply_reputation_penalty(current_user, 20)
                 penalty_applied = True
         
         booking.status = booking_update.status
