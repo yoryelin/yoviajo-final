@@ -123,6 +123,9 @@ export default function Dashboard() {
             <style>{styles}</style>
 
             {/* SEARCH BAR */}
+            {/* SEARCH BAR */}
+
+
             <div className="mb-8 p-4 bg-slate-900/50 rounded-2xl border border-slate-800 flex flex-col md:flex-row gap-4 items-center">
                 <div className="flex-1 w-full">
                     <CityAutocomplete

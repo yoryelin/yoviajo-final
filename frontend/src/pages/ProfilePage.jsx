@@ -294,16 +294,18 @@ export default function ProfilePage() {
                                     </div>
                                     <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
                                 </button>
-                                <button className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group">
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-2xl opacity-50 group-hover:opacity-100">🚙</span>
-                                        <div className="text-left">
-                                            <p className="font-bold text-white">Licencia de Conducir</p>
-                                            <p className="text-xs text-slate-500">Pendiente de carga</p>
+                                {isDriver && (
+                                    <button className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-2xl opacity-50 group-hover:opacity-100">🚙</span>
+                                            <div className="text-left">
+                                                <p className="font-bold text-white">Licencia de Conducir</p>
+                                                <p className="text-xs text-slate-500">Pendiente de carga</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
-                                </button>
+                                        <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
+                                    </button>
+                                )}
                             </div>
 
                             <button
