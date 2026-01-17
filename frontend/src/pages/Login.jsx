@@ -81,12 +81,15 @@ export default function Login() {
     try {
       const isRegister = viewMode === 'register'
 
-      // Normalizar URL base
-      const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
-      const API_BASE = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
+      // Normalizar URL base de forma robusta
+      let raw = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003').trim();
+      // Eliminar slash final si existe
+      if (raw.endsWith('/')) {
+        raw = raw.slice(0, -1);
+      }
+      // Verificar si ya incluye /api
+      const API_BASE = raw.endsWith('/api') ? raw : `${raw}/api`;
 
-      // Endpoints (ya tienen /api en el backend router prefix, pero verifiquemos)
-      // Si API_BASE ya es ".../api", entonces endpoints deben ser "/register"
       const endpoint = isRegister ? '/register' : '/login'
       const url = `${API_BASE}${endpoint}`
 
