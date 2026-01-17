@@ -15,8 +15,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./yoviajo.db")
     
     # Security
-    # CRITICAL: No default value here. Must be loaded from env.
-    SECRET_KEY: str 
+    # WARNING: This default is for dev/demo only. In prod, override with env var.
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "fallback_secret_key_for_demo_only_12345") 
     
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080 # 7 días
