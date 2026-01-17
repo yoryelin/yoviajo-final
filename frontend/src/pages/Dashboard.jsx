@@ -7,7 +7,8 @@ import CityAutocomplete from '../components/CityAutocomplete'
 import ReserveRideModal from '../components/ReserveRideModal'
 
 export default function Dashboard() {
-    const { user } = useAuth()
+    const { user, authFetch } = useAuth() // Restored authFetch
+    const isDriver = user?.role === 'C' // Restored isDriver check
 
     // Normalizar URL: asegurar que termine en /api
     const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
@@ -17,18 +18,56 @@ export default function Dashboard() {
     const [rides, setRides] = useState([])
     const [requests, setRequests] = useState([])
 
+    // Search State
+    const [searchFrom, setSearchFrom] = useState('')
+    const [searchTo, setSearchTo] = useState('')
+    const [searchDate, setSearchDate] = useState('')
+
     // UI State
     const [activeTab, setActiveTab] = useState('rides') // 'rides' | 'requests'
 
     // Modals
     const [showOfferModal, setShowOfferModal] = useState(false)
-    const [selectedRideForEdit, setSelectedRideForEdit] = useState(null) // NEW: For managing
+    const [selectedRideForEdit, setSelectedRideForEdit] = useState(null)
     const [showRequestModal, setShowRequestModal] = useState(false)
     const [showReserveModal, setShowReserveModal] = useState(false)
     const [selectedRideForReservation, setSelectedRideForReservation] = useState(null)
     const [loading, setLoading] = useState(false)
 
-    // ... (rest of search filters) ...
+    useEffect(() => {
+        fetchData()
+    }, [user])
+
+    const fetchData = async () => {
+        setLoading(true)
+        try {
+            // Fetch Rides
+            const resRides = await authFetch(`${API_URL}/rides`)
+            if (resRides.ok) setRides(await resRides.json())
+
+            // Fetch Requests (if needed, or logic to separate)
+            const resRequests = await authFetch(`${API_URL}/requests`)
+            if (resRequests.ok) setRequests(await resRequests.json())
+        } catch (error) {
+            console.error("Error fetching dashboard data:", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // Filter Logic
+    const filteredRides = rides.filter(ride => {
+        if (searchFrom && !ride.origin.toLowerCase().includes(searchFrom.toLowerCase())) return false
+        if (searchTo && !ride.destination.toLowerCase().includes(searchTo.toLowerCase())) return false
+        if (searchDate && ride.departure_time && !ride.departure_time.startsWith(searchDate)) return false
+        return true
+    })
+
+    const filteredRequests = requests.filter(req => {
+        if (searchFrom && !req.origin.toLowerCase().includes(searchFrom.toLowerCase())) return false
+        if (searchTo && !req.destination.toLowerCase().includes(searchTo.toLowerCase())) return false
+        return true
+    })
 
     // Handle Manage (Driver)
     const handleManageRide = (rideData) => {
@@ -41,8 +80,6 @@ export default function Dashboard() {
         setSelectedRideForReservation(rideData)
         setShowReserveModal(true)
     }
-
-    // ... (useEffect and styles) ...
 
     return (
         <>
