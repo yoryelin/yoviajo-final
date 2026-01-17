@@ -66,7 +66,7 @@ const Layout = ({ children }) => {
                                 <button
                                     onClick={() => {
                                         logout()
-                                        navigate('/')
+                                        window.location.href = '/'
                                     }}
                                     className="ml-2 px-3 py-1 text-[10px] font-bold text-slate-400 hover:text-red-400 transition uppercase tracking-wider"
                                 >
