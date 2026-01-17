@@ -29,10 +29,14 @@ export default function Dashboard() {
 
     // Search Filters
     const [searchTerm, setSearchTerm] = useState({ origin: '', destination: '' })
+    const [womenOnlyFilter, setWomenOnlyFilter] = useState(false)
 
     // Detectar Rol Activo
     const userRole = user?.role
     const isDriver = userRole === 'C'
+
+    // Safety: Solo ver toggle si es Mujer
+    const isFemale = user?.gender === 'F'
 
     // Función para hacer fetch autenticado
     const authFetch = async (url, options = {}) => {
@@ -51,7 +55,14 @@ export default function Dashboard() {
         setLoading(true)
         try {
             // Public Feeds
-            const resRides = await authFetch(`${API_URL}/rides/`)
+            // Construir Query Params
+            let rideUrl = `${API_URL}/rides/`
+            const params = new URLSearchParams()
+            if (womenOnlyFilter) params.append('women_only', 'true')
+
+            if (params.toString()) rideUrl += `?${params.toString()}`
+
+            const resRides = await authFetch(rideUrl)
             if (resRides.ok) setRides(await resRides.json())
 
             const resRequests = await authFetch(`${API_URL}/requests/`)
@@ -63,6 +74,7 @@ export default function Dashboard() {
         }
     }
 
+    // ... (Filter Logic remains same)
     // Filter Logic
     const filterList = (list) => {
         return list.filter(item => {
@@ -86,7 +98,7 @@ export default function Dashboard() {
         if (user) {
             fetchData()
         }
-    }, [user])
+    }, [user, womenOnlyFilter]) // Refetch on filter change
 
     // --- ANIMACIONES CSS (Inyectadas) ---
     const styles = `
@@ -111,8 +123,8 @@ export default function Dashboard() {
             <style>{styles}</style>
 
             {/* SEARCH BAR */}
-            <div className="mb-8 p-4 bg-slate-900/50 rounded-2xl border border-slate-800 flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
+            <div className="mb-8 p-4 bg-slate-900/50 rounded-2xl border border-slate-800 flex flex-col md:flex-row gap-4 items-center">
+                <div className="flex-1 w-full">
                     <CityAutocomplete
                         label="Filtrar Origen"
                         placeholder="Ej: Mar del Plata"
@@ -120,7 +132,7 @@ export default function Dashboard() {
                         onChange={(val) => setSearchTerm({ ...searchTerm, origin: val })}
                     />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 w-full">
                     <CityAutocomplete
                         label="Filtrar Destino"
                         placeholder="Ej: Necochea"
@@ -128,6 +140,22 @@ export default function Dashboard() {
                         onChange={(val) => setSearchTerm({ ...searchTerm, destination: val })}
                     />
                 </div>
+
+                {/* Women Only Toggle (Safety) */}
+                {isFemale && activeTab === 'rides' && (
+                    <div className="flex items-center gap-2 bg-pink-900/20 border border-pink-500/30 px-4 py-2 rounded-xl h-[42px] mt-6 md:mt-0">
+                        <input
+                            type="checkbox"
+                            id="womenOnly"
+                            checked={womenOnlyFilter}
+                            onChange={(e) => setWomenOnlyFilter(e.target.checked)}
+                            className="w-5 h-5 accent-pink-500 cursor-pointer"
+                        />
+                        <label htmlFor="womenOnly" className="text-pink-200 font-bold text-xs uppercase cursor-pointer select-none">
+                            Solo Conductoras 🌸
+                        </label>
+                    </div>
+                )}
             </div>
 
             {/* TABS (Simplified) */}

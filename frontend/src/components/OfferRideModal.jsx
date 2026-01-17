@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import CityAutocomplete from './CityAutocomplete'
-
+import { useAuth } from '../context/AuthContext'
 
 const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initialData }) => {
+    const { user } = useAuth()
+    const userIsFemale = user?.gender === 'F'
+
     const [offer, setOffer] = useState({
         origin: '',
         destination: '',
@@ -154,22 +157,11 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Distancia (km)</label>
                                 <input
                                     className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-cyan-500 outline-none text-white transition placeholder-slate-600"
-                                    name="price" // Reusing price field temporarily for distance storage or need new state
-                                    // Better to use a new state or just repurpose price as logic
+                                    name="price"
                                     onChange={(e) => {
                                         const dist = parseFloat(e.target.value);
-                                        const totalLiters = dist / 10; // 10km/L
-                                        const seats = 4; // Default for calculation
-                                        // Logic: Total Liters / (Seats + 1 Driver) ??? No, T&C says "Occupants".
-                                        // User scenario: "1 Driver + X Passengers".
-                                        // Let's assume standard '4 passengers + 1 driver' capacity for specific share?
-                                        // Or just let Driver set "Price per Seat" in Liters manually based on T&C suggestion?
-                                        // T&C 1.2 says: "Platform calculates".
-                                        // Let's implement: Input KM -> System shows "Total Liters: X".
-                                        // System calculates Per Seat (Share) assuming full car (e.g. 4 pax)?
-                                        // Let's stick to the prompt: Input Dist -> Calc Liters.
-                                        const litersPerSeat = (totalLiters / 4).toFixed(1); // Rough estimate
-                                        setOffer({ ...offer, distance: dist, fuel_liters: totalLiters, price: (dist * 175) }); // ~175 ARS/km = (1750/10)
+                                        const totalLiters = dist / 10;
+                                        setOffer({ ...offer, distance: dist, fuel_liters: totalLiters, price: (dist * 175) });
                                     }}
                                     placeholder="Ej: 400"
                                     required
@@ -190,6 +182,30 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                                 </div>
                             </div>
                         </div>
+
+                        {/* WOMEN ONLY TOGGLE */}
+                        {userIsFemale && (
+                            <div className="bg-pink-900/10 border border-pink-500/20 rounded-xl p-3 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-pink-500/20 p-2 rounded-lg">
+                                        🌸
+                                    </div>
+                                    <div>
+                                        <p className="text-pink-200 text-xs font-bold uppercase">Solo Mujeres</p>
+                                        <p className="text-[10px] text-pink-400/70">Viaje exclusivo para pasajeras</p>
+                                    </div>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={offer.women_only || false}
+                                        onChange={(e) => setOffer({ ...offer, women_only: e.target.checked })}
+                                    />
+                                    <div className="w-11 h-6 bg-slate-800 border border-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 peer-checked:border-pink-500"></div>
+                                </label>
+                            </div>
+                        )}
 
                         <button className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] text-sm uppercase tracking-widest mt-2">
                             CONFIRMAR PUBLICACIÓN

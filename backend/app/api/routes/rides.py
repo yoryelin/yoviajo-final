@@ -31,17 +31,33 @@ def get_rides(
     query = db.query(Ride)
     
     # 1. Filtros básicos
-    if women_only:
-        query = query.filter(Ride.women_only == True)
     if allow_pets:
         query = query.filter(Ride.allow_pets == True)
     if allow_smoking:
         query = query.filter(Ride.allow_smoking == True)
 
-    # 2. Safety Filter (Women Only)
-    # Si el usuario es Hombre, NO puede ver viajes 'Solo Mujeres'
+    # 2. Women Only Logic (Bidirectional Safe Space)
+    
+    # A) Safety Rule: Hombres NUNCA ven viajes marcados como 'women_only'
     if current_user.gender == 'M':
          query = query.filter(Ride.women_only == False)
+         # Si un hombre intenta forzar el filtro, lo ignoramos o retornamos vacío
+         if women_only:
+             return []
+
+    # B) Search Filter: Pasajera busca "Solo Conductoras" o Viajes Seguros
+    if women_only:
+        if current_user.gender != 'F':
+            # Protección extra: Solo mujeres pueden activar este filtro activamente
+             raise HTTPException(status_code=400, detail="El filtro 'Solo Mujeres' es exclusivo para usuarias.")
+        
+        # Filtrar: 
+        # 1. Viajes marcados como women_only=True (Exclusivos)
+        # OR
+        # 2. Viajes donde la conductora es Mujer (aunque sea abierto)
+        # La consigna dice: "viajar solo con un conductor mujer".
+        # Así que filtramos por género del conductor.
+        query = query.join(User, Ride.driver_id == User.id).filter(User.gender == 'F')
 
     rides = query.all()
     

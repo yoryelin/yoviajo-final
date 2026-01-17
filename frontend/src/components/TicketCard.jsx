@@ -104,14 +104,30 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
             <span className="text-slate-600 text-sm">➜</span>
             {data.destination}
           </h4>
-          <div className="mt-1 inline-flex items-center gap-2 bg-slate-950/50 px-2 py-1 rounded border border-slate-800">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">📅 {displayDate}</span>
-          </div>
-          {displayTime && (
-            <div className="mt-1 ml-2 inline-flex items-center gap-2 bg-slate-950/50 px-2 py-1 rounded border border-slate-800">
-              <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">⏰ {displayTime}</span>
+
+          {/* BADGES ROW */}
+          <div className="flex flex-wrap gap-2 mt-2">
+            {/* Date Badge */}
+            <div className="inline-flex items-center gap-2 bg-slate-950/50 px-2 py-1 rounded border border-slate-800">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">📅 {displayDate}</span>
             </div>
-          )}
+
+            {/* Time Badge */}
+            {displayTime && (
+              <div className="inline-flex items-center gap-2 bg-slate-950/50 px-2 py-1 rounded border border-slate-800">
+                <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">⏰ {displayTime}</span>
+              </div>
+            )}
+
+            {/* Women Only Badge (Safety) */}
+            {data.women_only && (
+              <div className="inline-flex items-center gap-1 bg-pink-900/40 px-2 py-1 rounded border border-pink-500/30">
+                <span className="text-xs">🌸</span>
+                <span className="text-[9px] font-black text-pink-300 uppercase tracking-widest">Solo Ellas</span>
+              </div>
+            )}
+          </div>
+
           {data.departure_time && (
             <div className="mt-2">
               <CountdownTimer targetDate={data.departure_time} />
@@ -151,9 +167,21 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-2">
             <span className="text-xl">{isOffer ? '🚗' : '🙋‍♂️'}</span>
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-              {isOffer ? data.driver_name || `Cond. #${data.driver_id}` : data.passenger_name || `Pas. #${data.passenger_id}`}
-            </span>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                {isOffer ? data.driver_name || `Cond. #${data.driver_id}` : data.passenger_name || `Pas. #${data.passenger_id}`}
+
+                {/* Verified Badge */}
+                {isOffer && data.driver_verified && (
+                  <span className="text-green-500 text-xs" title="Identidad Verificada">✅</span>
+                )}
+              </span>
+
+              {/* Car Info */}
+              {isOffer && data.car_model && (
+                <span className="text-[9px] text-slate-600 font-medium">{data.car_model} {data.car_color ? `• ${data.car_color}` : ''}</span>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex gap-2">
