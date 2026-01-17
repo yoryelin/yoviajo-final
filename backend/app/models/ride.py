@@ -16,6 +16,10 @@ class Ride(Base):
     price = Column(Integer)
     available_seats = Column(Integer)
     status = Column(String, default="active") # active, cancelled, completed
+
+    # Monetization (Fuel Standard)
+    fuel_liters_total = Column(Float, default=0.0)
+    price_per_seat_liters = Column(Float, default=0.0)
     
     # Filters & Amenities
     women_only = Column(Boolean, default=False)

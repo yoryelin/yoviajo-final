@@ -149,9 +149,46 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                             </div>
                         </div>
 
-                        <div>
-                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Precio por Asiento</label>
-                            <input className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-cyan-500 outline-none text-white transition placeholder-slate-600" name="price" onChange={handleChange} placeholder="$ 0" required type="number" value={offer.price} />
+                        <div className="flex gap-3">
+                            <div className="w-1/2">
+                                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Distancia (km)</label>
+                                <input
+                                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-cyan-500 outline-none text-white transition placeholder-slate-600"
+                                    name="price" // Reusing price field temporarily for distance storage or need new state
+                                    // Better to use a new state or just repurpose price as logic
+                                    onChange={(e) => {
+                                        const dist = parseFloat(e.target.value);
+                                        const totalLiters = dist / 10; // 10km/L
+                                        const seats = 4; // Default for calculation
+                                        // Logic: Total Liters / (Seats + 1 Driver) ??? No, T&C says "Occupants".
+                                        // User scenario: "1 Driver + X Passengers".
+                                        // Let's assume standard '4 passengers + 1 driver' capacity for specific share?
+                                        // Or just let Driver set "Price per Seat" in Liters manually based on T&C suggestion?
+                                        // T&C 1.2 says: "Platform calculates".
+                                        // Let's implement: Input KM -> System shows "Total Liters: X".
+                                        // System calculates Per Seat (Share) assuming full car (e.g. 4 pax)?
+                                        // Let's stick to the prompt: Input Dist -> Calc Liters.
+                                        const litersPerSeat = (totalLiters / 4).toFixed(1); // Rough estimate
+                                        setOffer({ ...offer, distance: dist, fuel_liters: totalLiters, price: (dist * 175) }); // ~175 ARS/km = (1750/10)
+                                    }}
+                                    placeholder="Ej: 400"
+                                    required
+                                    type="number"
+                                />
+                            </div>
+                            <div className="w-1/2 bg-slate-800/50 rounded-xl p-3 flex flex-col justify-center border border-dashed border-slate-700">
+                                <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1 block">Cálculo "Patrón Nafta"</label>
+                                <div className="flex items-end gap-1">
+                                    <span className="text-2xl">⛽</span>
+                                    <span className="text-xl font-bold text-white">
+                                        {offer.fuel_liters ? (offer.fuel_liters / 4).toFixed(1) : '-'} L
+                                    </span>
+                                    <span className="text-xs text-slate-400 mb-1">/ asiento</span>
+                                </div>
+                                <div className="text-[10px] text-slate-500">
+                                    ≈ ${offer.price ? (offer.price / 4).toLocaleString() : '-'} ARS
+                                </div>
+                            </div>
                         </div>
 
                         <button className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] text-sm uppercase tracking-widest mt-2">

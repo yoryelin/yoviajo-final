@@ -12,6 +12,10 @@ class RideBase(BaseModel):
     price: float
     available_seats: int
     
+    # Monetization (Fuel Standard)
+    fuel_liters_total: Optional[float] = 0.0
+    price_per_seat_liters: Optional[float] = 0.0
+
     # Amenities
     women_only: bool = False
     allow_pets: bool = False
