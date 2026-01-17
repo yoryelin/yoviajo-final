@@ -15,14 +15,24 @@ export default function ReserveRideModal({ isOpen, onClose, ride, authFetch, API
 
     if (!isOpen || !ride) return null
 
-    const totalPrice = ride.price * seats
+    // Cálculos Económicos (Patrón Nafta)
+    const FUEL_PRICE = 1750
+    // Usar datos del backend si existen, sino fallback
+    const litersPerSeat = ride.price_per_seat_liters || (ride.price / FUEL_PRICE) || 0
 
-    const handleConfirm = async () => {
+    // Costo Colaborativo (Directo al Conductor)
+    const fuelCostTotal = (litersPerSeat * seats * FUEL_PRICE).toFixed(0)
+
+    // Fee de Gestión (10% del costo colaborativo)
+    const feeAmount = (fuelCostTotal * 0.10).toFixed(0)
+
+    const handlePaymentFlow = async () => {
         setLoading(true)
         setError(null)
 
         try {
-            const response = await authFetch(`${API_URL}/bookings/`, {
+            // PASO 1: Crear Reserva (Pending)
+            const bookingRes = await authFetch(`${API_URL}/bookings/`, {
                 method: 'POST',
                 body: JSON.stringify({
                     ride_id: ride.id,
@@ -30,19 +40,31 @@ export default function ReserveRideModal({ isOpen, onClose, ride, authFetch, API
                 })
             })
 
-            if (response.ok) {
-                onReserveSuccess()
-                onClose()
-                alert(`✅ ¡Reserva Exitosa!\n\nViaje: ${ride.origin} → ${ride.destination}\nAsientos: ${seats}\nTotal: $${totalPrice}`)
-            } else {
-                const data = await response.json()
-                let errorMsg = 'Error al realizar la reserva'
-                if (data.detail) errorMsg = data.detail
-                setError(errorMsg)
+            if (!bookingRes.ok) {
+                const data = await bookingRes.json()
+                throw new Error(data.detail || 'Error al crear la reserva')
             }
+
+            const bookingData = await bookingRes.json()
+            const bookingId = bookingData.id
+
+            // PASO 2: Generar Preferencia de Pago (AstroPay)
+            const paymentRes = await authFetch(`${API_URL}/payments/create_preference/${bookingId}`, {
+                method: 'POST'
+            })
+
+            if (!paymentRes.ok) {
+                throw new Error('Error al generar el link de pago')
+            }
+
+            const paymentData = await paymentRes.json()
+
+            // PASO 3: Redirección al "Candado" 🔒
+            window.location.href = paymentData.init_point
+
         } catch (e) {
-            setError('Error de conexión con el servidor')
-        } finally {
+            console.error(e)
+            setError(e.message || 'Error de conexión')
             setLoading(false)
         }
     }
@@ -66,36 +88,18 @@ export default function ReserveRideModal({ isOpen, onClose, ride, authFetch, API
                     exit={{ scale: 0.95, opacity: 0, y: 20 }}
                     className="relative w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden"
                 >
-                    {/* Header con gradiente */}
-                    <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 text-white text-center">
-                        <h2 className="text-2xl font-black uppercase tracking-widest">Confirmar Reserva</h2>
-                        <p className="text-emerald-100 text-sm font-medium mt-1">Asegura tu lugar en este viaje</p>
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-cyan-900 to-blue-900 p-6 text-white text-center border-b border-white/5">
+                        <h2 className="text-xl font-black uppercase tracking-widest flex justify-center items-center gap-2">
+                            Confirmar Lugares
+                        </h2>
+                        <p className="text-cyan-200 text-xs font-medium mt-1">El "Candado" de Seguridad 🔒</p>
                     </div>
 
                     <div className="p-6 space-y-6">
-                        {/* Detalles del Viaje */}
-                        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700 space-y-3">
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-slate-400 font-bold uppercase">Origen</span>
-                                <span className="text-white font-bold">{ride.origin}</span>
-                            </div>
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-slate-400 font-bold uppercase">Destino</span>
-                                <span className="text-white font-bold">{ride.destination}</span>
-                            </div>
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-slate-400 font-bold uppercase">Conductor</span>
-                                <span className="text-white font-bold">{ride.driver_name || 'Conductor'}</span>
-                            </div>
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-slate-400 font-bold uppercase">Fecha</span>
-                                <span className="text-white font-bold">{ride.departure_time ? new Date(ride.departure_time).toLocaleString() : 'Pendiente'}</span>
-                            </div>
-                        </div>
-
                         {/* Selector de Asientos */}
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Cantidad de Asientos</label>
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Asientos a Reservar</label>
                             <div className="flex items-center gap-4 bg-slate-950 p-2 rounded-xl border border-slate-800">
                                 <button
                                     onClick={() => setSeats(Math.max(1, seats - 1))}
@@ -105,7 +109,7 @@ export default function ReserveRideModal({ isOpen, onClose, ride, authFetch, API
                                 </button>
                                 <div className="flex-1 text-center">
                                     <span className="text-2xl font-black text-white">{seats}</span>
-                                    <span className="text-xs text-slate-500 block">de {ride.available_seats} disp.</span>
+                                    <span className="text-xs text-slate-500 block">lugares</span>
                                 </div>
                                 <button
                                     onClick={() => setSeats(Math.min(ride.available_seats, seats + 1))}
@@ -116,10 +120,27 @@ export default function ReserveRideModal({ isOpen, onClose, ride, authFetch, API
                             </div>
                         </div>
 
-                        {/* Total */}
-                        <div className="flex justify-between items-center py-4 border-t border-slate-700">
-                            <span className="text-slate-400 font-bold uppercase">Total a Pagar</span>
-                            <span className="text-4xl font-black text-emerald-400">${totalPrice}</span>
+                        {/* Desglose de Costos */}
+                        <div className="bg-slate-800/30 rounded-xl p-4 space-y-3 border border-slate-700/50">
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-slate-400">Colaboración (Nafta)</span>
+                                <div className="text-right">
+                                    <span className="block text-white font-bold text-lg">${parseInt(fuelCostTotal).toLocaleString()}</span>
+                                    <span className="text-[10px] text-slate-500">Se paga al conductor</span>
+                                </div>
+                            </div>
+
+                            <div className="h-px bg-slate-700/50 my-2"></div>
+
+                            <div className="flex justify-between items-center text-sm">
+                                <div className="flex flex-col">
+                                    <span className="text-cyan-400 font-bold uppercase tracking-wider">Fee de Gestión</span>
+                                    <span className="text-[10px] text-cyan-500/70">Abonar ahora para confirmar</span>
+                                </div>
+                                <div className="text-right">
+                                    <span className="block text-cyan-400 font-black text-2xl">${parseInt(feeAmount).toLocaleString()}</span>
+                                </div>
+                            </div>
                         </div>
 
                         {error && (
@@ -132,18 +153,26 @@ export default function ReserveRideModal({ isOpen, onClose, ride, authFetch, API
                         <div className="grid grid-cols-2 gap-3">
                             <button
                                 onClick={onClose}
-                                className="py-3 rounded-xl border-2 border-slate-700 text-slate-400 font-bold hover:border-slate-500 hover:text-white transition uppercase tracking-widest text-xs"
+                                className="py-3 rounded-xl border-2 border-slate-700 text-slate-400 font-bold hover:border-slate-500 hover:text-white transition uppercase tracking-widest text-[10px]"
                             >
                                 Cancelar
                             </button>
                             <button
-                                onClick={handleConfirm}
+                                onClick={handlePaymentFlow}
                                 disabled={loading}
-                                className="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20 transition transform active:scale-95 uppercase tracking-widest text-xs"
+                                className="py-3 rounded-xl bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white font-bold shadow-lg shadow-red-900/20 transition transform active:scale-95 uppercase tracking-widest text-[10px] flex items-center justify-center gap-2"
                             >
-                                {loading ? 'Reservando...' : 'Confirmar Reserva'}
+                                {loading ? 'Procesando...' : (
+                                    <>
+                                        <span>Ir a Pagar</span>
+                                        <span className="text-base">💳</span>
+                                    </>
+                                )}
                             </button>
                         </div>
+                        <p className="text-[9px] text-slate-600 text-center px-4">
+                            Serás redirigido a AstroPay para completar el pago seguro del Fee.
+                        </p>
                     </div>
                 </motion.div>
             </div>

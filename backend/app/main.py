@@ -41,8 +41,12 @@ app.include_router(auth.router)
 app.include_router(rides.router)
 app.include_router(requests.router)
 app.include_router(bookings.router)
+app.include_router(bookings.router)
 app.include_router(reports.router)
 app.include_router(geocode.router)
+
+from app.api.routes import payment
+app.include_router(payment.router)
 
 from app.api.routes import debug
 app.include_router(debug.router)

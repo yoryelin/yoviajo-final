@@ -11,10 +11,12 @@ from app.database import Base
 
 class BookingStatus(str, enum.Enum):
     """Estados posibles de una reserva."""
-    PENDING = "pending"       # Reserva creada, pendiente de confirmación
-    CONFIRMED = "confirmed"   # Confirmada por el conductor
-    CANCELLED = "cancelled"   # Cancelada (por pasajero o conductor)
+    AWAITING_PAYMENT = "awaiting_payment" # Creada, esperando fee
+    PENDING = "pending"       # Pagada, esperando confirmación conductor (si aplica)
+    CONFIRMED = "confirmed"   # Confirmada (Pago OK + Aprobación)
+    CANCELLED = "cancelled"   # Cancelada
     COMPLETED = "completed"   # Viaje completado
+    PAID = "paid"             # Estado intermedio si se requiere distinción
 
 
 class Booking(Base):
@@ -37,5 +39,6 @@ class Booking(Base):
     # Relaciones SQLAlchemy
     ride = relationship("Ride", back_populates="bookings")
     passenger = relationship("User", back_populates="bookings")
+    payment = relationship("Payment", uselist=False, back_populates="booking", cascade="all, delete-orphan")
 
 
