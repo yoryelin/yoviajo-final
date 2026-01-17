@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom' // Added useNavigate
 import { useAuth } from '../context/AuthContext'
 import OfferRideModal from '../components/OfferRideModal'
 import RequestRideModal from '../components/RequestRideModal'
@@ -7,8 +8,24 @@ import CityAutocomplete from '../components/CityAutocomplete'
 import ReserveRideModal from '../components/ReserveRideModal'
 
 export default function Dashboard() {
-    const { user, authFetch } = useAuth() // Restored authFetch
-    const isDriver = user?.role === 'C' // Restored isDriver check
+    const { user, authFetch } = useAuth()
+    const navigate = useNavigate() // Hook
+    const isDriver = user?.role === 'C'
+
+    // Check for Intended Role Redirect (From Landing)
+    useEffect(() => {
+        const intended = sessionStorage.getItem('intendedRole')
+        if (intended) {
+            sessionStorage.removeItem('intendedRole')
+            if (intended === 'C' && !isDriver) {
+                // User wanted to be Driver but is Passenger
+                // Redirect to Profile to upgrade
+                if (confirm("Para publicar viajes, primero debes configurar tu perfil de Conductor. ¿Ir al perfil?")) {
+                    navigate('/profile')
+                }
+            }
+        }
+    }, [isDriver, navigate])
 
     // Normalizar URL: asegurar que termine en /api
     const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
@@ -17,6 +34,7 @@ export default function Dashboard() {
     // Datos y Estados
     const [rides, setRides] = useState([])
     const [requests, setRequests] = useState([])
+    const [loading, setLoading] = useState(false) // Moved up context logic check
 
     // Search State
     const [searchFrom, setSearchFrom] = useState('')
@@ -24,7 +42,7 @@ export default function Dashboard() {
     const [searchDate, setSearchDate] = useState('')
 
     // UI State
-    const [activeTab, setActiveTab] = useState('rides') // 'rides' | 'requests'
+    const [activeTab, setActiveTab] = useState('rides')
 
     // Modals
     const [showOfferModal, setShowOfferModal] = useState(false)
@@ -32,7 +50,6 @@ export default function Dashboard() {
     const [showRequestModal, setShowRequestModal] = useState(false)
     const [showReserveModal, setShowReserveModal] = useState(false)
     const [selectedRideForReservation, setSelectedRideForReservation] = useState(null)
-    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         fetchData()

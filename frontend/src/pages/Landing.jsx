@@ -21,10 +21,12 @@ export default function Landing() {
         }
     };
 
-    const handleAction = () => {
+    const handleAction = (role) => {
         if (user) {
             navigate('/dashboard');
         } else {
+            // Pass intended role via sessionStorage (more robust for redirects)
+            sessionStorage.setItem('intendedRole', role);
             navigate('/login');
         }
     };
@@ -114,7 +116,7 @@ export default function Landing() {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={handleAction}
+                            onClick={() => handleAction('C')}
                             className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-2xl shadow-xl shadow-cyan-500/20 font-bold text-lg flex items-center justify-center gap-2"
                         >
                             <span>🚘</span> {user ? 'Soy Conductor' : 'Soy Conductor'}
@@ -123,7 +125,7 @@ export default function Landing() {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={handleAction} // Por ahora ambos van al login
+                            onClick={() => handleAction('P')} // Por ahora ambos van al login
                             className="px-8 py-4 bg-white text-slate-900 border-2 border-slate-200 rounded-2xl shadow-lg hover:border-cyan-500 transition font-bold text-lg flex items-center justify-center gap-2"
                         >
                             <span>🙋‍♂️</span> {user ? 'Soy Pasajero' : 'Soy Pasajero'}
