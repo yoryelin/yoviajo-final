@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import AnimatedLogo from '../components/AnimatedLogo';
 import { useAuth } from '../context/AuthContext';
 
 export default function Landing() {
