@@ -19,15 +19,19 @@ def register(user: UserCreate, request: Request, db: Session = Depends(get_db)):
     """
     Registro de nuevo usuario.
     Requiere DNI, Email, Nombre y Password.
+    AHORA: DNI y Email son únicos globales (Una cuenta por persona).
     """
     logger.info(f"Register attempt for DNI: {user.dni}, Email: {user.email}")
-    # 1. Verificar DNI duplicado para este ROL
-    if db.query(User).filter(User.dni == user.dni, User.role == user.role).first():
-        raise HTTPException(status_code=400, detail="Ya existe una cuenta con este DNI para el rol seleccionado.")
+    
+    # 1. Verificar DNI duplicado GLOBALMENTE
+    if db.query(User).filter(User.dni == user.dni).first():
+        logger.warning(f"Registration failed: DNI {user.dni} already exists.")
+        raise HTTPException(status_code=400, detail="Ya existe una cuenta registrada con este DNI.")
 
-    # 2. Verificar Email duplicado para este ROL
-    if db.query(User).filter(User.email == user.email, User.role == user.role).first():
-        raise HTTPException(status_code=400, detail="Ya existe una cuenta con este Email para el rol seleccionado.")
+    # 2. Verificar Email duplicado GLOBALMENTE
+    if db.query(User).filter(User.email == user.email).first():
+        logger.warning(f"Registration failed: Email {user.email} already exists.")
+        raise HTTPException(status_code=400, detail="Ya existe una cuenta registrada con este Email.")
 
     hashed_pwd = auth.get_password_hash(user.password)
     new_user = User(
@@ -61,55 +65,36 @@ def register(user: UserCreate, request: Request, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 def login(user_credentials: UserLogin, request: Request, db: Session = Depends(get_db)):
-    logger.info(f"Login Request for DNI={user_credentials.dni}, Role={user_credentials.role}")
     """
     Login de usuario existente. Devuelve token JWT.
-    Usa DNI y Password.
+    Identificación directa por DNI (Cuenta Única).
     """
-    # Buscar TODAS las cuentas con este DNI
-    users = db.query(User).filter(User.dni == user_credentials.dni).all()
+    logger.info(f"Login Request for DNI={user_credentials.dni}")
 
-    if not users:
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas (DNI no encontrado)")
+    # Buscar UNICA cuenta con este DNI
+    user = db.query(User).filter(User.dni == user_credentials.dni).first()
 
-    # Si se especificó el rol, filtramos
-    target_user = None
-    if user_credentials.role:
-        target_user = next((u for u in users if u.role == user_credentials.role), None)
-        if not target_user:
-             raise HTTPException(status_code=401, detail="No tienes cuenta con ese rol.")
-    else:
-        # Si NO se especificó rol, y hay más de uno, pedimos desambiguar
-        if len(users) > 1:
-            # Retornamos 300 Multiple Choices
-            # Nota: FastAPI no tiene una excepción directa para devolver body custom en 3xx fácilmente con HTTPException,
-            # pero podemos devolver una JSONResponse. Sin embargo, para mantener el schema,
-            # forzaremos un error 300 que el frontend entienda.
-            from fastapi.responses import JSONResponse
-            options = [{"role": u.role, "label": "Conductor" if u.role == 'C' else "Pasajero"} for u in users]
-            return JSONResponse(
-                status_code=300,
-                content={"detail": "Múltiples roles detectados", "roles_available": options}
-            )
-        else:
-            target_user = users[0]
+    if not user:
+        # Por seguridad no deberiamos decir si existe o no, pero para UX diremos credenciales incorrectas
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas (DNI o Password)")
 
     # Verificar Password
-    if not auth.verify_password(user_credentials.password, target_user.hashed_password):
-        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+    if not auth.verify_password(user_credentials.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas (DNI o Password)")
 
+    # Login Exitoso
     access_token = auth.create_access_token(
-        data={"sub": target_user.dni, "id": target_user.id} # Mantener sub como DNI aunque ya no sea unique global
+        data={"sub": user.dni, "id": user.id} 
     )
     
     # AUDIT LOG
     ip = request.client.host if request.client else "0.0.0.0"
-    utils.log_audit(db, "USER_LOGIN", {"dni": target_user.dni, "role": target_user.role}, target_user.id, ip)
+    utils.log_audit(db, "USER_LOGIN", {"dni": user.dni, "role": user.role}, user.id, ip)
 
     return {
         "access_token": access_token, 
         "token_type": "bearer", 
-        "user": target_user
+        "user": user
     }
 
 

@@ -10,8 +10,8 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    dni = Column(String, index=True)  # Unique per role (see __table_args__)
-    email = Column(String, index=True)  # Unique per role
+    dni = Column(String, unique=True, index=True) 
+    email = Column(String, unique=True, index=True)
     name = Column(String)
     hashed_password = Column(String)
     phone = Column(String, nullable=True) # WhatsApp
@@ -44,9 +44,4 @@ class User(Base):
     rides_offered = relationship("Ride", back_populates="driver")
     rides_requested = relationship("RideRequest", back_populates="passenger")
     bookings = relationship("Booking", back_populates="passenger")
-
-    __table_args__ = (
-        UniqueConstraint('dni', 'role', name='uix_dni_role'),
-        UniqueConstraint('email', 'role', name='uix_email_role'),
-    )
 

@@ -137,30 +137,6 @@ export default function Login() {
         const data = await response.json()
         console.log("Respuesta body:", data)
 
-        // CASO ESPECIAL: Múltiples Roles (Status 300)
-        if (response.status === 300) {
-          setAvailableRoles(data.roles_available)
-          setViewMode('select_role')
-          setLoading(false)
-          return
-        }
-
-        if (!response.ok) {
-          let errorMessage = "Error en el servidor";
-          if (data.detail) {
-            if (typeof data.detail === 'string') {
-              errorMessage = data.detail;
-            } else if (Array.isArray(data.detail)) {
-              // FastAPI Validation Error (Array of errors)
-              errorMessage = data.detail.map(e => e.msg).join(', ');
-            } else if (typeof data.detail === 'object') {
-              // Generic Object Error
-              errorMessage = JSON.stringify(data.detail);
-            }
-          }
-          throw new Error(errorMessage);
-        }
-
         // Login/Registro Exitoso
         if (isRegister) {
           alert("¡Cuenta creada! Por favor inicia sesión.")
@@ -185,44 +161,6 @@ export default function Login() {
       }
       setLoading(false)
     }
-  }
-
-  // --- RENDERIZADO DE VISTA SELECCION DE ROL (Login Ambiguo) ---
-  if (viewMode === 'select_role') {
-    return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-        <div className="bg-slate-800 border border-slate-700 p-8 rounded-3xl shadow-2xl w-full max-w-md text-center">
-          <h2 className="text-2xl font-bold text-white mb-2">👋 Hola de nuevo</h2>
-          <p className="text-slate-400 mb-6">Detectamos que tienes dos perfiles. ¿Cómo quieres ingresar hoy?</p>
-
-          <div className="space-y-3">
-            {availableRoles.map((r) => (
-              <button
-                key={r.role}
-                onClick={() => handleSubmit(null, r.role)}
-                className={`w-full p-4 rounded-xl border-2 transition font-bold text-lg flex items-center justify-between group ${r.role === 'C'
-                  ? 'border-cyan-500/30 hover:border-cyan-500 bg-cyan-900/10 text-cyan-400'
-                  : 'border-pink-500/30 hover:border-pink-500 bg-pink-900/10 text-pink-400'
-                  }`}
-              >
-                <span>{r.role === 'C' ? '🚗' : '🙋‍♂️'} {r.label}</span>
-                <span className="opacity-0 group-hover:opacity-100 transition">➝</span>
-              </button>
-            ))}
-          </div>
-
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center">
-              <p className="text-red-300 text-xs">{error}</p>
-            </div>
-          )}
-
-          <button onClick={() => setViewMode('login')} className="mt-6 text-slate-500 text-sm hover:text-white">
-            ← Volver atrás
-          </button>
-        </div>
-      </div>
-    )
   }
 
   // --- RENDERIZADO NORMAL (Login / Register) ---
