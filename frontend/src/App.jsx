@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import MyTrips from './pages/MyTrips'
 import Login from './pages/Login'
 import Landing from './pages/Landing'
+import ProfilePage from './pages/ProfilePage'
 import { useAuth } from './context/AuthContext'
 
 export default function App() {
@@ -42,6 +43,17 @@ export default function App() {
           user ? (
             <Layout>
               <MyTrips />
+            </Layout>
+          ) : <Navigate to="/" />
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          user ? (
+            <Layout>
+              <ProfilePage />
             </Layout>
           ) : <Navigate to="/" />
         }

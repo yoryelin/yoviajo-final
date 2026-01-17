@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
                             <div className="flex items-center gap-3 bg-slate-900/50 border border-slate-700/50 px-4 py-1.5 rounded-full hover:border-slate-600 transition cursor-default">
                                 <div
                                     className="flex items-center space-x-3 bg-slate-800/50 hover:bg-slate-700/50 p-2 rounded-xl border border-slate-700/50 transition cursor-pointer"
-                                    onClick={() => setShowProfileModal(true)}
+                                    onClick={() => window.location.href = '/profile'}
                                 >
                                     <div className={`w-10 h-10 rounded-full bg-gradient-to-br p-[2px] ${isDriver ? 'from-cyan-400 to-blue-600' : 'from-pink-400 to-rose-600'}`}>
                                         <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
@@ -78,15 +78,15 @@ const Layout = ({ children }) => {
                         </div>
                     )}
                 </div>
-            </header>
+            </header >
 
             {/* Main Content Injection */}
-            <main className="max-w-4xl mx-auto px-4 py-8">
+            < main className="max-w-4xl mx-auto px-4 py-8" >
                 {children}
-            </main>
+            </main >
 
             {/* Global Modals (Like Profile) */}
-            <ProfileModal
+            < ProfileModal
                 isOpen={showProfileModal}
                 onClose={() => setShowProfileModal(false)}
                 user={user}
@@ -104,7 +104,7 @@ const Layout = ({ children }) => {
                 }}
                 onUpdate={() => window.location.reload()}
             />
-        </div>
+        </div >
     )
 }
 

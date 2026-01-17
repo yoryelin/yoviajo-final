@@ -111,3 +111,16 @@ class Token(BaseModel):
     user: UserResponse
 
 
+
+class UserUpdate(BaseModel):
+    # Extended
+    birth_date: Optional[date] = None
+    address: Optional[str] = None
+    
+    # Driver Specific
+    car_model: Optional[str] = None
+    car_plate: Optional[str] = None
+    car_color: Optional[str] = None
+    prefs_smoking: Optional[bool] = None
+    prefs_pets: Optional[bool] = None
+    prefs_luggage: Optional[bool] = None
