@@ -20,6 +20,14 @@ export default function Login() {
   // Para manejar el caso de múltiples roles
   const [availableRoles, setAvailableRoles] = useState([])
 
+  // Pre-fill Role from Landing Page intent
+  useState(() => {
+    const intended = sessionStorage.getItem('intendedRole')
+    if (intended) {
+      setFormData(prev => ({ ...prev, role: intended }))
+    }
+  }, [])
+
   // API URL
   const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003/api'
 
@@ -148,11 +156,27 @@ export default function Login() {
         if (isRegister) {
           alert("¡Cuenta creada! Por favor inicia sesión.")
           setViewMode('login')
-          setFormData({ dni: formData.dni, password: '', name: '', role: 'P', email: '', gender: 'M' })
+          setFormData({
+            dni: formData.dni, password: '', name: '', role: 'P', email: '', gender: 'M',
+            birth_date: '', address: '',
+            car_model: '', car_plate: '', car_color: '',
+            prefs_smoking: false, prefs_pets: false, prefs_luggage: true,
+            check_license: false, check_insurance: false
+          })
           setLoading(false)
         } else {
+          // STRICT ROLE CHECK (Zero-Ambiguity Guard)
+          const intendedRole = sessionStorage.getItem('intendedRole')
+          const userRole = data.user.role
+
+          if (intendedRole && userRole !== intendedRole) {
+            const roleNames = { 'C': 'Conductor', 'P': 'Pasajero' }
+            throw new Error(`Acceso Denegado: Esta cuenta está registrada como ${roleNames[userRole] || userRole} y no puede acceder al portal de ${roleNames[intendedRole] || intendedRole}.`)
+          }
+
+          // Limpiar intención y proceder
+          sessionStorage.removeItem('intendedRole')
           login(data.user, data.access_token)
-          // Don't set loading false here immediately if login redirects or unmounts component
         }
       } catch (fetchErr) {
         clearTimeout(timeoutId);
@@ -193,6 +217,30 @@ export default function Login() {
         </div>
 
         <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
+
+
+          {/* SELECTOR DE ROL (Restaurado para Separación Estricta) */}
+          {viewMode === 'register' && (
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Quiero registrarme como:</label>
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: 'P' })}
+                  className={`p-4 rounded-xl border-2 text-sm font-black uppercase tracking-widest transition flex flex-col items-center gap-2 ${formData.role === 'P' ? 'border-pink-500 bg-pink-500/10 text-white shadow-lg shadow-pink-900/20' : 'border-slate-700 text-slate-500 hover:border-slate-500 hover:bg-slate-800'}`}
+                >
+                  <span>🙋‍♂️</span> Pasajero
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: 'C' })}
+                  className={`p-4 rounded-xl border-2 text-sm font-black uppercase tracking-widest transition flex flex-col items-center gap-2 ${formData.role === 'C' ? 'border-cyan-500 bg-cyan-500/10 text-white shadow-lg shadow-cyan-900/20' : 'border-slate-700 text-slate-500 hover:border-slate-500 hover:bg-slate-800'}`}
+                >
+                  <span>🚘</span> Conductor
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* CAMPOS DE REGISTRO */}
           {viewMode === 'register' && (
@@ -270,8 +318,74 @@ export default function Login() {
             </div>
           )}
 
-          {/* CAMPOS DE CONDUCTOR (Eliminados de Registro Inicial - Se completan en Perfil) */}
-          {/* Driver fields removed */}
+          {/* CAMPOS DE CONDUCTOR (Restaurados - Solo si es Conductor) */}
+          {viewMode === 'register' && formData.role === 'C' && (
+            <div className="space-y-4 animate-fade-in bg-slate-800/50 p-4 rounded-xl border border-slate-700 mt-2">
+              <h3 className="text-cyan-400 font-bold text-sm uppercase tracking-widest flex items-center gap-2 border-b border-slate-700 pb-2">
+                DATOS DEL VEHÍCULO
+              </h3>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase">Marca y Modelo</label>
+                  <input
+                    className="input-field text-sm"
+                    type="text"
+                    placeholder="Ej: Fiat Cronos"
+                    value={formData.car_model}
+                    onChange={(e) => setFormData({ ...formData, car_model: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase">Patente</label>
+                  <input
+                    className="input-field text-sm uppercase"
+                    type="text"
+                    placeholder="AA 123 BB"
+                    value={formData.car_plate}
+                    onChange={(e) => setFormData({ ...formData, car_plate: e.target.value.toUpperCase() })}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-500 uppercase">Color</label>
+                <input
+                  className="input-field text-sm"
+                  type="text"
+                  placeholder="Ej: Blanco"
+                  value={formData.car_color}
+                  onChange={(e) => setFormData({ ...formData, car_color: e.target.value })}
+                />
+              </div>
+
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.prefs_smoking} onChange={(e) => setFormData({ ...formData, prefs_smoking: e.target.checked })} className="accent-cyan-500" />
+                  <span className="text-xs text-slate-400">🚬 Fuma</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.prefs_pets} onChange={(e) => setFormData({ ...formData, prefs_pets: e.target.checked })} className="accent-cyan-500" />
+                  <span className="text-xs text-slate-400">🐾 Mascotas</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.prefs_luggage} onChange={(e) => setFormData({ ...formData, prefs_luggage: e.target.checked })} className="accent-cyan-500" />
+                  <span className="text-xs text-slate-400">🧳 Baúl</span>
+                </label>
+              </div>
+
+              <div className="space-y-2 pt-2">
+                <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 cursor-pointer hover:bg-slate-900 transition">
+                  <input type="checkbox" checked={formData.check_license} onChange={(e) => setFormData({ ...formData, check_license: e.target.checked })} className="w-5 h-5 accent-cyan-500" />
+                  <span className="text-xs font-bold text-cyan-100/80 uppercase">Licencia Vigente</span>
+                </label>
+                <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 cursor-pointer hover:bg-slate-900 transition">
+                  <input type="checkbox" checked={formData.check_insurance} onChange={(e) => setFormData({ ...formData, check_insurance: e.target.checked })} className="w-5 h-5 accent-cyan-500" />
+                  <span className="text-xs font-bold text-cyan-100/80 uppercase">Seguro al Día</span>
+                </label>
+              </div>
+            </div>
+          )}
 
           {/* CAMPO DNI (Común) */}
           <div className="space-y-1">
@@ -297,12 +411,11 @@ export default function Login() {
             />
           </div>
 
-          {/* SELECTOR DE ROL (Eliminado para Single Account - Todos inician como Pasajeros) */}
-          {/* Default role is 'P' in formData state */}
+          {/* End of Form Fields */}
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center">
-              <p className="text-red-300 text-xs">{error}</p>
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center animate-shake">
+              <p className="text-red-300 text-xs font-bold">{error}</p>
             </div>
           )}
 
@@ -310,7 +423,7 @@ export default function Login() {
             className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] mt-4 uppercase tracking-widest disabled:opacity-50"
             disabled={loading}
           >
-            {loading ? 'Procesando...' : (viewMode === 'register' ? 'Registrar Identidad' : 'Ingresar')}
+            {loading ? 'Procesando...' : (viewMode === 'register' ? 'Confirmar Registro' : 'Ingresar al Sistema')}
           </button>
         </form>
 
@@ -322,7 +435,7 @@ export default function Login() {
             }}
             className="text-slate-400 text-sm font-bold hover:text-white transition"
           >
-            {viewMode === 'login' ? '¿No tienes cuenta? Regístrate hoy' : '¿Ya tienes cuenta? Inicia sesión'}
+            {viewMode === 'login' ? '¿No tienes cuenta? Registrate' : '¿Ya tienes cuenta? Ingresa'}
           </button>
         </div>
 
