@@ -1,9 +1,8 @@
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import AnimatedLogo from '../components/AnimatedLogo';
+import { useAuth } from '../context/AuthContext';
 
 export default function Landing() {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     // Animación del brillo en el texto
     const shineVariant = {
@@ -16,6 +15,14 @@ export default function Landing() {
                 ease: "linear",
                 delay: 1 // Espera un poco a que cargue la página
             }
+        }
+    };
+
+    const handleAction = () => {
+        if (user) {
+            navigate('/dashboard');
+        } else {
+            navigate('/login');
         }
     };
 
@@ -62,8 +69,8 @@ export default function Landing() {
                 </div>
                 <div className="space-x-4 text-sm font-bold">
                     <button className="text-slate-500 hover:text-cyan-600 transition">Ayuda</button>
-                    <button onClick={() => navigate('/login')} className="bg-slate-900 text-white px-5 py-2 rounded-full hover:bg-slate-700 transition shadow-lg">
-                        Ingresar
+                    <button onClick={handleAction} className="bg-slate-900 text-white px-5 py-2 rounded-full hover:bg-slate-700 transition shadow-lg">
+                        {user ? 'Ir a mi Dashboard' : 'Ingresar'}
                     </button>
                 </div>
             </nav>
@@ -104,19 +111,19 @@ export default function Landing() {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => navigate('/login')}
+                            onClick={handleAction}
                             className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-2xl shadow-xl shadow-cyan-500/20 font-bold text-lg flex items-center justify-center gap-2"
                         >
-                            <span>🚘</span> Soy Conductor
+                            <span>🚘</span> {user ? 'Soy Conductor' : 'Soy Conductor'}
                         </motion.button>
 
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => navigate('/login')} // Por ahora ambos van al login
+                            onClick={handleAction} // Por ahora ambos van al login
                             className="px-8 py-4 bg-white text-slate-900 border-2 border-slate-200 rounded-2xl shadow-lg hover:border-cyan-500 transition font-bold text-lg flex items-center justify-center gap-2"
                         >
-                            <span>🙋‍♂️</span> Soy Pasajero
+                            <span>🙋‍♂️</span> {user ? 'Soy Pasajero' : 'Soy Pasajero'}
                         </motion.button>
                     </div>
 
