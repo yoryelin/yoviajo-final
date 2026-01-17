@@ -1,11 +1,13 @@
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom' // Unused
+
 import { useAuth } from '../context/AuthContext'
 import { useState } from 'react'
 import ProfileModal from '../components/ProfileModal'
 
 const Layout = ({ children }) => {
     const { user, logout } = useAuth()
-    const navigate = useNavigate()
+    // const navigate = useNavigate() // Unused
+
     const [showProfileModal, setShowProfileModal] = useState(false)
     const isDriver = user?.role === 'C'
     const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003/api'
