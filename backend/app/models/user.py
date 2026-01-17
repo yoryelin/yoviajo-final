@@ -1,7 +1,7 @@
 """
 Modelo de Usuario.
 """
-from sqlalchemy import Column, Integer, String, Boolean, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Boolean, UniqueConstraint, Date
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -28,8 +28,18 @@ class User(Base):
     # Driver Profile
     car_model = Column(String, nullable=True)
     car_plate = Column(String, nullable=True)
+    car_color = Column(String, nullable=True) # Added color
     phone_verified = Column(Boolean, default=False)
     email_verified = Column(Boolean, default=False)
+    
+    # Extended Profile
+    birth_date = Column(Date, nullable=True)
+    address = Column(String, nullable=True)
+    
+    # Driver Preferences (Defaults)
+    prefs_smoking = Column(Boolean, default=False)
+    prefs_pets = Column(Boolean, default=False)
+    prefs_luggage = Column(Boolean, default=True)
 
     rides_offered = relationship("Ride", back_populates="driver")
     rides_requested = relationship("RideRequest", back_populates="passenger")

@@ -7,7 +7,13 @@ export default function Login() {
   // Modos: 'login' | 'register' | 'select_role'
   const [viewMode, setViewMode] = useState('login')
 
-  const [formData, setFormData] = useState({ dni: '', password: '', name: '', role: 'P', email: '', gender: 'M' })
+  const [formData, setFormData] = useState({
+    dni: '', password: '', name: '', role: 'P', email: '', gender: 'M',
+    birth_date: '', address: '',
+    car_model: '', car_plate: '', car_color: '',
+    prefs_smoking: false, prefs_pets: false, prefs_luggage: true,
+    check_license: false, check_insurance: false
+  })
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -43,11 +49,26 @@ export default function Login() {
     }
 
     if (viewMode === 'register') {
-      if (!formData.name || !formData.email) {
-        setError("Por favor completa Nombre y Email para registrarte.")
+      if (!formData.name || !formData.email || !formData.birth_date || !formData.address) {
+        setError("Por favor completa todos los datos personales.")
         setLoading(false)
         return
       }
+
+      // Driver Validations
+      if (formData.role === 'C') {
+        if (!formData.car_model || !formData.car_plate) {
+          setError("Conductores deben registrar los datos del vehículo.")
+          setLoading(false)
+          return
+        }
+        if (!formData.check_license || !formData.check_insurance) {
+          setError("Debes confirmar que tienes Licencia y Seguro vigentes.")
+          setLoading(false)
+          return
+        }
+      }
+
       // Simple email validation regex
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (!emailRegex.test(formData.email)) {
@@ -76,7 +97,22 @@ export default function Login() {
       }
 
       if (isRegister) {
-        payload = { ...payload, name: formData.name, role: formData.role, email: formData.email, gender: formData.gender }
+        payload = {
+          ...payload,
+          name: formData.name,
+          role: formData.role,
+          email: formData.email,
+          gender: formData.gender,
+          birth_date: formData.birth_date,
+          address: formData.address,
+          // Driver Specifics
+          car_model: formData.car_model,
+          car_plate: formData.car_plate,
+          car_color: formData.car_color,
+          prefs_smoking: formData.prefs_smoking,
+          prefs_pets: formData.prefs_pets,
+          prefs_luggage: formData.prefs_luggage
+        }
       }
 
       // Si forzamos un rol (caso login con múltiple elección)
@@ -260,6 +296,94 @@ export default function Login() {
                 >
                   Femenino
                 </button>
+              </div>
+            </div>
+          )}
+
+          {/* DATOS EXTENDIDOS (FECHA Y DIRECCIÓN) */}
+          {viewMode === 'register' && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Nacimiento</label>
+                <input
+                  className="input-field w-full"
+                  type="date"
+                  value={formData.birth_date}
+                  onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Barrio / Zona</label>
+                <input
+                  className="input-field w-full"
+                  type="text"
+                  placeholder="Ej: Centro"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* CAMPOS ESPECÍFICOS DE CONDUCTOR (PREFERENCIAS Y AUTO) */}
+          {viewMode === 'register' && formData.role === 'C' && (
+            <div className="border border-cyan-500/30 bg-cyan-900/10 rounded-xl p-4 space-y-3 animate-fade-in">
+              <h3 className="text-sm font-black text-cyan-400 uppercase tracking-widest border-b border-cyan-500/20 pb-2 mb-2">
+                🚙 Datos del Vehículo
+              </h3>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">Marca y Modelo</label>
+                  <input className="input-field text-xs" list="car_models" placeholder="Ej: Fiat Cronos" value={formData.car_model} onChange={(e) => setFormData({ ...formData, car_model: e.target.value })} />
+                  <datalist id="car_models">
+                    <option value="Fiat Cronos" />
+                    <option value="Peugeot 208" />
+                    <option value="Toyota Hilux" />
+                    <option value="Volkswagen Amarok" />
+                    <option value="Ford Ranger" />
+                    <option value="Renault Kangoo" />
+                    <option value="Chevrolet Tracker" />
+                    <option value="Volkswagen Gol Trend" />
+                    <option value="Toyota Etios" />
+                    <option value="Renault Sandero" />
+                  </datalist>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">Patente</label>
+                  <input className="input-field text-xs uppercase" placeholder="AA 123 BB" value={formData.car_plate} onChange={(e) => setFormData({ ...formData, car_plate: e.target.value.toUpperCase() })} />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Color</label>
+                <input className="input-field text-xs" placeholder="Ej: Blanco" value={formData.car_color} onChange={(e) => setFormData({ ...formData, car_color: e.target.value })} />
+              </div>
+
+              <div className="flex justify-between items-center py-2 border-t border-cyan-500/10">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.prefs_smoking} onChange={(e) => setFormData({ ...formData, prefs_smoking: e.target.checked })} className="accent-cyan-500" />
+                  <span className="text-xs text-slate-300">🚬 Fuma</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.prefs_pets} onChange={(e) => setFormData({ ...formData, prefs_pets: e.target.checked })} className="accent-cyan-500" />
+                  <span className="text-xs text-slate-300">🐾 Mascotas</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.prefs_luggage} onChange={(e) => setFormData({ ...formData, prefs_luggage: e.target.checked })} className="accent-cyan-500" />
+                  <span className="text-xs text-slate-300">🧳 Baúl</span>
+                </label>
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-cyan-500/10">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.check_license} onChange={(e) => setFormData({ ...formData, check_license: e.target.checked })} className="accent-green-500 w-4 h-4" />
+                  <span className="text-[10px] font-bold text-green-400 uppercase"> Licencia Vigente</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.check_insurance} onChange={(e) => setFormData({ ...formData, check_insurance: e.target.checked })} className="accent-green-500 w-4 h-4" />
+                  <span className="text-[10px] font-bold text-green-400 uppercase"> Seguro al Día</span>
+                </label>
               </div>
             </div>
           )}

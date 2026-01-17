@@ -36,7 +36,17 @@ def register(user: UserCreate, request: Request, db: Session = Depends(get_db)):
         name=user.name, 
         hashed_password=hashed_pwd,
         role=user.role,
-        gender=user.gender
+        gender=user.gender,
+        # Extended Profile
+        birth_date=user.birth_date,
+        address=user.address,
+        # Driver Profile
+        car_model=user.car_model,
+        car_plate=user.car_plate,
+        car_color=user.car_color,
+        prefs_smoking=user.prefs_smoking,
+        prefs_pets=user.prefs_pets,
+        prefs_luggage=user.prefs_luggage
     )
     db.add(new_user)
     db.commit()
