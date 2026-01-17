@@ -32,7 +32,7 @@ export default function App() {
             <Layout>
               <Dashboard />
             </Layout>
-          ) : <Navigate to="/login" />
+          ) : <Navigate to="/" />
         }
       />
 
@@ -43,7 +43,7 @@ export default function App() {
             <Layout>
               <MyTrips />
             </Layout>
-          ) : <Navigate to="/login" />
+          ) : <Navigate to="/" />
         }
       />
 
