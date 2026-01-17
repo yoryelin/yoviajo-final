@@ -4,6 +4,7 @@ from app.database import engine, Base
 router = APIRouter(prefix="/api/debug", tags=["debug"])
 
 @router.post("/reset_db")
+@router.get("/reset_db") # Permitir GET para fácil acceso desde navegador
 def reset_database():
     """
     ⚠️ PELIGRO: Borra TODO y recrea las tablas.
