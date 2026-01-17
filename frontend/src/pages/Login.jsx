@@ -140,6 +140,10 @@ export default function Login() {
         const data = await response.json()
         console.log("Respuesta body:", data)
 
+        if (!response.ok) {
+          throw new Error(data.detail || data.message || "Error en la solicitud")
+        }
+
         // Login/Registro Exitoso
         if (isRegister) {
           alert("¡Cuenta creada! Por favor inicia sesión.")
