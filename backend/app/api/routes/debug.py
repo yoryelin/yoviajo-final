@@ -1,22 +1,38 @@
-from fastapi import APIRouter, HTTPException
-from app.database import engine, Base
+
+from fastapi import APIRouter, HTTPException, Depends
+from sqlalchemy.orm import Session
+from app.database import get_db, engine, Base
+from app.core.logger import logger
+from app.config import settings
+import os
 
 router = APIRouter(prefix="/api/debug", tags=["debug"])
 
-@router.post("/reset_db")
-@router.get("/reset_db") # Permitir GET para fácil acceso desde navegador
-def reset_database():
+@router.post("/reset-database-force")
+def reset_database_force(secret_key: str, db: Session = Depends(get_db)):
     """
-    ⚠️ PELIGRO: Borra TODO y recrea las tablas.
-    Usar solo para aplicar cambios de Schema en desarrollo.
+    ENDPOINT PELIGROSO: Borra y recrea toda la base de datos.
+    Solo funciona si se provee la SECRET_KEY correcta.
     """
+    # Simple protección rudimentaria para este caso de emergencia
+    # En producción usamos la env var SECRET_KEY
+    if secret_key != settings.SECRET_KEY:
+        logger.warning("Intento fallido de reset DB: Clave incorrecta")
+        raise HTTPException(status_code=403, detail="Acceso denegado")
+        
     try:
-        # 1. Borrar todo (Drop All)
+        logger.warning("⚠️ INICIANDO RESET DE BASE DE DATOS REMOTA ⚠️")
+        
+        # Cerrar sesiones (SQLAlchemy lo maneja pool)
+        # Drop all tables
         Base.metadata.drop_all(bind=engine)
         
-        # 2. Crear todo de nuevo (Create All con nuevas columnas)
+        # Create all tables
         Base.metadata.create_all(bind=engine)
         
-        return {"status": "success", "message": "Base de datos reseteada y esquema actualizado."}
+        logger.info("✅ Database reset completed successfully.")
+        return {"message": "Database reset successfully. Clean slate active."}
+        
     except Exception as e:
+        logger.error(f"Error resetting database: {e}")
         raise HTTPException(status_code=500, detail=str(e))
