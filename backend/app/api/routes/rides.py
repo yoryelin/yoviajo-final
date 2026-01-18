@@ -88,50 +88,56 @@ def create_ride(
     """
     Crear una nueva oferta de viaje. Requiere autenticación.
     """
-    # Validar ventana de tiempo (72 horas)
     try:
-        # Formatos posibles que vienen del frontend
-        departure_dt = datetime.fromisoformat(ride.departure_time.replace('Z', '+00:00'))
-    except ValueError:
-        # Fallback si el formato no es ISO standard
-        raise HTTPException(status_code=400, detail="Formato de fecha inválido")
+        # Validar ventana de tiempo (72 horas)
+        try:
+            # Formatos posibles que vienen del frontend
+            departure_dt = datetime.fromisoformat(ride.departure_time.replace('Z', '+00:00'))
+        except ValueError:
+            # Fallback si el formato no es ISO standard
+            raise HTTPException(status_code=400, detail="Formato de fecha inválido")
 
-    now = datetime.now(departure_dt.tzinfo)
-    
-    # 1. No en el pasado (con 15 min de gracia)
-    if departure_dt < now - timedelta(minutes=15):
-        raise HTTPException(status_code=400, detail="El viaje no puede ser en el pasado")
+        now = datetime.now(departure_dt.tzinfo)
         
-    # 2. No más de 72 horas
-    if departure_dt > now + timedelta(hours=72):
-        raise HTTPException(status_code=400, detail="Solo se pueden publicar viajes dentro de las próximas 72 horas")
+        # 1. No en el pasado (con 15 min de gracia)
+        if departure_dt < now - timedelta(minutes=15):
+            raise HTTPException(status_code=400, detail="El viaje no puede ser en el pasado")
+            
+        # 2. No más de 72 horas
+        if departure_dt > now + timedelta(hours=72):
+            raise HTTPException(status_code=400, detail="Solo se pueden publicar viajes dentro de las próximas 72 horas")
 
-    ride_data = ride.dict()
-    
-    # Asegurar que solo conductoras mujeres puedan activar 'women_only'
-    if ride_data.get('women_only') and current_user.gender != 'F':
-         raise HTTPException(status_code=400, detail="Solo conductoras mujeres pueden crear viajes exclusivos para mujeres")
+        ride_data = ride.dict()
+        
+        # Asegurar que solo conductoras mujeres puedan activar 'women_only'
+        if ride_data.get('women_only') and current_user.gender != 'F':
+             raise HTTPException(status_code=400, detail="Solo conductoras mujeres pueden crear viajes exclusivos para mujeres")
 
-    new_ride = Ride(**ride_data, driver_id=current_user.id, status="active")
-    db.add(new_ride)
-    db.commit()
-    db.refresh(new_ride)
-    
-    # AUDIT LOG
-    utils.log_audit(db, "RIDE_CREATED", {"ride_id": new_ride.id, "origin": new_ride.origin, "women_only": new_ride.women_only}, current_user.id)
-    
-    # Agregar enlace de Maps a la respuesta
-    result = RideResponse.from_orm(new_ride).dict()
-    result['maps_url'] = utils.generate_google_maps_url(
-        new_ride.origin,
-        new_ride.destination,
-        new_ride.origin_lat,
-        new_ride.origin_lng,
-        new_ride.destination_lat,
-        new_ride.destination_lng
-    )
-    result['bookings_count'] = 0 # Recién creado
-    return result
+        new_ride = Ride(**ride_data, driver_id=current_user.id, status="active")
+        db.add(new_ride)
+        db.commit()
+        db.refresh(new_ride)
+        
+        # AUDIT LOG
+        utils.log_audit(db, "RIDE_CREATED", {"ride_id": new_ride.id, "origin": new_ride.origin, "women_only": new_ride.women_only}, current_user.id)
+        
+        # Agregar enlace de Maps a la respuesta
+        result = RideResponse.from_orm(new_ride).dict()
+        result['maps_url'] = utils.generate_google_maps_url(
+            new_ride.origin,
+            new_ride.destination,
+            new_ride.origin_lat,
+            new_ride.origin_lng,
+            new_ride.destination_lat,
+            new_ride.destination_lng
+        )
+        result['bookings_count'] = 0 # Recién creado
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"CRITICAL ERROR creating ride: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error Interno: {str(e)}")
 
 
 @router.delete("/{ride_id}")
