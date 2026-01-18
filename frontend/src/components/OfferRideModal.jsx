@@ -71,8 +71,19 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
             if (response.ok) {
                 alert("¡Viaje Publicado!")
                 setOffer({ origin: '', destination: '', date: '', time_start: '08:00', time_end: '10:00', price: '' })
-                onPublish()
-                onClose()
+
+                console.log("Success! Calling callbacks...");
+                if (typeof onPublish === 'function') {
+                    await onPublish();
+                } else {
+                    console.error("onPublish is not a function:", onPublish);
+                }
+
+                if (typeof onClose === 'function') {
+                    onClose();
+                } else {
+                    console.error("onClose is not a function:", onClose);
+                }
             } else {
                 const error = await response.json()
                 alert(error.detail || "Error al publicar")
