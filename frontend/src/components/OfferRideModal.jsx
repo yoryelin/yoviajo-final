@@ -170,6 +170,17 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                                 </div>
                             </div>
 
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Referencia / Punto de Encuentro</label>
+                                <input
+                                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-cyan-500 outline-none text-white transition placeholder-slate-600"
+                                    name="meeting_point"
+                                    placeholder="Ej: Estación de Servicio YPF centro, Frente a la Plaza..."
+                                    value={offer.meeting_point || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
                             <div>
                                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Fecha de Salida</label>
                                 <input

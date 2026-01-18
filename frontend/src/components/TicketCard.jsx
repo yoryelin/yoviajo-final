@@ -128,6 +128,14 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
             )}
           </div>
 
+          {/* MEETING POINT REFERENCE */}
+          {data.meeting_point && (
+            <div className="mt-2 flex items-start gap-1">
+              <span className="text-xs">📍</span>
+              <p className="text-[10px] text-slate-400 font-medium italic">"{data.meeting_point}"</p>
+            </div>
+          )}
+
           {data.departure_time && (
             <div className="mt-2">
               <CountdownTimer targetDate={data.departure_time} />

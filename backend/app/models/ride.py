@@ -31,6 +31,7 @@ class Ride(Base):
     origin_lng = Column(Float, nullable=True)
     destination_lat = Column(Float, nullable=True)
     destination_lng = Column(Float, nullable=True)
+    meeting_point = Column(String, nullable=True) # Referencia texto libre
 
     driver_id = Column(Integer, ForeignKey("users.id"))
     driver = relationship("User", back_populates="rides_offered")
@@ -54,6 +55,7 @@ class RideRequest(Base):
     origin_lng = Column(Float, nullable=True)
     destination_lat = Column(Float, nullable=True)
     destination_lng = Column(Float, nullable=True)
+    meeting_point = Column(String, nullable=True) # Referencia texto libre
 
     passenger_id = Column(Integer, ForeignKey("users.id"))
     passenger = relationship("User", back_populates="rides_requested")

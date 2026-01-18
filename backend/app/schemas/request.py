@@ -17,6 +17,7 @@ class RequestBase(BaseModel):
     origin_lng: Optional[float] = None
     destination_lat: Optional[float] = None
     destination_lng: Optional[float] = None
+    meeting_point: Optional[str] = None
 
 
 class RequestCreate(RequestBase):
