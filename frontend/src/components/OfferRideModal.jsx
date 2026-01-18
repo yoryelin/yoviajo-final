@@ -78,7 +78,8 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                 alert(error.detail || "Error al publicar")
             }
         } catch (e) {
-            alert("Error de conexión")
+            console.error("Error creating ride:", e);
+            alert(`Error inesperado: ${e.message || "Error desconocido"}`);
         }
     }
 
@@ -101,7 +102,8 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                 alert(error.detail || "Error al cancelar")
             }
         } catch (e) {
-            alert("Error de conexión")
+            console.error("Error cancelling ride:", e);
+            alert(`Error inesperado: ${e.message || "Error desconocido"}`);
         }
     }
 

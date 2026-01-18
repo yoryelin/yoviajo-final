@@ -48,7 +48,8 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
                 alert(error.detail || "Error al solicitar")
             }
         } catch (e) {
-            alert("Error de conexión")
+            console.error("Error requesting ride:", e);
+            alert(`Error inesperado: ${e.message || "Error desconocido"}`);
         }
     }
 
