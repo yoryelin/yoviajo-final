@@ -101,15 +101,29 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
                             </div>
                         </div>
 
-                        <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Referencia / Punto de Encuentro</label>
-                            <input
-                                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none text-white transition placeholder-slate-600"
-                                name="meeting_point"
-                                placeholder="Ej: Esquina del Shopping, Parada de Colectivo..."
-                                value={reqData.meeting_point || ''}
-                                onChange={handleChange}
-                            />
+
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Ref. Origen</label>
+                                <input
+                                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none text-white transition placeholder-slate-600"
+                                    name="origin_reference"
+                                    placeholder="Ej: Terminal..."
+                                    value={reqData.origin_reference || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Ref. Destino</label>
+                                <input
+                                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none text-white transition placeholder-slate-600"
+                                    name="destination_reference"
+                                    placeholder="Ej: Centro Civico..."
+                                    value={reqData.destination_reference || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
                         </div>
 
                         <div>
@@ -149,8 +163,8 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
                     </form>
                 </div>
 
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

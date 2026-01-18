@@ -128,11 +128,21 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
             )}
           </div>
 
-          {/* MEETING POINT REFERENCE */}
-          {data.meeting_point && (
-            <div className="mt-2 flex items-start gap-1">
-              <span className="text-xs">📍</span>
-              <p className="text-[10px] text-slate-400 font-medium italic">"{data.meeting_point}"</p>
+          {/* REFERENCES ROW */}
+          {(data.origin_reference || data.destination_reference) && (
+            <div className="mt-2 flex flex-col gap-1 text-[10px] font-medium text-slate-400">
+              {data.origin_reference && (
+                <div className="flex items-start gap-1">
+                  <span className="text-xs">🛫</span>
+                  <span className="italic">Salida: {data.origin_reference}</span>
+                </div>
+              )}
+              {data.destination_reference && (
+                <div className="flex items-start gap-1">
+                  <span className="text-xs">🏁</span>
+                  <span className="italic">Llegada: {data.destination_reference}</span>
+                </div>
+              )}
             </div>
           )}
 

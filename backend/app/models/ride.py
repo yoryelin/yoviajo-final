@@ -31,7 +31,8 @@ class Ride(Base):
     origin_lng = Column(Float, nullable=True)
     destination_lat = Column(Float, nullable=True)
     destination_lng = Column(Float, nullable=True)
-    meeting_point = Column(String, nullable=True) # Referencia texto libre
+    origin_reference = Column(String, nullable=True)
+    destination_reference = Column(String, nullable=True)
 
     driver_id = Column(Integer, ForeignKey("users.id"))
     driver = relationship("User", back_populates="rides_offered")
@@ -55,7 +56,8 @@ class RideRequest(Base):
     origin_lng = Column(Float, nullable=True)
     destination_lat = Column(Float, nullable=True)
     destination_lng = Column(Float, nullable=True)
-    meeting_point = Column(String, nullable=True) # Referencia texto libre
+    origin_reference = Column(String, nullable=True)      # Ej: Frente al Casino
+    destination_reference = Column(String, nullable=True) # Ej: Terminal de Omnibus
 
     passenger_id = Column(Integer, ForeignKey("users.id"))
     passenger = relationship("User", back_populates="rides_requested")
