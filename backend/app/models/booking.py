@@ -32,6 +32,11 @@ class Booking(Base):
     seats_booked = Column(Integer, nullable=False, default=1)  # Cantidad de asientos
     status = Column(String, default=BookingStatus.PENDING.value, nullable=False)
     
+    # Payment Info
+    payment_status = Column(String, default="unpaid") # unpaid, paid, refunded
+    fee_amount = Column(Float, default=5000.0) # Fixed Fee
+    
+    
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

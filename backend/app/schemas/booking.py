@@ -32,6 +32,8 @@ class BookingResponse(BookingBase):
     id: int
     passenger_id: int
     status: str
+    payment_status: str
+    fee_amount: float
     created_at: datetime
     updated_at: Optional[datetime] = None
     

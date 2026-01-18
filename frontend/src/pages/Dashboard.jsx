@@ -6,6 +6,7 @@ import RequestRideModal from '../components/RequestRideModal'
 import TicketCard from '../components/TicketCard'
 import CityAutocomplete from '../components/CityAutocomplete'
 import ReserveRideModal from '../components/ReserveRideModal'
+import PaymentModal from '../components/PaymentModal'
 
 export default function Dashboard() {
     const { user, authFetch } = useAuth()
@@ -51,6 +52,8 @@ export default function Dashboard() {
     const [showRequestModal, setShowRequestModal] = useState(false)
     const [showReserveModal, setShowReserveModal] = useState(false)
     const [selectedRideForReservation, setSelectedRideForReservation] = useState(null)
+    const [showPaymentModal, setShowPaymentModal] = useState(false)
+    const [currentBookingForPayment, setCurrentBookingForPayment] = useState(null)
 
     useEffect(() => {
         fetchData()
@@ -97,10 +100,45 @@ export default function Dashboard() {
         setShowOfferModal(true)
     }
 
-    // Handle Reserve
     const handleReserveInit = (rideData) => {
         setSelectedRideForReservation(rideData)
         setShowReserveModal(true)
+    }
+
+    const handleMatch = async (matchData) => {
+        // Lógica para "Solicitar Unirme" (Pasajero)
+        if (!isDriver) {
+            if (confirm(`¿Confirmar reserva con ${matchData.candidate_user.name}? Se procederá al pago del Fee.`)) {
+                setLoading(true)
+                try {
+                    // 1. Crear Reserva (Awaiting Payment)
+                    const res = await authFetch(`${API_URL}/bookings`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            ride_id: matchData.ride_id,
+                            seats_booked: 1 // Default 1 seat for match
+                        })
+                    })
+                    if (res.ok) {
+                        const booking = await res.json()
+                        // 2. Abrir Modal de Pago
+                        setCurrentBookingForPayment(booking)
+                        setShowPaymentModal(true)
+                    } else {
+                        const err = await res.json()
+                        alert(`Error: ${err.detail}`)
+                    }
+                } catch (e) {
+                    console.error(e)
+                    alert("Error al iniciar reserva")
+                } finally {
+                    setLoading(false)
+                }
+            }
+        } else {
+            alert("La funcionalidad para invitar pasajeros estará disponible pronto.")
+        }
     }
 
     return (
@@ -123,7 +161,8 @@ export default function Dashboard() {
                                     type="match_found"
                                     data={match}
                                     user={user}
-                                    onMatch={(data) => alert(`¡Conectando con ${data.candidate_user.name}!... (Próximamente)`)}
+
+                                    onMatch={handleMatch}
                                 />
                             ))}
                         </div>
@@ -229,6 +268,18 @@ export default function Dashboard() {
             />
             <RequestRideModal isOpen={showRequestModal} onClose={() => setShowRequestModal(false)} authFetch={authFetch} API_URL={API_URL} onPublish={fetchData} />
             <ReserveRideModal isOpen={showReserveModal} ride={selectedRideForReservation} onClose={() => { setShowReserveModal(false); setSelectedRideForReservation(null) }} authFetch={authFetch} API_URL={API_URL} onReserveSuccess={fetchData} />
+            <PaymentModal
+                booking={currentBookingForPayment}
+                onClose={() => { setShowPaymentModal(false); setCurrentBookingForPayment(null); }}
+                onPaymentSuccess={(data) => {
+                    setShowPaymentModal(false)
+                    setCurrentBookingForPayment(null)
+                    fetchData() // Refresh to show confirmed booking/ticket
+                    alert("¡Reserva Confirmada! Datos del conductor desbloqueados.")
+                }}
+                authFetch={authFetch}
+                API_URL={API_URL}
+            />
         </>
     )
 }
