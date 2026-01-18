@@ -157,7 +157,6 @@ def create_booking(
         ride_id=booking.ride_id,
         passenger_id=current_user.id,
         seats_booked=booking.seats_booked,
-        seats_booked=booking.seats_booked,
         status=BookingStatus.AWAITING_PAYMENT.value,
         payment_status="unpaid",
         fee_amount=5000.0 # Fixed Fee explicit assignment

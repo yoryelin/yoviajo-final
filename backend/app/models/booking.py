@@ -2,7 +2,7 @@
 Modelo de Reservas (Bookings).
 Representa cuando un pasajero reserva asientos en un viaje ofrecido por un conductor.
 """
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
