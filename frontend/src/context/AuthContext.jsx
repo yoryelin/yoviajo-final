@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem('token')
     const userData = localStorage.getItem('user')
-    
+
     if (token && userData) {
       try {
         setUser(JSON.parse(userData))
@@ -35,12 +35,36 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('user')
   }
 
+  const authFetch = async (url, options = {}) => {
+    const token = localStorage.getItem('token')
+    const headers = {
+      'Content-Type': 'application/json',
+      ...options.headers
+    }
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
+    const response = await fetch(url, {
+      ...options,
+      headers
+    })
+
+    if (response.status === 401) {
+      logout()
+    }
+
+    return response
+  }
+
   const value = {
     user,
     login,
     logout,
     loading,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
+    authFetch
   }
 
   return (
