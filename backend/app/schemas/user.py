@@ -58,6 +58,7 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     id: int
     dni: str
+    age: Optional[int] = None
     role: str
     is_active: bool
     cancellation_count: int = 0

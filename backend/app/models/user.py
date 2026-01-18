@@ -3,6 +3,7 @@ Modelo de Usuario.
 """
 from sqlalchemy import Column, Integer, String, Boolean, UniqueConstraint, Date
 from sqlalchemy.orm import relationship
+from datetime import datetime     
 from app.database import Base
 
 
@@ -44,4 +45,11 @@ class User(Base):
     rides_offered = relationship("Ride", back_populates="driver")
     rides_requested = relationship("RideRequest", back_populates="passenger")
     bookings = relationship("Booking", back_populates="passenger")
+
+    @property
+    def age(self):
+        if not self.birth_date:
+            return None
+        today = datetime.now().date()
+        return today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
 

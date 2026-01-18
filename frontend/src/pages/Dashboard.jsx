@@ -34,6 +34,7 @@ export default function Dashboard() {
     // Datos y Estados
     const [rides, setRides] = useState([])
     const [requests, setRequests] = useState([])
+    const [matches, setMatches] = useState([]) // NEW: Smart Matches
     const [loading, setLoading] = useState(false) // Moved up context logic check
 
     // Search State
@@ -65,6 +66,10 @@ export default function Dashboard() {
             // Fetch Requests (if needed, or logic to separate)
             const resRequests = await authFetch(`${API_URL}/requests`)
             if (resRequests.ok) setRequests(await resRequests.json())
+
+            // Fetch Matches
+            const resMatches = await authFetch(`${API_URL}/matches`)
+            if (resMatches.ok) setMatches(await resMatches.json())
         } catch (error) {
             console.error("Error fetching dashboard data:", error)
         } finally {
@@ -101,6 +106,30 @@ export default function Dashboard() {
     return (
         <>
             <div className="space-y-6">
+                {/* --- SMART MATCHES SECTION --- */}
+                {matches.length > 0 && (
+                    <div className="mb-8 p-6 bg-gradient-to-r from-amber-900/40 to-slate-900 rounded-3xl border border-amber-500/30 animate-pulse-glow">
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="text-2xl">🎯</span>
+                            <div>
+                                <h3 className="text-xl font-bold text-amber-500">Coincidencias Inteligentes</h3>
+                                <p className="text-xs text-amber-200/70">Usuarios compatibles contigo (Mismo trayecto + Horario similar)</p>
+                            </div>
+                        </div>
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            {matches.map((match, idx) => (
+                                <TicketCard
+                                    key={`match-${idx}`}
+                                    type="match_found"
+                                    data={match}
+                                    user={user}
+                                    onMatch={(data) => alert(`¡Conectando con ${data.candidate_user.name}!... (Próximamente)`)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* --- FEED DE VIAJES --- */}
                 {activeTab === 'rides' && (
                     <div className="space-y-6 animate-fade-in">

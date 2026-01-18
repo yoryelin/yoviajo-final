@@ -2,12 +2,17 @@ import React from 'react'
 import CountdownTimer from './CountdownTimer'
 
 const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onReport, onMatch, user, authFetch, API_URL }) => {
-  const isOffer = type === 'ride' || isDriver // Legacy fallback
+  const isMatch = type === 'match_found'
+  const isOffer = (type === 'ride' || isDriver) && !isMatch // Legacy fallback
   const isBooking = type === 'booking'
   const viewerIsDriver = user?.role === 'C'
 
-  const borderClass = isOffer ? 'border-cyan-500 shadow-cyan-500/10' : 'border-pink-500 shadow-pink-500/10'
-  const btnClass = isOffer ? 'bg-cyan-600 hover:bg-cyan-500' : 'bg-pink-600 hover:bg-pink-500'
+  // En Matches: Candidate User es lo importante
+  const candidate = data.candidate_user
+  const matchScore = data.match_score
+
+  const borderClass = isMatch ? 'border-amber-400 shadow-amber-500/20' : isOffer ? 'border-cyan-500 shadow-cyan-500/10' : 'border-pink-500 shadow-pink-500/10'
+  const btnClass = isMatch ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-black' : isOffer ? 'bg-cyan-600 hover:bg-cyan-500' : 'bg-pink-600 hover:bg-pink-500'
 
   // Formateo inteligente de Fecha y Hora
   const formatDateTime = () => {
@@ -61,17 +66,22 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
   // Si soy Pasajero y veo Solicitud (Mía) -> "Pendiente"
 
   const getActionButtonParams = () => {
+    // 1. MATCH MODE (Priority)
+    if (isMatch) {
+      if (viewerIsDriver) {
+        return { label: '⚡ Ofrecer Lugar', action: () => onMatch && onMatch(data), disabled: false }
+      } else {
+        return { label: '👋 Solicitar Unirme', action: () => onMatch && onMatch(data), disabled: false }
+      }
+    }
+
+    // 2. DRIVER MODE
     if (viewerIsDriver) {
       if (isRequest) return { label: '⚡ Hacer Match', action: () => onMatch && onMatch(data), disabled: false }
       return { label: 'Gestionar', action: () => onManage && onManage(data), disabled: false }
     } else {
-      // Pasajero (o no logueado)
+      // 3. PASSENGER MODE
       if (isBooking) {
-        // Lógica para Mis Reservas
-        // 1. Verificar si el viaje ya pasó -> Opción de Reportar
-        // 2. Si es futuro -> opción de Cancelar
-        // data.ride_departure_time o data.ride.departure_time? El endpoint devuelve flattened?
-        // En MyTrips/backend: booking_dict has 'ride_departure_time'.
         const depTime = data.ride_departure_time || data.departure_time
         const isPast = new Date(depTime) < new Date()
 
@@ -83,8 +93,7 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
       }
 
       if (isOffer) return { label: user ? 'Reservar' : 'Inicia sesión', action: handleReserveClick, disabled: !user }
-      // Solicitud vista por pasajero
-      // Si es MI solicitud -> Gestionar
+
       if (isRequest && user && data.passenger_name === user.username) {
         return { label: 'Gestionar', action: () => onManage && onManage(data), disabled: false }
       }

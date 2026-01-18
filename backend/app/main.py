@@ -45,6 +45,9 @@ app.include_router(bookings.router)
 app.include_router(reports.router)
 app.include_router(geocode.router)
 
+from app.api.routes import matches
+app.include_router(matches.router)
+
 from app.api.routes import payment
 app.include_router(payment.router)
 
