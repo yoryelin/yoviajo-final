@@ -328,13 +328,25 @@ export default function Login() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold text-slate-500 uppercase">Marca y Modelo</label>
-                  <input
-                    className="input-field text-sm"
-                    type="text"
-                    placeholder="Ej: Fiat Cronos"
+                  <select
+                    className="input-field text-sm appearance-none"
                     value={formData.car_model}
                     onChange={(e) => setFormData({ ...formData, car_model: e.target.value })}
-                  />
+                  >
+                    <option value="">Selecciona un modelo...</option>
+                    <option value="Fiat Cronos">Fiat Cronos</option>
+                    <option value="Peugeot 208">Peugeot 208</option>
+                    <option value="Toyota Etios">Toyota Etios</option>
+                    <option value="Toyota Hilux">Toyota Hilux</option>
+                    <option value="Volkswagen Gol Trend">VW Gol Trend</option>
+                    <option value="Volkswagen Amarok">VW Amarok</option>
+                    <option value="Ford Ka">Ford Ka</option>
+                    <option value="Ford Ranger">Ford Ranger</option>
+                    <option value="Chevrolet Onix">Chevrolet Onix</option>
+                    <option value="Renault Sandero">Renault Sandero</option>
+                    <option value="Renault Kangoo">Renault Kangoo</option>
+                    <option value="Otro">Otro / No listado</option>
+                  </select>
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold text-slate-500 uppercase">Patente</label>
