@@ -28,56 +28,64 @@ def get_rides(
     Obtener todas las ofertas de viajes activas.
     Soporta filtros por atributos de confianza.
     """
-    query = db.query(Ride)
-    
-    # 1. Filtros básicos
-    if allow_pets:
-        query = query.filter(Ride.allow_pets == True)
-    if allow_smoking:
-        query = query.filter(Ride.allow_smoking == True)
-
-    # 2. Women Only Logic (Bidirectional Safe Space)
-    
-    # A) Safety Rule: Hombres NUNCA ven viajes marcados como 'women_only'
-    if current_user.gender == 'M':
-         query = query.filter(Ride.women_only == False)
-         # Si un hombre intenta forzar el filtro, lo ignoramos o retornamos vacío
-         if women_only:
-             return []
-
-    # B) Search Filter: Pasajera busca "Solo Conductoras" o Viajes Seguros
-    if women_only:
-        if current_user.gender != 'F':
-            # Protección extra: Solo mujeres pueden activar este filtro activamente
-             raise HTTPException(status_code=400, detail="El filtro 'Solo Mujeres' es exclusivo para usuarias.")
+    try:
+        query = db.query(Ride)
         
-        # Filtrar: 
-        # 1. Viajes marcados como women_only=True (Exclusivos)
-        # OR
-        # 2. Viajes donde la conductora es Mujer (aunque sea abierto)
-        # La consigna dice: "viajar solo con un conductor mujer".
-        # Así que filtramos por género del conductor.
-        query = query.join(User, Ride.driver_id == User.id).filter(User.gender == 'F')
+        # 1. Filtros básicos
+        if allow_pets:
+            query = query.filter(Ride.allow_pets == True)
+        if allow_smoking:
+            query = query.filter(Ride.allow_smoking == True)
 
-    rides = query.all()
-    
-    result = []
-    for ride in rides:
-        ride_dict = RideResponse.from_orm(ride).dict()
-        ride_dict['maps_url'] = utils.generate_google_maps_url(
-            ride.origin,
-            ride.destination,
-            ride.origin_lat,
-            ride.origin_lng,
-            ride.destination_lat,
-            ride.destination_lng
+        # 2. Women Only Logic (Bidirectional Safe Space)
+        
+        # A) Safety Rule: Hombres NUNCA ven viajes marcados como 'women_only'
+        if current_user.gender == 'M':
+             query = query.filter(Ride.women_only == False)
+             # Si un hombre intenta forzar el filtro, lo ignoramos o retornamos vacío
+             if women_only:
+                 return []
 
-        )
-        # Calcular reservas activas
-        active_bookings = [b for b in ride.bookings if b.status != BookingStatus.CANCELLED.value]
-        ride_dict['bookings_count'] = len(active_bookings)
-        result.append(ride_dict)
-    return result
+        # B) Search Filter: Pasajera busca "Solo Conductoras" o Viajes Seguros
+        if women_only:
+            if current_user.gender != 'F':
+                # Protección extra: Solo mujeres pueden activar este filtro activamente
+                 raise HTTPException(status_code=400, detail="El filtro 'Solo Mujeres' es exclusivo para usuarias.")
+            
+            # Filtrar: 
+            # 1. Viajes marcados como women_only=True (Exclusivos)
+            # OR
+            # 2. Viajes donde la conductora es Mujer (aunque sea abierto)
+            # La consigna dice: "viajar solo con un conductor mujer".
+            # Así que filtramos por género del conductor.
+            query = query.join(User, Ride.driver_id == User.id).filter(User.gender == 'F')
+
+        rides = query.all()
+        
+        result = []
+        for ride in rides:
+            try:
+                ride_dict = RideResponse.from_orm(ride).dict()
+                ride_dict['maps_url'] = utils.generate_google_maps_url(
+                    ride.origin,
+                    ride.destination,
+                    ride.origin_lat,
+                    ride.origin_lng,
+                    ride.destination_lat,
+                    ride.destination_lng
+
+                )
+                # Calcular reservas activas
+                active_bookings = [b for b in ride.bookings if b.status != BookingStatus.CANCELLED.value]
+                ride_dict['bookings_count'] = len(active_bookings)
+                result.append(ride_dict)
+            except Exception as e:
+                print(f"Skipping corrupt ride {ride.id}: {e}")
+                continue
+        return result
+    except Exception as e:
+        print(f"CRITICAL ERROR in get_rides: {e}")
+        raise HTTPException(status_code=500, detail=f"Debug Error: {str(e)}")
 
 @router.post("", response_model=RideResponse)
 def create_ride(
