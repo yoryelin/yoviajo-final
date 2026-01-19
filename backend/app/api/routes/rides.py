@@ -229,30 +229,39 @@ def get_my_rides(
     """
     Obtener mis viajes publicados. Requiere autenticación.
     """
-    rides = db.query(Ride).filter(Ride.driver_id == current_user.id).all()
-    result = []
-    for ride in rides:
-        ride_dict = RideResponse.from_orm(ride).dict()
-        ride_dict['maps_url'] = utils.generate_google_maps_url(
-            ride.origin,
-            ride.destination,
-            ride.origin_lat,
-            ride.origin_lng,
-            ride.destination_lat,
-            ride.destination_lng
-        )
+    try:
+        rides = db.query(Ride).filter(Ride.driver_id == current_user.id).all()
+        result = []
+        for ride in rides:
+            try:
+                ride_dict = RideResponse.from_orm(ride).dict()
+                ride_dict['maps_url'] = utils.generate_google_maps_url(
+                    ride.origin,
+                    ride.destination,
+                    ride.origin_lat,
+                    ride.origin_lng,
+                    ride.destination_lat,
+                    ride.destination_lng
+                )
 
-        # Calcular reservas activas
-        active_bookings = [b for b in ride.bookings if b.status != BookingStatus.CANCELLED.value]
-        ride_dict['bookings_count'] = len(active_bookings)
-        
-        # Calcular coincidencias (Solicitudes de pasajeros con mismo Origen/Destino)
-        matches = db.query(RideRequest).filter(
-            RideRequest.origin == ride.origin,
-            RideRequest.destination == ride.destination
-        ).count()
-        ride_dict['matches_count'] = matches
+                # Calcular reservas activas
+                active_bookings = [b for b in ride.bookings if b.status != BookingStatus.CANCELLED.value]
+                ride_dict['bookings_count'] = len(active_bookings)
+                
+                # Calcular coincidencias (Solicitudes de pasajeros con mismo Origen/Destino)
+                matches = db.query(RideRequest).filter(
+                    RideRequest.origin == ride.origin,
+                    RideRequest.destination == ride.destination
+                ).count()
+                ride_dict['matches_count'] = matches
 
-        result.append(ride_dict)
-    return result
+                result.append(ride_dict)
+            except Exception as e:
+                print(f"ERROR processing ride {ride.id}: {e}")
+                # Continue with other rides or raise? Let's skip bad rides to prevent full crash
+                continue 
+        return result
+    except Exception as e:
+        print(f"CRITICAL ERROR in get_my_rides: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Debug Error: {str(e)}")
 
