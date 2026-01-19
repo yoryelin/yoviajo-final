@@ -4,7 +4,7 @@ Rutas de geocoding (conversión de direcciones a coordenadas).
 from fastapi import APIRouter, HTTPException
 import requests
 
-router = APIRouter(prefix="/api", tags=["geocoding"])
+router = APIRouter(prefix="/api/geocode", tags=["geocoding"])
 
 
 @router.get("/geocode")
