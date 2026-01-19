@@ -66,31 +66,39 @@ def get_my_bookings(
     """
     Obtener mis reservas. Requiere autenticación.
     """
-    bookings = db.query(Booking).filter(Booking.passenger_id == current_user.id).all()
-    result = []
-    for booking in bookings:
-        booking_dict = BookingResponse.from_orm(booking).dict()
-        # Agregar información del viaje
-        if booking.ride:
-            booking_dict['ride_origin'] = booking.ride.origin
-            booking_dict['ride_destination'] = booking.ride.destination
-            booking_dict['ride_departure_time'] = booking.ride.departure_time
-            booking_dict['ride_price'] = booking.ride.price
-            booking_dict['driver_name'] = booking.ride.driver.name if booking.ride.driver else None
-            
-            # Agregar geolocalización del viaje - ¡CORAZÓN DEL SISTEMA!
-            booking_dict['maps_url'] = utils.generate_google_maps_url(
-                booking.ride.origin,
-                booking.ride.destination,
-                booking.ride.origin_lat,
-                booking.ride.origin_lng,
-                booking.ride.destination_lat,
-                booking.ride.destination_lng
-            )
-        
-        booking_dict['passenger_name'] = current_user.name
-        result.append(booking_dict)
-    return result
+    try:
+        bookings = db.query(Booking).filter(Booking.passenger_id == current_user.id).all()
+        result = []
+        for booking in bookings:
+            try:
+                booking_dict = BookingResponse.from_orm(booking).dict()
+                # Agregar información del viaje
+                if booking.ride:
+                    booking_dict['ride_origin'] = booking.ride.origin
+                    booking_dict['ride_destination'] = booking.ride.destination
+                    booking_dict['ride_departure_time'] = booking.ride.departure_time
+                    booking_dict['ride_price'] = booking.ride.price
+                    booking_dict['driver_name'] = booking.ride.driver.name if booking.ride.driver else None
+                    
+                    # Agregar geolocalización del viaje - ¡CORAZÓN DEL SISTEMA!
+                    booking_dict['maps_url'] = utils.generate_google_maps_url(
+                        booking.ride.origin,
+                        booking.ride.destination,
+                        booking.ride.origin_lat,
+                        booking.ride.origin_lng,
+                        booking.ride.destination_lat,
+                        booking.ride.destination_lng
+                    )
+                
+                booking_dict['passenger_name'] = current_user.name
+                result.append(booking_dict)
+            except Exception as e:
+                print(f"Skipping corrupt booking {booking.id}: {e}")
+                continue
+        return result
+    except Exception as e:
+         print(f"CRITICAL ERROR in get_my_bookings: {e}")
+         raise HTTPException(status_code=500, detail=f"Debug Error: {str(e)}")
 
 
 @router.post("/", response_model=BookingResponse, status_code=status.HTTP_201_CREATED)
