@@ -51,6 +51,9 @@ class BookingResponse(BookingBase):
     passenger_name: Optional[str] = None
     passenger_phone: Optional[str] = None # WhatsApp
 
+    # Payment URL (MercadoPago)
+    payment_init_point: Optional[str] = None
+
     class Config:
         from_attributes = True
 

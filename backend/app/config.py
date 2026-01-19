@@ -32,6 +32,9 @@ class Settings(BaseSettings):
     # Fuel Standard (Monetization)
     FUEL_PRICE_ARS: float = 1750.0 
     AVG_CONSUMPTION_KM_L: int = 10
+
+    # MercadoPago Integration
+    MP_ACCESS_TOKEN: str = os.getenv("MP_ACCESS_TOKEN", "")
     
     class Config:
         env_file = ".env"

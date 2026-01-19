@@ -195,7 +195,31 @@ def create_booking(
         ride.destination_lat,
         ride.destination_lng
     )
-    
+
+    # ---------------------------------------------------------
+    # MONETIZATION: GENERATE MERCADOPAGO PREFERENCE
+    # ---------------------------------------------------------
+    try:
+        from app.services.payment_service import PaymentService
+        payment_service = PaymentService()
+        
+        preference = payment_service.create_preference(
+            booking_id=new_booking.id,
+            title=f"Reserva de Viaje: {ride.origin} -> {ride.destination}",
+            price=new_booking.fee_amount, # Fixed Fee (5000)
+            payer_email=current_user.email
+        )
+        
+        if preference:
+            booking_dict['payment_init_point'] = preference['init_point']
+            logger.info(f"MP Preference created for booking {new_booking.id}: {preference['init_point']}")
+        else:
+            logger.error(f"Failed to create MP Preference for booking {new_booking.id}")
+            
+    except Exception as e:
+        logger.error(f"Payment Integration Error: {e}")
+        # No fallamos la reserva, pero el usuario no tendrá link de pago (deberá reintentar)
+
     return booking_dict
 
 
