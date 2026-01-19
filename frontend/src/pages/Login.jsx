@@ -29,7 +29,8 @@ export default function Login() {
   }, [])
 
   // API URL
-  const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003/api'
+  const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
+  const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
 
   const handleSubmit = async (e, forcedRole = null) => {
     if (e) e.preventDefault()
@@ -91,7 +92,6 @@ export default function Login() {
 
       // Normalizar URL base de forma robusta
       let raw = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003').trim();
-      // Eliminar slash final si existe
       if (raw.endsWith('/')) {
         raw = raw.slice(0, -1);
       }

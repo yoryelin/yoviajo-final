@@ -10,7 +10,8 @@ const Layout = ({ children }) => {
 
     const [showProfileModal, setShowProfileModal] = useState(false)
     const isDriver = user?.role === 'C'
-    const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003/api'
+    const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
+    const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-cyan-500 selection:text-white overflow-x-hidden pb-32">

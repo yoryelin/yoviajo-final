@@ -29,7 +29,8 @@ export default function CityAutocomplete({ label, value, onChange, placeholder =
             if (query.length >= 3 && showSuggestions) {
                 setIsLoading(true);
                 try {
-                    const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003/api';
+                    const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003';
+                    const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`;
                     const res = await fetch(`${API_URL}/geocode/autocomplete?q=${encodeURIComponent(query)}`);
                     if (res.ok) {
                         const data = await res.json();
