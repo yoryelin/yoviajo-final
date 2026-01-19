@@ -46,6 +46,9 @@ def generate_google_maps_url(
     
     Si hay coordenadas, las usa. Si no, usa las direcciones en texto.
     """
+    if not origin or not destination:
+        return None
+
     if origin_lat and origin_lng and dest_lat and dest_lng:
         # Usar coordenadas si están disponibles (más preciso)
         return f"https://www.google.com/maps/dir/?api=1&origin={origin_lat},{origin_lng}&destination={dest_lat},{dest_lng}&travelmode=driving"

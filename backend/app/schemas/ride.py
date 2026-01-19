@@ -36,6 +36,9 @@ class RideCreate(RideBase):
 class RideResponse(RideBase):
     id: int
     driver_id: int
+    # Override defaults to handle potential DB nulls gracefully
+    origin: Optional[str] = None
+    destination: Optional[str] = None
     maps_url: Optional[str] = None
     status: str
     bookings_count: int = 0
