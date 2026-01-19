@@ -44,12 +44,10 @@ def get_my_matches(
                         "reputation": passenger.reputation_score,
                         "photo": None # TODO: Avatar url
                     },
-                    "details": {
-                        "origin": req.origin,
-                        "destination": req.destination,
-                        "date": req.date,
-                        "price_proposal": req.proposed_price
-                    }
+                    "origin": req.origin,
+                    "destination": req.destination,
+                    "date": req.date,
+                    "price_proposal": req.proposed_price
                 })
                 
     else: # Pasajero
@@ -73,13 +71,12 @@ def get_my_matches(
                         "reputation": driver.reputation_score,
                         "photo": None
                     },
-                    "details": {
-                        "origin": ride.origin,
-                        "destination": ride.destination,
-                        "date": ride.departure_time, # ISO String
-                        "price": ride.price,
-                        "car": f"{driver.car_model} - {driver.car_color}"
-                    }
+                    "origin": ride.origin,
+                    "destination": ride.destination,
+                    "date": ride.departure_time, # ISO String
+                    "price": ride.price,
+                    "car_model": driver.car_model,
+                    "car_color": driver.car_color
                 })
     
     return matches_result
