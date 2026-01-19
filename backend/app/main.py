@@ -12,6 +12,10 @@ from app.api.routes import auth, rides, requests, geocode, bookings, reports, us
 # Crear tablas en la base de datos
 Base.metadata.create_all(bind=engine)
 
+# Ejecutar Migraciones Manuales (Columnas faltantes)
+from app.db_migration import run_migrations
+run_migrations()
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
