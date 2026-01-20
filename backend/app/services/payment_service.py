@@ -53,12 +53,19 @@ class PaymentService:
                 raise Exception("MercadoPago SDK not initialized")
                 
             preference_response = self.sdk.preference().create(preference_data)
+            
+            # Chequeo de Estado HTTP
+            if preference_response["status"] not in [200, 201]:
+                print(f"❌ MP Error Status: {preference_response['status']}")
+                print(f"❌ MP Error Detail: {preference_response.get('response')}")
+                return None
+            
             response = preference_response["response"]
             
             return {
                 "preference_id": response["id"],
-                "init_point": response["init_point"], # URL para redirigir al usuario
-                "sandbox_init_point": response["sandbox_init_point"] # URL para pruebas
+                "init_point": response["init_point"], 
+                "sandbox_init_point": response["sandbox_init_point"] 
             }
         except Exception as e:
             print(f"Error creando preferencia MP: {e}")
