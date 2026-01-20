@@ -82,3 +82,22 @@ class PaymentService:
         except Exception as e:
             print(f"Error creando preferencia MP: {e}")
             return None
+
+    def get_payment_info(self, payment_id: str):
+        """
+        Consulta la información de un pago en MP por su ID.
+        """
+        try:
+            if not self.sdk:
+                return None
+            
+            payment_info = self.sdk.payment().get(payment_id)
+            
+            if payment_info["status"] == 200:
+                return payment_info["response"]
+            else:
+                print(f"❌ Error getting payment info: {payment_info}")
+                return None
+        except Exception as e:
+            print(f"Error consultando pago MP: {e}")
+            return None

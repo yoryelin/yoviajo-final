@@ -13,49 +13,59 @@ router = APIRouter(prefix="/api/payment", tags=["payment"])
 class PaymentRequest(BaseModel):
     booking_id: int
 
-@router.post("/simulate")
-def simulate_payment(
-    data: PaymentRequest,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+
+from app.services.payment_service import PaymentService
+from fastapi import Request
+
+@router.post("/webhook")
+async def payment_webhook(
+    request: Request,
+    db: Session = Depends(get_db)
 ):
     """
-    Simula el pago de del Fee de Reserva.
-    En la vida real, aquí interactuaríamos con MercadoPago/Stripe.
+    Webhook para recibir notificaciones de MercadoPago.
     """
-    booking = db.query(Booking).filter(Booking.id == data.booking_id).first()
-    if not booking:
-        raise HTTPException(status_code=404, detail="Reserva no encontrada")
-    
-    if booking.passenger_id != current_user.id:
-        raise HTTPException(status_code=403, detail="No tienes permiso para pagar esta reserva")
+    try:
+        # 1. Obtener parámetros (query o body)
+        # MP suele mandar ?topic=payment&id=123 o type=payment
+        params = request.query_params
+        topic = params.get("topic") or params.get("type")
+        payment_id = params.get("id") or params.get("data.id")
 
-    if booking.payment_status == "paid":
-        return {"message": "La reserva ya está pagada", "status": "approved"}
+        print(f"🔔 Webhook received: {params}")
 
-    # 1. Crear Registro de Pago
-    payment = Payment(
-        booking_id=booking.id,
-        external_id=f"PAY-SIM-{datetime.now().timestamp()}",
-        status="approved",
-        amount=booking.fee_amount,
-        currency="ARS",
-        payment_url="https://mock.payment.gateway/success"
-    )
-    db.add(payment)
-    
-    # 2. Actualizar Reserva
-    booking.payment_status = "paid"
-    # Si estaba en 'pending' o 'awaiting_payment', ahora pasa a 'confirmed'
-    # Asumimos confirmación automática tras el pago para este flujo
-    booking.status = BookingStatus.CONFIRMED.value 
-    
-    db.commit()
-    db.refresh(booking)
-    
-    return {
-        "message": "Pago exitoso. Reserva confirmada.",
-        "status": "approved",
-        "booking_status": booking.status,
-        "payment_id": payment.id
-    }
+        if topic == "payment" and payment_id:
+            # 2. Consultar estado real a MP
+            service = PaymentService()
+            payment_info = service.get_payment_info(payment_id)
+            
+            if payment_info and payment_info.get("status") == "approved":
+                # 3. Identificar la Reserva (external_reference)
+                external_ref = payment_info.get("external_reference")
+                if external_ref:
+                    booking_id = int(external_ref)
+                    booking = db.query(Booking).filter(Booking.id == booking_id).first()
+                    
+                    if booking and booking.payment_status != "paid":
+                        print(f"💰 Payment Approved for Booking {booking_id}")
+                        
+                        # 4. Actualizar Booking
+                        booking.payment_status = "paid"
+                        booking.status = BookingStatus.CONFIRMED.value
+                        
+                        # Guardar ID del pago también (si existiera modelo Payment, o en un log)
+                        # Por ahora actualizamos Booking directamente
+                        booking.updated_at = datetime.utcnow()
+                        
+                        db.commit()
+                        db.refresh(booking)
+                        
+                        return {"status": "success", "message": "Booking confirmed"}
+            
+        return {"status": "ignored"}
+
+    except Exception as e:
+        print(f"❌ Webhook Error: {e}")
+        # Retornamos 200 siempre a MP para que no reintente infinitamente si es un error lógico nuestro
+        return {"status": "error"}
+
