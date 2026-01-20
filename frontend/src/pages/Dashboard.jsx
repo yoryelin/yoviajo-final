@@ -112,7 +112,7 @@ export default function Dashboard() {
                 setLoading(true)
                 try {
                     // 1. Crear Reserva (Awaiting Payment)
-                    const res = await authFetch(`${API_URL}/bookings`, {
+                    const res = await authFetch(`${API_URL}/bookings/`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -122,9 +122,15 @@ export default function Dashboard() {
                     })
                     if (res.ok) {
                         const booking = await res.json()
-                        // 2. Abrir Modal de Pago
-                        setCurrentBookingForPayment(booking)
-                        setShowPaymentModal(true)
+
+                        // 2. Redirigir a MercadoPago (Real Payment)
+                        if (booking.payment_init_point) {
+                            window.location.href = booking.payment_init_point
+                        } else {
+                            // Fallback (Simulation)
+                            setCurrentBookingForPayment(booking)
+                            setShowPaymentModal(true)
+                        }
                     } else {
                         const err = await res.json()
                         alert(`Error: ${err.detail}`)
