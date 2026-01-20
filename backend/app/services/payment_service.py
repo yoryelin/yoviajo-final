@@ -22,8 +22,20 @@ class PaymentService:
         """
         
         # Configuración de URLs de retorno (Back URLs)
-        # En producción, estas deben ser URLs reales de tu frontend
-        base_url = settings.CORS_ORIGINS[0] if settings.CORS_ORIGINS and settings.CORS_ORIGINS[0] != "*" else "http://localhost:5173"
+        # En producción (Render), usamos la URL real.
+        # Fallback a localhost solo si estamos en desarrollo explícito.
+        
+        # Detectar si estamos en producción (basado en si hay un token real configurado, o simplemente hardcode seguro)
+        production_url = "https://yoviajo-frontend.onrender.com"
+        
+        if settings.CORS_ORIGINS and settings.CORS_ORIGINS[0] != "*":
+             base_url = settings.CORS_ORIGINS[0]
+        else:
+             # Si CORS es "*" (default), asumimos producción si no es local, 
+             # PERO para asegurar que funcione en Render, forzamos la URL de frontend conocida.
+             base_url = production_url
+
+        print(f"🔗 MP Back URL Base: {base_url}") # Debug log
         
         preference_data = {
             "items": [
