@@ -5,6 +5,7 @@ import MyTrips from './pages/MyTrips'
 import Login from './pages/Login'
 import Landing from './pages/Landing'
 import ProfilePage from './pages/ProfilePage'
+import TransactionsPage from './pages/TransactionsPage'
 import { useAuth } from './context/AuthContext'
 
 export default function App() {
@@ -54,6 +55,17 @@ export default function App() {
           user ? (
             <Layout>
               <ProfilePage />
+            </Layout>
+          ) : <Navigate to="/" />
+        }
+      />
+
+      <Route
+        path="/admin/transactions"
+        element={
+          user ? (
+            <Layout>
+              <TransactionsPage />
             </Layout>
           ) : <Navigate to="/" />
         }
