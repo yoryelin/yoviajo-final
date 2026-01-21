@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
@@ -8,7 +9,7 @@ export default function Login() {
   const [viewMode, setViewMode] = useState('login')
 
   const [formData, setFormData] = useState({
-    dni: '', password: '', name: '', role: 'P', email: '', gender: 'M',
+    dni: '', password: '', name: '', role: 'P', email: '', phone: '', gender: 'M',
     birth_date: '', address: '',
     car_model: '', car_plate: '', car_color: '',
     prefs_smoking: false, prefs_pets: false, prefs_luggage: true,
@@ -58,7 +59,7 @@ export default function Login() {
     }
 
     if (viewMode === 'register') {
-      if (!formData.name || !formData.email || !formData.birth_date || !formData.address) {
+      if (!formData.name || !formData.email || !formData.phone || !formData.birth_date || !formData.address) {
         setError("Por favor completa todos los datos personales.")
         setLoading(false)
         return
@@ -113,6 +114,7 @@ export default function Login() {
           name: formData.name,
           role: formData.role,
           email: formData.email,
+          phone: formData.phone,
           gender: formData.gender,
           birth_date: formData.birth_date,
           address: formData.address,
@@ -256,6 +258,18 @@ export default function Login() {
                 />
               </div>
 
+              {/* CAMPO TELEFONO - NUEVO */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Celular (WhatsApp)</label>
+                <input
+                  className="input-field"
+                  type="tel"
+                  placeholder="Ej: 11 1234 5678"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                />
+              </div>
+
               {/* CAMPO EMAIL */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Email</label>
@@ -267,192 +281,196 @@ export default function Login() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
               </div>
-            </>
-          )}
 
-          {/* CAMPO GÉNERO (Solo Registro) */}
-          {viewMode === 'register' && (
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Género</label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, gender: 'M' })}
-                  className={`p-3 rounded-xl border-2 text-sm font-bold transition ${formData.gender === 'M' ? 'border-blue-500 bg-blue-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
-                >
-                  Masculino
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, gender: 'F' })}
-                  className={`p-3 rounded-xl border-2 text-sm font-bold transition ${formData.gender === 'F' ? 'border-pink-500 bg-pink-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
-                >
-                  Femenino
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* DATOS EXTENDIDOS (FECHA Y DIRECCIÓN) */}
-          {viewMode === 'register' && (
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Nacimiento</label>
-                <input
-                  className="input-field w-full"
-                  type="date"
-                  value={formData.birth_date}
-                  onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Barrio / Zona</label>
-                <input
-                  className="input-field w-full"
-                  type="text"
-                  placeholder="Ej: Centro"
-                  value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* CAMPOS DE CONDUCTOR (Restaurados - Solo si es Conductor) */}
-          {viewMode === 'register' && formData.role === 'C' && (
-            <div className="space-y-4 animate-fade-in bg-slate-800/50 p-4 rounded-xl border border-slate-700 mt-2">
-              <h3 className="text-cyan-400 font-bold text-sm uppercase tracking-widest flex items-center gap-2 border-b border-slate-700 pb-2">
-                DATOS DEL VEHÍCULO
-              </h3>
-
-              <div className="grid grid-cols-2 gap-3">
+              {/* CAMPO GÉNERO (Solo Registro) */}
+              {viewMode === 'register' && (
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase">Marca y Modelo</label>
-                  <select
-                    className="input-field text-sm appearance-none"
-                    value={formData.car_model}
-                    onChange={(e) => setFormData({ ...formData, car_model: e.target.value })}
-                  >
-                    <option value="">Selecciona un modelo...</option>
-                    <option value="Fiat Cronos">Fiat Cronos</option>
-                    <option value="Peugeot 208">Peugeot 208</option>
-                    <option value="Toyota Etios">Toyota Etios</option>
-                    <option value="Toyota Hilux">Toyota Hilux</option>
-                    <option value="Volkswagen Gol Trend">VW Gol Trend</option>
-                    <option value="Volkswagen Amarok">VW Amarok</option>
-                    <option value="Ford Ka">Ford Ka</option>
-                    <option value="Ford Ranger">Ford Ranger</option>
-                    <option value="Chevrolet Onix">Chevrolet Onix</option>
-                    <option value="Renault Sandero">Renault Sandero</option>
-                    <option value="Renault Kangoo">Renault Kangoo</option>
-                    <option value="Otro">Otro / No listado</option>
-                  </select>
+                  <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Género</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, gender: 'M' })}
+                      className={`p-3 rounded-xl border-2 text-sm font-bold transition ${formData.gender === 'M' ? 'border-blue-500 bg-blue-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
+                    >
+                      Masculino
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, gender: 'F' })}
+                      className={`p-3 rounded-xl border-2 text-sm font-bold transition ${formData.gender === 'F' ? 'border-pink-500 bg-pink-500/10 text-white' : 'border-slate-700 text-slate-500 hover:border-slate-500'}`}
+                    >
+                      Femenino
+                    </button>
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase">Patente</label>
-                  <input
-                    className="input-field text-sm uppercase"
-                    type="text"
-                    placeholder="AA 123 BB"
-                    value={formData.car_plate}
-                    onChange={(e) => setFormData({ ...formData, car_plate: e.target.value.toUpperCase() })}
-                  />
-                </div>
-              </div>
+              )}
 
+              {/* DATOS EXTENDIDOS (FECHA Y DIRECCIÓN) */}
+              {viewMode === 'register' && (
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Nacimiento</label>
+                    <input
+                      className="input-field w-full"
+                      type="date"
+                      value={formData.birth_date}
+                      onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Barrio / Zona</label>
+                    <input
+                      className="input-field w-full"
+                      type="text"
+                      placeholder="Ej: Centro"
+                      value={formData.address}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* CAMPOS DE CONDUCTOR (Restaurados - Solo si es Conductor) */}
+              {viewMode === 'register' && formData.role === 'C' && (
+                <div className="space-y-4 animate-fade-in bg-slate-800/50 p-4 rounded-xl border border-slate-700 mt-2">
+                  <h3 className="text-cyan-400 font-bold text-sm uppercase tracking-widest flex items-center gap-2 border-b border-slate-700 pb-2">
+                    DATOS DEL VEHÍCULO
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase">Marca y Modelo</label>
+                      <select
+                        className="input-field text-sm appearance-none"
+                        value={formData.car_model}
+                        onChange={(e) => setFormData({ ...formData, car_model: e.target.value })}
+                      >
+                        <option value="">Selecciona un modelo...</option>
+                        <option value="Fiat Cronos">Fiat Cronos</option>
+                        <option value="Peugeot 208">Peugeot 208</option>
+                        <option value="Toyota Etios">Toyota Etios</option>
+                        <option value="Toyota Hilux">Toyota Hilux</option>
+                        <option value="Volkswagen Gol Trend">VW Gol Trend</option>
+                        <option value="Volkswagen Amarok">VW Amarok</option>
+                        <option value="Ford Ka">Ford Ka</option>
+                        <option value="Ford Ranger">Ford Ranger</option>
+                        <option value="Chevrolet Onix">Chevrolet Onix</option>
+                        <option value="Renault Sandero">Renault Sandero</option>
+                        <option value="Renault Kangoo">Renault Kangoo</option>
+                        <option value="Otro">Otro / No listado</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase">Patente</label>
+                      <input
+                        className="input-field text-sm uppercase"
+                        type="text"
+                        placeholder="AA 123 BB"
+                        value={formData.car_plate}
+                        onChange={(e) => setFormData({ ...formData, car_plate: e.target.value.toUpperCase() })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase">Color</label>
+                    <input
+                      className="input-field text-sm"
+                      type="text"
+                      placeholder="Ej: Blanco"
+                      value={formData.car_color}
+                      onChange={(e) => setFormData({ ...formData, car_color: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" checked={formData.prefs_smoking} onChange={(e) => setFormData({ ...formData, prefs_smoking: e.target.checked })} className="accent-cyan-500" />
+                      <span className="text-xs text-slate-400">🚬 Fuma</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" checked={formData.prefs_pets} onChange={(e) => setFormData({ ...formData, prefs_pets: e.target.checked })} className="accent-cyan-500" />
+                      <span className="text-xs text-slate-400">🐾 Mascotas</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" checked={formData.prefs_luggage} onChange={(e) => setFormData({ ...formData, prefs_luggage: e.target.checked })} className="accent-cyan-500" />
+                      <span className="text-xs text-slate-400">🧳 Baúl</span>
+                    </label>
+                  </div>
+
+                  <div className="space-y-2 pt-2">
+                    <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 cursor-pointer hover:bg-slate-900 transition">
+                      <input type="checkbox" checked={formData.check_license} onChange={(e) => setFormData({ ...formData, check_license: e.target.checked })} className="w-5 h-5 accent-cyan-500" />
+                      <span className="text-xs font-bold text-cyan-100/80 uppercase">Licencia Vigente</span>
+                    </label>
+                    <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 cursor-pointer hover:bg-slate-900 transition">
+                      <input type="checkbox" checked={formData.check_insurance} onChange={(e) => setFormData({ ...formData, check_insurance: e.target.checked })} className="w-5 h-5 accent-cyan-500" />
+                      <span className="text-xs font-bold text-cyan-100/80 uppercase">Seguro al Día</span>
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {/* CAMPO DNI (Común) */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-500 uppercase">Color</label>
+                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">DNI</label>
                 <input
-                  className="input-field text-sm"
-                  type="text"
-                  placeholder="Ej: Blanco"
-                  value={formData.car_color}
-                  onChange={(e) => setFormData({ ...formData, car_color: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold tracking-widest"
+                  type="number"
+                  placeholder="Ej: 30123456"
+                  value={formData.dni}
+                  onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
                 />
               </div>
 
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.prefs_smoking} onChange={(e) => setFormData({ ...formData, prefs_smoking: e.target.checked })} className="accent-cyan-500" />
-                  <span className="text-xs text-slate-400">🚬 Fuma</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.prefs_pets} onChange={(e) => setFormData({ ...formData, prefs_pets: e.target.checked })} className="accent-cyan-500" />
-                  <span className="text-xs text-slate-400">🐾 Mascotas</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.prefs_luggage} onChange={(e) => setFormData({ ...formData, prefs_luggage: e.target.checked })} className="accent-cyan-500" />
-                  <span className="text-xs text-slate-400">🧳 Baúl</span>
-                </label>
+              {/* CAMPO PASSWORD (Común) */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Contraseña</label>
+                <input
+                  className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold"
+                  type="password"
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                />
               </div>
 
-              <div className="space-y-2 pt-2">
-                <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 cursor-pointer hover:bg-slate-900 transition">
-                  <input type="checkbox" checked={formData.check_license} onChange={(e) => setFormData({ ...formData, check_license: e.target.checked })} className="w-5 h-5 accent-cyan-500" />
-                  <span className="text-xs font-bold text-cyan-100/80 uppercase">Licencia Vigente</span>
-                </label>
-                <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 cursor-pointer hover:bg-slate-900 transition">
-                  <input type="checkbox" checked={formData.check_insurance} onChange={(e) => setFormData({ ...formData, check_insurance: e.target.checked })} className="w-5 h-5 accent-cyan-500" />
-                  <span className="text-xs font-bold text-cyan-100/80 uppercase">Seguro al Día</span>
-                </label>
+              <div className="text-right">
+                <Link to="/forgot-password" className="text-xs font-bold text-slate-400 hover:text-cyan-400 transition">
+                  ¿Olvidaste tu contraseña?
+                </Link>
               </div>
-            </div>
-          )}
 
-          {/* CAMPO DNI (Común) */}
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-400 ml-1 uppercase">DNI</label>
-            <input
-              className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold tracking-widest"
-              type="number"
-              placeholder="Ej: 30123456"
-              value={formData.dni}
-              onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
-            />
+              {/* End of Form Fields */}
+
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center animate-shake">
+                  <p className="text-red-300 text-xs font-bold">{error}</p>
+                </div>
+              )}
+
+              <button
+                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] mt-4 uppercase tracking-widest disabled:opacity-50"
+                disabled={loading}
+              >
+                {loading ? 'Procesando...' : (viewMode === 'register' ? 'Confirmar Registro' : 'Ingresar al Sistema')}
+              </button>
+            </form>
+
+          <div className="mt-8 text-center pt-4 border-t border-slate-700/50">
+            <button
+              onClick={() => {
+                setViewMode(viewMode === 'login' ? 'register' : 'login');
+                setError(null);
+              }}
+              className="text-slate-400 text-sm font-bold hover:text-white transition"
+            >
+              {viewMode === 'login' ? '¿No tienes cuenta? Registrate' : '¿Ya tienes cuenta? Ingresa'}
+            </button>
           </div>
-
-          {/* CAMPO PASSWORD (Común) */}
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Contraseña</label>
-            <input
-              className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold"
-              type="password"
-              placeholder="••••••••"
-              autoComplete="current-password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            />
-          </div>
-
-          {/* End of Form Fields */}
-
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center animate-shake">
-              <p className="text-red-300 text-xs font-bold">{error}</p>
-            </div>
-          )}
-
-          <button
-            className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] mt-4 uppercase tracking-widest disabled:opacity-50"
-            disabled={loading}
-          >
-            {loading ? 'Procesando...' : (viewMode === 'register' ? 'Confirmar Registro' : 'Ingresar al Sistema')}
-          </button>
-        </form>
-
-        <div className="mt-8 text-center pt-4 border-t border-slate-700/50">
-          <button
-            onClick={() => {
-              setViewMode(viewMode === 'login' ? 'register' : 'login');
-              setError(null);
-            }}
-            className="text-slate-400 text-sm font-bold hover:text-white transition"
-          >
-            {viewMode === 'login' ? '¿No tienes cuenta? Registrate' : '¿Ya tienes cuenta? Ingresa'}
-          </button>
-        </div>
 
       </div>
-    </div>
+    </div >
   )
 }

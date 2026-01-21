@@ -3,6 +3,8 @@ import Layout from './layouts/Layout'
 import Dashboard from './pages/Dashboard'
 import MyTrips from './pages/MyTrips'
 import Login from './pages/Login'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import Landing from './pages/Landing'
 import ProfilePage from './pages/ProfilePage'
 import TransactionsPage from './pages/TransactionsPage'
@@ -25,6 +27,8 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
       <Route path="/register" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+      <Route path="/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/dashboard" />} />
+      <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
 
       {/* Private Routes */}
       <Route

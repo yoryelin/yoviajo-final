@@ -1,15 +1,17 @@
 """
 Rutas de Gestión de Usuarios y Perfil.
 """
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
 from app.schemas.user import UserResponse, UserUpdate
 from app.api.deps import get_current_user
 from app import utils
+from app.services.storage_service import StorageService
 
 router = APIRouter(prefix="/api/users", tags=["users"])
+storage_service = StorageService()
 
 
 @router.get("/me", response_model=UserResponse)
@@ -73,3 +75,45 @@ def request_verification(
     db.commit()
     
     return {"message": "Verificación aprobada automáticamente (Modo Demo) ✅"}
+
+
+@router.post("/me/photo", response_model=UserResponse)
+def upload_profile_photo(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Sube una foto de perfil a Cloudinary y actualiza el usuario.
+    """
+    if not storage_service.enabled:
+        raise HTTPException(
+            status_code=503, 
+            detail="El servicio de almacenamiento no está configurado."
+        )
+
+    # Validar tipo de archivo (solo imagenes)
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(
+            status_code=400, 
+            detail="El archivo debe ser una imagen."
+        )
+
+    # Subir a Cloudinary
+    url = storage_service.upload_file(file.file, file.filename)
+    
+    if not url:
+        raise HTTPException(
+            status_code=500, 
+            detail="Error al subir la imagen."
+        )
+        
+    # Actualizar DB
+    current_user.profile_picture = url
+    db.commit()
+    db.refresh(current_user)
+    
+    # Audit
+    utils.log_audit(db, "PROFILE_PHOTO_UPDATED", {"url": url}, current_user.id)
+    
+    return current_user

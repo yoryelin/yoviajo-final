@@ -38,7 +38,12 @@ class Settings(BaseSettings):
 
     # Emails (Resend)
     RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
-    FROM_EMAIL: str = os.getenv("FROM_EMAIL", "onboarding@resend.dev") # Default Resend test domain
+    FROM_EMAIL: str = os.getenv("FROM_EMAIL", "onboarding@resend.dev")
+
+    # Cloudinary
+    CLOUDINARY_CLOUD_NAME: str = os.getenv("CLOUDINARY_CLOUD_NAME", "")
+    CLOUDINARY_API_KEY: str = os.getenv("CLOUDINARY_API_KEY", "")
+    CLOUDINARY_API_SECRET: str = os.getenv("CLOUDINARY_API_SECRET", "")
     
     class Config:
         env_file = ".env"

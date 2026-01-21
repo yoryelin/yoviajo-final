@@ -86,6 +86,46 @@ export default function ProfilePage() {
         }
     }
 
+    const handlePhotoUpload = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        if (!file.type.startsWith('image/')) {
+            alert('Por favor selecciona una imagen válida.')
+            return
+        }
+
+        const formData = new FormData()
+        formData.append('file', file)
+
+        setLoading(true)
+        try {
+            const token = localStorage.getItem('token')
+            const res = await fetch(`${API_URL}/users/me/photo`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            })
+
+            if (res.ok) {
+                const updatedUser = await res.json()
+                setProfile(updatedUser)
+                setSuccessMsg('Foto actualizada correctamente 📸')
+                setTimeout(() => setSuccessMsg(''), 3000)
+            } else {
+                const err = await res.json()
+                alert(err.detail || 'Error al subir imagen')
+            }
+        } catch (error) {
+            console.error(error)
+            alert('Error de conexión')
+        } finally {
+            setLoading(false)
+        }
+    }
+
     if (loading) return <div className="p-10 text-center text-white">Cargando perfil...</div>
 
     const isDriver = profile?.role === 'C'
@@ -94,8 +134,20 @@ export default function ProfilePage() {
         <div className="max-w-4xl mx-auto p-6 space-y-8 animate-fade-in pb-24">
             {/* Header */}
             <div className="flex items-center gap-6 bg-slate-900/50 p-6 rounded-3xl border border-slate-800">
-                <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-4xl shadow-xl shadow-cyan-900/40">
-                    {profile?.gender === 'F' ? '👩' : (profile?.gender === 'M' ? '👨' : '👤')}
+                <div className="relative group">
+                    <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-4xl shadow-xl shadow-cyan-900/40 overflow-hidden border-4 border-slate-800 relative">
+                        {profile?.profile_picture ? (
+                            <img src={profile.profile_picture} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                            <span>{profile?.gender === 'F' ? '👩' : (profile?.gender === 'M' ? '👨' : '👤')}</span>
+                        )}
+
+                        {/* Overlay Upload */}
+                        <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer text-white text-xs font-bold">
+                            CAMBIAR
+                            <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} />
+                        </label>
+                    </div>
                 </div>
                 <div>
                     <h1 className="text-3xl font-black text-white">{profile?.name}</h1>

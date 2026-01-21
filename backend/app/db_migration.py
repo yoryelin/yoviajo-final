@@ -124,5 +124,19 @@ def run_migrations():
                 except Exception as e:
                     logger.error(f"❌ Failed to add 'phone' to users: {e}")
 
+            # 8. Check 'profile_picture' in 'users' (Cloudinary)
+            try:
+                connection.execute(text("SELECT profile_picture FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'profile_picture' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN profile_picture VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'profile_picture' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'profile_picture' to users: {e}")
+
         except Exception as e:
             logger.error(f"Migration Error: {e}")

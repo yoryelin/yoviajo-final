@@ -16,6 +16,7 @@ class User(Base):
     name = Column(String)
     hashed_password = Column(String)
     phone = Column(String, nullable=True) # WhatsApp
+    profile_picture = Column(String, nullable=True) # URL Cloudinary
     role = Column(String, default="user")
     is_active = Column(Boolean, default=True)
     cancellation_count = Column(Integer, default=0)
