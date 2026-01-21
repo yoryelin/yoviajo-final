@@ -11,6 +11,7 @@ import re
 class UserBase(BaseModel):
     name: str
     email: EmailStr
+    phone: Optional[str] = None
 
 
 class UserCreate(UserBase):

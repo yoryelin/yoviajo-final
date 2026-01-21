@@ -41,6 +41,7 @@ def register(user: UserCreate, request: Request, db: Session = Depends(get_db)):
         hashed_password=hashed_pwd,
         role=user.role,
         gender=user.gender,
+        phone=user.phone,
         # Extended Profile
         birth_date=user.birth_date,
         address=user.address,
