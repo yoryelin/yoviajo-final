@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import AnimatedLogo from '../components/AnimatedLogo';
 import { useAuth } from '../context/AuthContext';
 
@@ -171,9 +171,9 @@ export default function Landing() {
             {/* FOOTER */}
             <footer className="bg-white/90 border-t border-slate-200 py-6 text-center text-slate-400 text-xs font-medium z-10 backdrop-blur-md">
                 <div className="flex justify-center gap-6 mb-2">
-                    <a href="#" className="hover:text-slate-600 transition">Términos</a>
-                    <a href="#" className="hover:text-slate-600 transition">Privacidad</a>
-                    <a href="#" className="hover:text-slate-600 transition">Contacto</a>
+                    <Link to="/terms" className="hover:text-slate-600 transition">Términos</Link>
+                    <Link to="/privacy" className="hover:text-slate-600 transition">Privacidad</Link>
+                    <a href="mailto:soporte@yoviajo.com.ar" className="hover:text-slate-600 transition">Contacto</a>
                 </div>
                 <p>© 2026 YoViajo Inc. Todos los derechos reservados.</p>
             </footer>

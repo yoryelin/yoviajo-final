@@ -6,6 +6,8 @@ import Login from './pages/Login'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import Landing from './pages/Landing'
+import TermsPage from './pages/TermsPage'
+import PrivacyPage from './pages/PrivacyPage'
 import ProfilePage from './pages/ProfilePage'
 import TransactionsPage from './pages/TransactionsPage'
 import { useAuth } from './context/AuthContext'
@@ -29,6 +31,10 @@ export default function App() {
       <Route path="/register" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
       <Route path="/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/dashboard" />} />
       <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
+
+      {/* Public Legal Pages */}
+      <Route path="/terms" element={<TermsPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
 
       {/* Private Routes */}
       <Route
