@@ -167,11 +167,20 @@ export default function ProfilePage() {
                         )}
                     </div>
 
-                    {/* Explicit Upload Button */}
-                    <label className="flex items-center gap-2 text-cyan-400 text-xs font-bold cursor-pointer hover:text-cyan-300 transition w-fit mt-1">
+                    {/* Explicit High-Visibility Button */}
+                    <button
+                        onClick={() => document.getElementById('photo-upload-input').click()}
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2 px-4 rounded-lg shadow-lg transition mt-2 border border-blue-400"
+                    >
                         <span>📷 CAMBIAR FOTO</span>
-                        <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} />
-                    </label>
+                    </button>
+                    <input
+                        id="photo-upload-input"
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                    />
                 </div>
 
             </div>
