@@ -410,65 +410,67 @@ export default function Login() {
                   </div>
                 </div>
               )}
+            </>
+          )}
 
-              {/* CAMPO DNI (Común) */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">DNI</label>
-                <input
-                  className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold tracking-widest"
-                  type="number"
-                  placeholder="Ej: 30123456"
-                  value={formData.dni}
-                  onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
-                />
-              </div>
-
-              {/* CAMPO PASSWORD (Común) */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Contraseña</label>
-                <input
-                  className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold"
-                  type="password"
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                />
-              </div>
-
-              <div className="text-right">
-                <Link to="/forgot-password" className="text-xs font-bold text-slate-400 hover:text-cyan-400 transition">
-                  ¿Olvidaste tu contraseña?
-                </Link>
-              </div>
-
-              {/* End of Form Fields */}
-
-              {error && (
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center animate-shake">
-                  <p className="text-red-300 text-xs font-bold">{error}</p>
-                </div>
-              )}
-
-              <button
-                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] mt-4 uppercase tracking-widest disabled:opacity-50"
-                disabled={loading}
-              >
-                {loading ? 'Procesando...' : (viewMode === 'register' ? 'Confirmar Registro' : 'Ingresar al Sistema')}
-              </button>
-            </form>
-
-          <div className="mt-8 text-center pt-4 border-t border-slate-700/50">
-            <button
-              onClick={() => {
-                setViewMode(viewMode === 'login' ? 'register' : 'login');
-                setError(null);
-              }}
-              className="text-slate-400 text-sm font-bold hover:text-white transition"
-            >
-              {viewMode === 'login' ? '¿No tienes cuenta? Registrate' : '¿Ya tienes cuenta? Ingresa'}
-            </button>
+          {/* CAMPO DNI (Común) */}
+          <div className="space-y-1">
+            <label className="text-xs font-bold text-slate-400 ml-1 uppercase">DNI</label>
+            <input
+              className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold tracking-widest"
+              type="number"
+              placeholder="Ej: 30123456"
+              value={formData.dni}
+              onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
+            />
           </div>
+
+          {/* CAMPO PASSWORD (Común) */}
+          <div className="space-y-1">
+            <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Contraseña</label>
+            <input
+              className="w-full bg-slate-950 border border-slate-600 rounded-xl p-3 text-white focus:border-cyan-500 outline-none transition font-bold"
+              type="password"
+              placeholder="••••••••"
+              autoComplete="current-password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            />
+          </div>
+
+          <div className="text-right">
+            <Link to="/forgot-password" className="text-xs font-bold text-slate-400 hover:text-cyan-400 transition">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
+
+          {/* End of Form Fields */}
+
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center animate-shake">
+              <p className="text-red-300 text-xs font-bold">{error}</p>
+            </div>
+          )}
+
+          <button
+            className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] mt-4 uppercase tracking-widest disabled:opacity-50"
+            disabled={loading}
+          >
+            {loading ? 'Procesando...' : (viewMode === 'register' ? 'Confirmar Registro' : 'Ingresar al Sistema')}
+          </button>
+        </form>
+
+        <div className="mt-8 text-center pt-4 border-t border-slate-700/50">
+          <button
+            onClick={() => {
+              setViewMode(viewMode === 'login' ? 'register' : 'login');
+              setError(null);
+            }}
+            className="text-slate-400 text-sm font-bold hover:text-white transition"
+          >
+            {viewMode === 'login' ? '¿No tienes cuenta? Registrate' : '¿Ya tienes cuenta? Ingresa'}
+          </button>
+        </div>
 
       </div>
     </div >
