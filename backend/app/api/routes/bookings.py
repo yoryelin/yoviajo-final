@@ -81,14 +81,15 @@ def get_my_bookings(
                     booking_dict['driver_name'] = booking.ride.driver.name if booking.ride.driver else None
                     
                     # Agregar geolocalización del viaje - ¡CORAZÓN DEL SISTEMA!
-                    booking_dict['maps_url'] = utils.generate_google_maps_url(
-                        booking.ride.origin,
-                        booking.ride.destination,
                         booking.ride.origin_lat,
                         booking.ride.origin_lng,
                         booking.ride.destination_lat,
                         booking.ride.destination_lng
                     )
+
+                    # Unlock Contact Info IF Paid
+                    if booking.payment_status == "paid":
+                        booking_dict['driver_phone'] = booking.ride.driver.phone if booking.ride.driver else None
                 
                 booking_dict['passenger_name'] = current_user.name
                 result.append(booking_dict)
@@ -377,9 +378,15 @@ def get_ride_bookings(
         booking_dict['ride_departure_time'] = ride.departure_time
         booking_dict['ride_price'] = ride.price
         booking_dict['driver_name'] = ride.driver.name if ride.driver else None
+        booking_dict['driver_name'] = ride.driver.name if ride.driver else None
         booking_dict['passenger_name'] = booking.passenger.name if booking.passenger else None
-        booking_dict['passenger_phone'] = booking.passenger.phone if booking.passenger else None # WhatsApp Contact
         
+        # Unlock Contact Info IF Paid
+        if booking.payment_status == "paid":
+             booking_dict['passenger_phone'] = booking.passenger.phone if booking.passenger else None # WhatsApp Contact
+        else:
+             booking_dict['passenger_phone'] = None
+             
         # Geolocalización
         booking_dict['maps_url'] = utils.generate_google_maps_url(
             ride.origin,
