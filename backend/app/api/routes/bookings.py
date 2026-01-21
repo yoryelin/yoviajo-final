@@ -81,6 +81,9 @@ def get_my_bookings(
                     booking_dict['driver_name'] = booking.ride.driver.name if booking.ride.driver else None
                     
                     # Agregar geolocalización del viaje - ¡CORAZÓN DEL SISTEMA!
+                    booking_dict['maps_url'] = utils.generate_google_maps_url(
+                        booking.ride.origin,
+                        booking.ride.destination,
                         booking.ride.origin_lat,
                         booking.ride.origin_lng,
                         booking.ride.destination_lat,
