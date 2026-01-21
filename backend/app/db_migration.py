@@ -54,5 +54,78 @@ def run_migrations():
                 except Exception as e:
                     logger.error(f"❌ Failed to add 'fee_amount': {e}")
 
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'fee_amount': {e}")
+            
+            # 3. Check 'driver_phone' in 'bookings' (Contact Lock)
+            try:
+                connection.execute(text("SELECT driver_phone FROM bookings LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'driver_phone' missing in 'bookings'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE bookings ADD COLUMN driver_phone VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'driver_phone' column.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'driver_phone': {e}")
+
+            # 4. Check 'passenger_phone' in 'bookings' (Contact Lock)
+            try:
+                connection.execute(text("SELECT passenger_phone FROM bookings LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'passenger_phone' missing in 'bookings'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE bookings ADD COLUMN passenger_phone VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'passenger_phone' column.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'passenger_phone': {e}")
+
+            # 5. Check 'payment_init_point' in 'bookings' (MP Integration)
+            try:
+                connection.execute(text("SELECT payment_init_point FROM bookings LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'payment_init_point' missing in 'bookings'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE bookings ADD COLUMN payment_init_point VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'payment_init_point' column.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'payment_init_point': {e}")
+
+            # 6. Check 'payment_id' in 'bookings' (MP Integration)
+            try:
+                connection.execute(text("SELECT payment_id FROM bookings LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'payment_id' missing in 'bookings'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE bookings ADD COLUMN payment_id VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'payment_id' column.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'payment_id': {e}")
+
+            # 7. Check 'phone' in 'users' (Identity)
+            try:
+                connection.execute(text("SELECT phone FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'phone' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN phone VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'phone' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'phone' to users: {e}")
+
         except Exception as e:
             logger.error(f"Migration Error: {e}")
