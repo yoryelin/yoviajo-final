@@ -33,8 +33,12 @@ class Settings(BaseSettings):
     FUEL_PRICE_ARS: float = 1750.0 
     AVG_CONSUMPTION_KM_L: int = 10
 
-    # MercadoPago Integration
-    MP_ACCESS_TOKEN: str = os.getenv("MP_ACCESS_TOKEN", "")
+    # MercadoPago
+    MP_ACCESS_TOKEN: str = os.getenv("MP_ACCESS_TOKEN", "TEST-...")
+
+    # Emails (Resend)
+    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
+    FROM_EMAIL: str = os.getenv("FROM_EMAIL", "onboarding@resend.dev") # Default Resend test domain
     
     class Config:
         env_file = ".env"

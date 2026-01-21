@@ -1,21 +1,23 @@
 """
 Rutas de autenticación: registro y login.
 """
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, BackgroundTasks
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
 from app.schemas.user import UserCreate, UserResponse, UserLogin, Token
 from app import auth
 from app import utils
+from app.services.email_service import EmailService
 
 from app.core.logger import logger
 
 router = APIRouter(prefix="/api", tags=["auth"])
+email_service = EmailService()
 
 
 @router.post("/register", response_model=UserResponse)
-def register(user: UserCreate, request: Request, db: Session = Depends(get_db)):
+def register(user: UserCreate, request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     Registro de nuevo usuario.
     Requiere DNI, Email, Nombre y Password.
@@ -57,6 +59,15 @@ def register(user: UserCreate, request: Request, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     
+    # MAIL BIENVENIDA (Background)
+    if email_service.enabled:
+        background_tasks.add_task(
+            email_service.send_welcome_email, 
+            new_user.name, 
+            new_user.email, 
+            new_user.role
+        )
+    
     # AUDIT LOG
     ip = request.client.host if request.client else "0.0.0.0"
     utils.log_audit(db, "USER_REGISTERED", {"dni": new_user.dni, "email": new_user.email, "role": new_user.role}, new_user.id, ip)
@@ -97,5 +108,75 @@ def login(user_credentials: UserLogin, request: Request, db: Session = Depends(g
         "token_type": "bearer", 
         "user": user
     }
+
+
+# SCHEMAS PARA RESET
+from pydantic import BaseModel, EmailStr
+from datetime import timedelta
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+@router.post("/forgot-password")
+def forgot_password(payload: ForgotPasswordRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    """
+    Inicia el proceso de recuperación. Genera token y envía email.
+    """
+    user = db.query(User).filter(User.email == payload.email).first()
+    if not user:
+        # Por seguridad no deberíamos decir si existe o no, pero para MVP UX ayudamos.
+        # Mejor: Retornar 200 siempre.
+        logger.info(f"Forgot pwd request for non-existent email: {payload.email}")
+        return {"message": "Si el email existe, recibirás instrucciones."}
+
+    # Generar Token de Recuperación (JWT de corta vida)
+    recovery_token = auth.create_access_token(
+        data={"sub": user.dni, "purpose": "recovery"},
+        expires_delta=timedelta(minutes=30)
+    )
+    
+    # Enviar Email en Backgound
+    if email_service.enabled:
+        background_tasks.add_task(
+            email_service.send_recovery_email, 
+            user.email, 
+            recovery_token
+        )
+    
+    return {"message": "Si el email existe, recibirás instrucciones."}
+
+
+@router.post("/reset-password")
+def reset_password(payload: ResetPasswordRequest, db: Session = Depends(get_db)):
+    """
+    Restablece la contraseña usando el token.
+    """
+    try:
+        # Validar Token
+        import jwt # type: ignore
+        # Reusamos la logica de auth
+        payload_data = jwt.decode(payload.token, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
+        dni: str = payload_data.get("sub")
+        purpose: str = payload_data.get("purpose")
+        
+        if purpose != "recovery":
+            raise HTTPException(status_code=400, detail="Token inválido para recuperación")
+            
+    except Exception:
+        raise HTTPException(status_code=400, detail="Token inválido o expirado")
+        
+    user = db.query(User).filter(User.dni == dni).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        
+    # Cambiar Password
+    user.hashed_password = auth.get_password_hash(payload.new_password)
+    db.commit()
+    
+    return {"message": "Contraseña actualizada correctamente"}
 
 
