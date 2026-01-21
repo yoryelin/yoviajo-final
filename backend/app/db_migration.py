@@ -53,9 +53,6 @@ def run_migrations():
                     logger.info("✅ Added 'fee_amount' column.")
                 except Exception as e:
                     logger.error(f"❌ Failed to add 'fee_amount': {e}")
-
-                except Exception as e:
-                    logger.error(f"❌ Failed to add 'fee_amount': {e}")
             
             # 3. Check 'driver_phone' in 'bookings' (Contact Lock)
             try:
