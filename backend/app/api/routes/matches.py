@@ -22,10 +22,17 @@ def get_my_matches(
     Retorna una lista simple enriquecida para el Frontend.
     """
     matches_result = []
+    
+    from datetime import datetime
+    now = datetime.now()
 
     if current_user.role == 'C': # Conductor
-        # 1. Obtener mis viajes activos
-        my_rides = db.query(Ride).filter(Ride.driver_id == current_user.id, Ride.status == 'active').all()
+        # 1. Obtener mis viajes activos y FUTUROS
+        my_rides = db.query(Ride).filter(
+            Ride.driver_id == current_user.id, 
+            Ride.status == 'active',
+            Ride.departure_time >= now # Filter expired rides
+        ).all()
         
         for ride in my_rides:
             # Buscar Requests que encajen
@@ -51,9 +58,12 @@ def get_my_matches(
                 })
                 
     else: # Pasajero
-        # 1. Obtener mis solicitudes activas
-        # TODO: Filtrar por status si implementamos estado en Request
-        my_requests = db.query(RideRequest).filter(RideRequest.passenger_id == current_user.id).all()
+        # 1. Obtener mis solicitudes activas y FUTURAS
+        today_str = now.strftime("%Y-%m-%d")
+        my_requests = db.query(RideRequest).filter(
+            RideRequest.passenger_id == current_user.id,
+            RideRequest.date >= today_str # Filter expired requests
+        ).all()
         
         for req in my_requests:
             candidates = find_matches_for_request(req, db)
