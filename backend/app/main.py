@@ -70,17 +70,4 @@ def read_root():
         "docs": "/docs"
     }
 
-@app.get("/api/debug-env")
-def debug_env():
-    """Temporary endpoint to debug Cloudinary env vars"""
-    import os
-    env_keys = list(os.environ.keys())
-    cloudinary_keys = [k for k in env_keys if "CLOUDINARY" in k]
-    
-    vars_status = {
-        "SETTINGS_CLOUD_NAME": "SET" if settings.CLOUDINARY_CLOUD_NAME else "MISSING",
-        "OS_CLOUD_NAME": "SET" if os.environ.get("CLOUDINARY_CLOUD_NAME") else "MISSING",
-        "OS_KEYS_FOUND": cloudinary_keys,
-        "ALL_ENV_KEYS": env_keys  # Dangerous in real prod but needed here
-    }
-    return vars_status
+

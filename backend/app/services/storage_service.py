@@ -14,11 +14,7 @@ class StorageService:
             )
             self.enabled = bool(settings.CLOUDINARY_CLOUD_NAME and settings.CLOUDINARY_API_KEY)
             if not self.enabled:
-                missing = []
-                if not settings.CLOUDINARY_CLOUD_NAME: missing.append("CLOUDINARY_CLOUD_NAME")
-                if not settings.CLOUDINARY_API_KEY: missing.append("CLOUDINARY_API_KEY")
-                if not settings.CLOUDINARY_API_SECRET: missing.append("CLOUDINARY_API_SECRET")
-                logger.warning(f"StorageService disabled. Missing vars: {', '.join(missing)}")
+                logger.warning("StorageService disabled: Credentials missing.")
         except Exception as e:
             logger.error(f"StorageService init error: {e}")
             self.enabled = False
