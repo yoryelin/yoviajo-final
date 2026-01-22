@@ -24,6 +24,14 @@ services:
         value: "false"
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: "10080"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: MP_ACCESS_TOKEN
+        sync: false
 
   # 2. Frontend Service (Static Site)
   # Note: Ideally this is a Static Site, but verifying if User wants Docker consistency.
