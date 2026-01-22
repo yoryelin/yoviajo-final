@@ -81,6 +81,8 @@ def debug_env():
     vars_status = {
         "SETTINGS_CLOUD_NAME": "SET" if settings.CLOUDINARY_CLOUD_NAME else "MISSING",
         "OS_CLOUD_NAME": "SET" if os.environ.get("CLOUDINARY_CLOUD_NAME") else "MISSING",
+        "GIT_BRANCH": os.environ.get("RENDER_GIT_BRANCH", "UNKNOWN"),
+        "IS_PR": os.environ.get("IS_PULL_REQUEST", "UNKNOWN"),
         "OS_KEYS_FOUND": cloudinary_keys,
         "ALL_ENV_KEYS": env_keys
     }
