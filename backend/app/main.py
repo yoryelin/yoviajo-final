@@ -70,3 +70,13 @@ def read_root():
         "docs": "/docs"
     }
 
+@app.get("/api/debug-env")
+def debug_env():
+    """Temporary endpoint to debug Cloudinary env vars"""
+    vars_status = {
+        "CLOUDINARY_CLOUD_NAME": "SET" if settings.CLOUDINARY_CLOUD_NAME else "MISSING",
+        "CLOUDINARY_API_KEY": "SET" if settings.CLOUDINARY_API_KEY else "MISSING",
+        "CLOUDINARY_API_SECRET": "SET" if settings.CLOUDINARY_API_SECRET else "MISSING",
+        "Cloud Name Value (First 2 chars)": settings.CLOUDINARY_CLOUD_NAME[:2] if settings.CLOUDINARY_CLOUD_NAME else "N/A"
+    }
+    return vars_status
