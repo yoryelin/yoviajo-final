@@ -116,6 +116,8 @@ class Token(BaseModel):
 
 
 class UserUpdate(BaseModel):
+    phone: Optional[str] = None
+    
     # Extended
     birth_date: Optional[date] = None
     address: Optional[str] = None
@@ -124,6 +126,7 @@ class UserUpdate(BaseModel):
     car_model: Optional[str] = None
     car_plate: Optional[str] = None
     car_color: Optional[str] = None
+    
     prefs_smoking: Optional[bool] = None
     prefs_pets: Optional[bool] = None
     prefs_luggage: Optional[bool] = None

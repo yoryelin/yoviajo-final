@@ -208,6 +208,19 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
               {isOffer && data.car_model && (
                 <span className="text-[9px] text-slate-600 font-medium">{data.car_model} {data.car_color ? `• ${data.car_color}` : ''}</span>
               )}
+
+              {/* CONTACT INFO (Checkmate) */}
+              {(data.driver_phone || data.passenger_phone) && (
+                <a
+                  href={`https://wa.me/${(data.driver_phone || data.passenger_phone).replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-flex items-center gap-1 text-[10px] font-bold text-green-400 hover:text-green-300 transition"
+                >
+                  <span className="text-sm">🟢</span>
+                  chat en vivo
+                </a>
+              )}
             </div>
           </div>
         </div>
