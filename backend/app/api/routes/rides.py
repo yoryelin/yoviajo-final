@@ -39,7 +39,7 @@ def get_rides(
 
         # 2. Women Only Logic (Bidirectional Safe Space)
         
-        # A) Safety Rule: Hombres NUNCA ven viajes marcados como 'women_only'
+            # A) Safety Rule: Hombres NUNCA ven viajes marcados como 'women_only'
         if current_user.gender == 'M':
              query = query.filter(Ride.women_only == False)
              # Si un hombre intenta forzar el filtro, lo ignoramos o retornamos vacío
@@ -59,6 +59,12 @@ def get_rides(
             # La consigna dice: "viajar solo con un conductor mujer".
             # Así que filtramos por género del conductor.
             query = query.join(User, Ride.driver_id == User.id).filter(User.gender == 'F')
+
+        # C) Time Filter: Solo viajes FUTUROS para el buscador público
+        # Usamos datetime.utcnow() para evitar problemas de timezone naive
+        # Ojo: departure_time en DB no tiene tzinfo, asumimos UTC o Local consistente.
+        # Para ser seguros, usamos now() simple si la DB es simple.
+        query = query.filter(Ride.departure_time >= datetime.now())
 
         rides = query.all()
         
@@ -238,7 +244,13 @@ def get_my_rides(
     Obtener mis viajes publicados. Requiere autenticación.
     """
     try:
-        rides = db.query(Ride).filter(Ride.driver_id == current_user.id).all()
+        # Mostrar viajes futuros o recientes (últimas 24hs)
+        # Todo lo anterior a ayer queda oculto (Archivado)
+        limit_date = datetime.now() - timedelta(hours=24)
+        rides = db.query(Ride).filter(
+            Ride.driver_id == current_user.id,
+            Ride.departure_time >= limit_date
+        ).all()
         result = []
         for ride in rides:
             try:

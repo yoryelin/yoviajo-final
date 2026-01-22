@@ -67,7 +67,14 @@ def get_my_bookings(
     Obtener mis reservas. Requiere autenticación.
     """
     try:
-        bookings = db.query(Booking).filter(Booking.passenger_id == current_user.id).all()
+        # Mostrar reservas de viajes futuros o recientes (últimas 24hs)
+        from datetime import timedelta
+        limit_date = datetime.now() - timedelta(hours=24)
+        
+        bookings = db.query(Booking).join(Ride).filter(
+            Booking.passenger_id == current_user.id,
+            Ride.departure_time >= limit_date
+        ).all()
         result = []
         for booking in bookings:
             try:
