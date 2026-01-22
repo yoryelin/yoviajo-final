@@ -142,11 +142,12 @@ export default function ProfilePage() {
                             <span>{profile?.gender === 'F' ? '👩' : (profile?.gender === 'M' ? '👨' : '👤')}</span>
                         )}
 
-                        {/* Overlay Upload */}
+                        {/* Overlay Upload HIDDEN FOR MVP
                         <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer text-white text-xs font-bold">
                             CAMBIAR
                             <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} />
                         </label>
+                        */}
                     </div>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -167,7 +168,7 @@ export default function ProfilePage() {
                         )}
                     </div>
 
-                    {/* Explicit High-Visibility Button */}
+                    {/* Explicit High-Visibility Button HIDDEN FOR MVP
                     <button
                         onClick={() => document.getElementById('photo-upload-input').click()}
                         className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2 px-4 rounded-lg shadow-lg transition mt-2 border border-blue-400"
@@ -181,6 +182,7 @@ export default function ProfilePage() {
                         accept="image/*"
                         onChange={handlePhotoUpload}
                     />
+                    */}
                 </div>
             </div>
 
