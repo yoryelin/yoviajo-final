@@ -47,9 +47,7 @@ const Layout = ({ children }) => {
                             <a href="/my-trips" className="hidden md:block text-sm font-bold text-slate-400 hover:text-white transition uppercase tracking-widest">
                                 Mis Viajes
                             </a>
-                            <a href="/admin/transactions" className="hidden md:block text-sm font-bold text-slate-400 hover:text-emerald-400 transition uppercase tracking-widest text-[10px]">
-                                Admin
-                            </a>
+
                             <div className="flex items-center gap-3 bg-slate-900/50 border border-slate-700/50 px-4 py-1.5 rounded-full hover:border-slate-600 transition cursor-default">
                                 <div
                                     className="flex items-center space-x-3 bg-slate-800/50 hover:bg-slate-700/50 p-2 rounded-xl border border-slate-700/50 transition cursor-pointer"

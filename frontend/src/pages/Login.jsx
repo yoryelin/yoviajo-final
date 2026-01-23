@@ -65,6 +65,13 @@ export default function Login() {
         return
       }
 
+      // Phone Validation (Min 10 digits)
+      if (formData.phone.length < 10) {
+        setError("El teléfono debe tener al menos 10 números (código de área + número).")
+        setLoading(false)
+        return
+      }
+
       // Driver Validations
       if (formData.role === 'C') {
         if (!formData.car_model || !formData.car_plate) {
@@ -264,9 +271,12 @@ export default function Login() {
                 <input
                   className="input-field"
                   type="tel"
-                  placeholder="Ej: 11 1234 5678"
+                  placeholder="Ej: 5491112345678 (Sin 0 ni 15)"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '');
+                    setFormData({ ...formData, phone: val });
+                  }}
                 />
               </div>
 

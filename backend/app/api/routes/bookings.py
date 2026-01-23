@@ -10,12 +10,46 @@ from app.models.user import User
 from app.models.ride import Ride
 from app.models.booking import Booking, BookingStatus
 from app.schemas.booking import BookingCreate, BookingResponse, BookingUpdate
-from app.api.deps import get_current_user
+
+from app.api.deps import get_current_user, get_current_admin_user
 from app import utils
 from datetime import datetime
 from app.core.logger import logger
 
 router = APIRouter(prefix="/api/bookings", tags=["bookings"])
+
+@router.get("/admin/transactions", response_model=List[BookingResponse])
+def get_all_transactions(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    """
+    Obtener TODAS las transacciones (reservas pagadas).
+    EXCLUSIVO SUPER ADMIN.
+    """
+    # Filtrar solo pagadas (o todas si queremos ver intentos fallidos también)
+    transactions = db.query(Booking).filter(
+        Booking.payment_status == "paid"
+    ).order_by(Booking.updated_at.desc()).all()
+    
+    result = []
+    for booking in transactions:
+        try:
+           booking_dict = BookingResponse.from_orm(booking).dict()
+           # Enriquecer datos
+           if booking.ride:
+               booking_dict['ride_origin'] = booking.ride.origin
+               booking_dict['ride_destination'] = booking.ride.destination
+               booking_dict['driver_name'] = booking.ride.driver.name if booking.ride.driver else "Unknown"
+           
+           if booking.passenger:
+               booking_dict['passenger_name'] = booking.passenger.name
+               
+           result.append(booking_dict)
+        except Exception:
+            continue
+            
+    return result
 
 
 def calculate_total_price(ride: Ride, seats: int) -> int:
@@ -25,6 +59,7 @@ def calculate_total_price(ride: Ride, seats: int) -> int:
 
 @router.get("/", response_model=List[BookingResponse])
 def get_bookings(db: Session = Depends(get_db)):
+
     """
     Obtener todas las reservas (público para ver disponibilidad).
     """

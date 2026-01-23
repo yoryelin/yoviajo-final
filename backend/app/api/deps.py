@@ -47,3 +47,17 @@ async def get_current_user(
         )
 
 
+def get_current_admin_user(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    """
+    Dependencia para obtener usuario con rol de Super Admin.
+    """
+    if current_user.role != "admin": # SUPER ADMIN CHECK
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Se requieren privilegios de Administrador"
+        )
+    return current_user
+
+

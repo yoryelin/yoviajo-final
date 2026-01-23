@@ -231,10 +231,10 @@ export default function ProfilePage() {
                         <div>
                             <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">WhatsApp / Teléfono</label>
                             <input
-                                type="text"
+                                type="tel"
                                 value={formData.phone || ''}
-                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                placeholder="+54 9 223..."
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, '') })}
+                                placeholder="Ej: 5491112345678 (Sin guiones)"
                                 className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
                             />
                             <p className="text-[10px] text-slate-500 mt-1">Solo se compartirá con quien confirmes viaje.</p>

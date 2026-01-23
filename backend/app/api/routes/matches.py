@@ -26,12 +26,15 @@ def get_my_matches(
     from datetime import datetime
     now = datetime.now()
 
+    today_str = now.strftime("%Y-%m-%d")
+    now_iso = now.strftime("%Y-%m-%dT%H:%M")
+
     if current_user.role == 'C': # Conductor
         # 1. Obtener mis viajes activos y FUTUROS
         my_rides = db.query(Ride).filter(
             Ride.driver_id == current_user.id, 
             Ride.status == 'active',
-            Ride.departure_time >= now # Filter expired rides
+            Ride.departure_time >= now_iso # Filter expired rides (String comparison)
         ).all()
         
         for ride in my_rides:
