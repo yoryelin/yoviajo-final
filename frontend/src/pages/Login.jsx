@@ -178,7 +178,7 @@ export default function Login() {
           const intendedRole = sessionStorage.getItem('intendedRole')
           const userRole = data.user.role
 
-          if (intendedRole && userRole !== intendedRole) {
+          if (intendedRole && userRole !== intendedRole && userRole !== 'admin') {
             const roleNames = { 'C': 'Conductor', 'P': 'Pasajero' }
             throw new Error(`Acceso Denegado: Esta cuenta está registrada como ${roleNames[userRole] || userRole} y no puede acceder al portal de ${roleNames[intendedRole] || intendedRole}.`)
           }
