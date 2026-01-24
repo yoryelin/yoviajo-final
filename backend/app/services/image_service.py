@@ -45,7 +45,6 @@ class ImageService:
                 
                 # Re-check valid prefix
                 if clean_url.startswith("cloudinary://"):
-                    import os
                     os.environ["CLOUDINARY_URL"] = clean_url
                     cloudinary.config(secure=True)
                     self.enabled = True
