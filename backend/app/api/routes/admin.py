@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.database import get_db
-from app.database import get_db
 from app.api.deps import get_current_admin_user
 from app.models import User, Ride, Booking, RideRequest
 
