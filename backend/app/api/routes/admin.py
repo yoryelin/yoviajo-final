@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.database import get_db
 from app.api.deps import get_current_admin_user
 from app.models import User, Ride, Booking, RideRequest
+from app.schemas import UserResponse, RideResponse, BookingResponse
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -30,17 +32,32 @@ def get_admin_stats(
         "users_preview": recent_users
     }
 
-@router.get("/users")
+@router.get("/users", response_model=List[UserResponse])
 def get_all_users(
     skip: int = 0,
     limit: int = 50,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_admin_user)
 ):
-    # Role check handled by dependency
-    
     users = db.query(User).offset(skip).limit(limit).all()
-    # Return a simplified list or list of Pydantic models. 
-    # For speed, we return dictionaries, but ideally we use a response_model.
-    # We'll rely on generic serialization for now or defined schemas if available.
     return users
+
+@router.get("/rides", response_model=List[RideResponse])
+def get_all_rides(
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    rides = db.query(Ride).order_by(Ride.created_at.desc()).offset(skip).limit(limit).all()
+    return rides
+
+@router.get("/bookings", response_model=List[BookingResponse])
+def get_all_bookings(
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    bookings = db.query(Booking).order_by(Booking.created_at.desc()).offset(skip).limit(limit).all()
+    return bookings

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '../../layouts/Layout'; // CORREGIDO: Ruta correcta
+import AdminLayout from '../../layouts/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -50,7 +50,7 @@ const AdminDashboard = () => {
     if (error) return <Layout><div className="p-4 text-red-500">Error: {error}</div></Layout>;
 
     return (
-        <Layout>
+        <AdminLayout>
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-bold text-white mb-8">Admin Console</h1>
 
@@ -86,17 +86,16 @@ const AdminDashboard = () => {
                         <button onClick={() => navigate('/admin/transactions')} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition">
                             View Transactions
                         </button>
-                        {/* Placeholder for future actions */}
-                        <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition">
-                            View Transactions
-                        </button>
                     </div>
                 </div>
 
-                {/* User Management Section */}
+                {/* User Management Section (Preview) */}
                 <div className="mt-12 bg-gray-800 rounded-lg shadow-lg border border-gray-700 overflow-hidden">
-                    <div className="p-6 border-b border-gray-700">
-                        <h2 className="text-xl font-bold text-white">User Management (Recent)</h2>
+                    <div className="p-6 border-b border-gray-700 flex justify-between items-center">
+                        <h2 className="text-xl font-bold text-white">Recent Users</h2>
+                        <button onClick={() => navigate('/admin/users')} className="text-cyan-400 hover:text-cyan-300 text-sm font-bold uppercase transition">
+                            View All Users
+                        </button>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-gray-300">
@@ -107,7 +106,6 @@ const AdminDashboard = () => {
                                     <th className="px-6 py-3">Email</th>
                                     <th className="px-6 py-3">Role</th>
                                     <th className="px-6 py-3">Verified</th>
-                                    <th className="px-6 py-3">Reputation</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -128,13 +126,12 @@ const AdminDashboard = () => {
                                                     <span className="text-yellow-500">No</span>
                                                 }
                                             </td>
-                                            <td className="px-6 py-4">{u.reputation_score || 0}</td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-                                            Loading users... (Requires backend update)
+                                        <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+                                            Loading users...
                                         </td>
                                     </tr>
                                 )}
@@ -143,7 +140,7 @@ const AdminDashboard = () => {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </AdminLayout>
     );
 };
 
