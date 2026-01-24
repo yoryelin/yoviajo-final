@@ -12,11 +12,10 @@ class Settings(BaseSettings):
     DEBUG: bool = os.getenv("DEBUG", "True").lower() == "true"
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./yoviajo.db")
+    DATABASE_URL: str = "sqlite:///./yoviajo.db"
     
     # Security
-    # WARNING: This default is for dev/demo only. In prod, override with env var.
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "fallback_secret_key_for_demo_only_12345") 
+    SECRET_KEY: str = "fallback_secret_key_for_demo_only_12345" 
     
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080 # 7 días
@@ -34,14 +33,14 @@ class Settings(BaseSettings):
     AVG_CONSUMPTION_KM_L: int = 10
 
     # MercadoPago
-    MP_ACCESS_TOKEN: str = os.getenv("MP_ACCESS_TOKEN", "TEST-...")
+    MP_ACCESS_TOKEN: str = "TEST-PLACEHOLDER-POR-AHORA"
 
     # Emails (Resend)
-    RESEND_API_KEY: str | None = os.getenv("RESEND_API_KEY")
-    FROM_EMAIL: str = os.getenv("FROM_EMAIL", "onboarding@resend.dev")
+    RESEND_API_KEY: str | None = None
+    FROM_EMAIL: str = "onboarding@resend.dev"
     
     # Cloudinary
-    CLOUDINARY_URL: str | None = os.getenv("CLOUDINARY_URL")
+    CLOUDINARY_URL: str | None = None
     
     class Config:
         env_file = ".env"
