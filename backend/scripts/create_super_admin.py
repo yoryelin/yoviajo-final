@@ -27,16 +27,16 @@ def promote_to_admin():
             return
 
         if user.role == "admin":
-            print(f"ℹ️  El usuario {user.full_name} ({email}) YA es administrador.")
+            print(f"ℹ️  El usuario {user.name} ({email}) YA es administrador.")
             return
 
-        print(f"✅ Usuario encontrado: {user.full_name}")
+        print(f"✅ Usuario encontrado: {user.name}")
         confirm = input("¿Estás seguro de hacerlo ADMIN? (s/n): ").lower()
         
         if confirm == 's':
             user.role = "admin"
             db.commit()
-            print(f"🎉 ¡Éxito! {user.full_name} ahora es SUPER ADMIN.")
+            print(f"🎉 ¡Éxito! {user.name} ahora es SUPER ADMIN.")
         else:
             print("🚫 Operación cancelada.")
             
