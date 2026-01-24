@@ -8,10 +8,10 @@ from app.models.user import User
 from app.schemas.user import UserResponse, UserUpdate
 from app.api.deps import get_current_user
 from app import utils
-from app.services.storage_service import StorageService
+from app.services.image_service import ImageService
 
 router = APIRouter(prefix="/api/users", tags=["users"])
-storage_service = StorageService()
+image_service = ImageService()
 
 
 @router.get("/me", response_model=UserResponse)
@@ -59,16 +59,6 @@ def request_verification(
     if current_user.verification_status == 'verified':
         return {"message": "Ya estás verificado."}
         
-    current_user.verification_status = 'pending'
-    # Mock auto-approve for Demo purposes if needed? 
-    # Or keep as pending and let Admin (Manual DB) approve?
-    # Let's keep as pending to show the flow.
-    
-    # Wait... for the demo, the user wants to SEE the badge. 
-    # Let's Mock Auto-Approve for now to satisfy the user request "Ganar el badge".
-    # Or maybe a "Simulated Approval" after 2 seconds? No, simpler.
-    # Let's set it to 'verified' directly for the MVP Demo experience if they upload "something".
-    
     current_user.verification_status = 'verified'
     current_user.is_verified = True
     
@@ -86,7 +76,7 @@ def upload_profile_photo(
     """
     Sube una foto de perfil a Cloudinary y actualiza el usuario.
     """
-    if not storage_service.enabled:
+    if not image_service.enabled:
         raise HTTPException(
             status_code=503, 
             detail="El servicio de almacenamiento no está configurado."
@@ -100,16 +90,16 @@ def upload_profile_photo(
         )
 
     # Subir a Cloudinary
-    url = storage_service.upload_file(file.file, file.filename)
+    url = image_service.upload_image(file.file, folder="yoviajo/avatars")
     
     if not url:
         raise HTTPException(
             status_code=500, 
-            detail="Error al subir la imagen."
+            detail="Error al subir la imagen a la nube."
         )
         
     # Actualizar DB
-    current_user.profile_picture = url
+    current_user.avatar_url = url
     db.commit()
     db.refresh(current_user)
     

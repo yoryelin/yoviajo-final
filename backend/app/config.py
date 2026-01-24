@@ -37,8 +37,11 @@ class Settings(BaseSettings):
     MP_ACCESS_TOKEN: str = os.getenv("MP_ACCESS_TOKEN", "TEST-...")
 
     # Emails (Resend)
-    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
+    RESEND_API_KEY: str | None = os.getenv("RESEND_API_KEY")
     FROM_EMAIL: str = os.getenv("FROM_EMAIL", "onboarding@resend.dev")
+    
+    # Cloudinary
+    CLOUDINARY_URL: str | None = os.getenv("CLOUDINARY_URL")
 
     # Cloudinary
     CLOUDINARY_CLOUD_NAME: str = os.getenv("CLOUDINARY_CLOUD_NAME", "")

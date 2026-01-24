@@ -26,3 +26,4 @@ cloudinary>=1.36.0
 python-multipart>=0.0.6
 
 
+cloudinary
