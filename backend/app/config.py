@@ -4,6 +4,16 @@ Configuración de la aplicación usando variables de entorno.
 import os
 from pydantic_settings import BaseSettings
 
+# --- CRITICAL FIX: Sanitize Environment for Cloudinary ---
+# The cloudinary library crashes on import if CLOUDINARY_URL is present but malformed.
+# We check it here (very early) and remove it if it's broken, so the app doesn't crash.
+# The app will fallback to individual keys (CLOUD_NAME, API_KEY, SECRET) later.
+raw_cloudinary_url = os.environ.get("CLOUDINARY_URL", "")
+if raw_cloudinary_url and not raw_cloudinary_url.strip().startswith("cloudinary://"):
+    print(f"⚠️ WARNING: Malformed CLOUDINARY_URL detected: '{raw_cloudinary_url[:10]}...'. Removing it to prevent crash.")
+    del os.environ["CLOUDINARY_URL"]
+# ---------------------------------------------------------
+
 
 class Settings(BaseSettings):
     # Base
