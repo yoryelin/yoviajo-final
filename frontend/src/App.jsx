@@ -10,6 +10,7 @@ import TermsPage from './pages/TermsPage'
 import PrivacyPage from './pages/PrivacyPage'
 import ProfilePage from './pages/ProfilePage'
 import TransactionsPage from './pages/TransactionsPage'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import { useAuth } from './context/AuthContext'
 
 export default function App() {
@@ -76,6 +77,17 @@ export default function App() {
           user ? (
             <Layout>
               <TransactionsPage />
+            </Layout>
+          ) : <Navigate to="/" />
+        }
+      />
+
+      <Route
+        path="/admin/dashboard"
+        element={
+          user ? (
+            <Layout>
+              <AdminDashboard />
             </Layout>
           ) : <Navigate to="/" />
         }

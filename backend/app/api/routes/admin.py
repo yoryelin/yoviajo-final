@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.database import get_db
-from app.api.deps import get_current_active_user
+from app.database import get_db
+from app.api.deps import get_current_admin_user
 from app.models import User, Ride, Booking, RideRequest
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
@@ -10,13 +11,9 @@ router = APIRouter(prefix="/api/admin", tags=["admin"])
 @router.get("/stats")
 def get_admin_stats(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    if current_user.role != "admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Requires admin privileges"
-        )
+    # Role check handled by dependency
     
     total_users = db.query(func.count(User.id)).scalar()
     total_rides = db.query(func.count(Ride.id)).scalar()
@@ -39,10 +36,9 @@ def get_all_users(
     skip: int = 0,
     limit: int = 50,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Not authorized")
+    # Role check handled by dependency
     
     users = db.query(User).offset(skip).limit(limit).all()
     # Return a simplified list or list of Pydantic models. 
