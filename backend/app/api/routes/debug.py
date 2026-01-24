@@ -36,3 +36,29 @@ def reset_database_force(secret_key: str, db: Session = Depends(get_db)):
     except Exception as e:
         logger.error(f"Error resetting database: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/cloudinary_check")
+def check_cloudinary_config():
+    """
+    Debug endpoint to check Cloudinary environment variables directly.
+    """
+    import os
+    from app.config import settings
+    from app.services.image_service import ImageService
+    
+    svc = ImageService()
+    
+    return {
+        "service_enabled": svc.enabled,
+        "config_values": {
+            "CLOUDINARY_URL (Settings)": "PRESENT" if settings.CLOUDINARY_URL else "MISSING",
+            "CLOUDINARY_URL (Env)": "PRESENT" if os.environ.get("CLOUDINARY_URL") else "MISSING",
+            "CLOUD_NAME (Settings)":  settings.CLOUDINARY_CLOUD_NAME or "MISSING",
+            "CLOUD_NAME (Env)": os.environ.get("CLOUDINARY_CLOUD_NAME") or "MISSING",
+            "API_KEY (Settings)": "PRESENT" if settings.CLOUDINARY_API_KEY else "MISSING",
+            "API_KEY (Env)": "PRESENT" if os.environ.get("CLOUDINARY_API_KEY") else "MISSING",
+            "API_SECRET (Settings)": "PRESENT" if settings.CLOUDINARY_API_SECRET else "MISSING",
+            "API_SECRET (Env)": "PRESENT" if os.environ.get("CLOUDINARY_API_SECRET") else "MISSING",
+        }
+    }
