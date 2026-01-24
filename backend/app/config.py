@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     
     # Cloudinary
     CLOUDINARY_URL: str | None = None
+    CLOUDINARY_CLOUD_NAME: str | None = os.getenv("CLOUDINARY_CLOUD_NAME")
+    CLOUDINARY_API_KEY: str | None = os.getenv("CLOUDINARY_API_KEY")
+    CLOUDINARY_API_SECRET: str | None = os.getenv("CLOUDINARY_API_SECRET")
     
     class Config:
         env_file = ".env"
