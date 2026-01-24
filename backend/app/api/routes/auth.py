@@ -9,6 +9,7 @@ from app.schemas.user import UserCreate, UserResponse, UserLogin, Token
 from app import auth
 from app import utils
 from app.services.email_service import EmailService
+from app.services.audit_service import AuditService
 
 from app.core.logger import logger
 
@@ -70,7 +71,7 @@ def register(user: UserCreate, request: Request, background_tasks: BackgroundTas
     
     # AUDIT LOG
     ip = request.client.host if request.client else "0.0.0.0"
-    utils.log_audit(db, "USER_REGISTERED", {"dni": new_user.dni, "email": new_user.email, "role": new_user.role}, new_user.id, ip)
+    AuditService.log(db, "USER_REGISTERED", user_id=new_user.id, details={"dni": new_user.dni, "email": new_user.email, "role": new_user.role}, ip_address=ip)
     
     return new_user
 
@@ -101,7 +102,7 @@ def login(user_credentials: UserLogin, request: Request, db: Session = Depends(g
     
     # AUDIT LOG
     ip = request.client.host if request.client else "0.0.0.0"
-    utils.log_audit(db, "USER_LOGIN", {"dni": user.dni, "role": user.role}, user.id, ip)
+    AuditService.log(db, "USER_LOGIN", user_id=user.id, details={"dni": user.dni, "role": user.role}, ip_address=ip)
 
     return {
         "access_token": access_token, 

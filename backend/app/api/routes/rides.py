@@ -12,6 +12,7 @@ from app.api.deps import get_current_user
 from app import utils
 from datetime import datetime, timedelta
 from app.models.booking import Booking, BookingStatus
+from app.services.audit_service import AuditService
 
 router = APIRouter(prefix="/api/rides", tags=["rides"])
 
@@ -133,7 +134,7 @@ def create_ride(
         db.refresh(new_ride)
         
         # AUDIT LOG
-        utils.log_audit(db, "RIDE_CREATED", {"ride_id": new_ride.id, "origin": new_ride.origin, "women_only": new_ride.women_only}, current_user.id)
+        AuditService.log(db, "RIDE_CREATED", user_id=current_user.id, details={"ride_id": new_ride.id, "origin": new_ride.origin, "women_only": new_ride.women_only})
         
         # Agregar enlace de Maps a la respuesta
         result = RideResponse.from_orm(new_ride).dict()
@@ -212,13 +213,14 @@ def cancel_ride(
     db.commit()
     
     # AUDIT LOG
-    utils.log_audit(db, "RIDE_CANCELLED", {
+    # AUDIT LOG
+    AuditService.log(db, "RIDE_CANCELLED", user_id=current_user.id, details={
         "ride_id": ride.id, 
         "bookings_affected": count_affected,
         "penalty_applied": penalty_applied,
         "is_within_6h": is_penalty_time,
         "new_reputation": new_reputation
-    }, current_user.id)
+    })
     
     msg = "Viaje cancelado exitosamente."
     if count_affected > 0:

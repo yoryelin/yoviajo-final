@@ -13,6 +13,7 @@ from app.schemas.booking import BookingCreate, BookingResponse, BookingUpdate
 
 from app.api.deps import get_current_user, get_current_admin_user
 from app import utils
+from app.services.audit_service import AuditService
 from datetime import datetime
 from app.core.logger import logger
 
@@ -221,7 +222,7 @@ def create_booking(
     db.refresh(new_booking)
     
     # AUDIT LOG
-    utils.log_audit(db, "BOOKING_CREATED", {"ride_id": booking.ride_id, "seats": booking.seats_booked}, current_user.id)
+    AuditService.log(db, "BOOKING_CREATED", user_id=current_user.id, details={"ride_id": booking.ride_id, "seats": booking.seats_booked})
     
     # Construir respuesta con información completa del viaje y geolocalización
     booking_dict = BookingResponse.from_orm(new_booking).dict()
@@ -359,12 +360,12 @@ def update_booking(
     
     # AUDIT LOG
     if booking.status == BookingStatus.CANCELLED.value:
-         utils.log_audit(db, "BOOKING_CANCELLED", {
+         AuditService.log(db, "BOOKING_CANCELLED", user_id=current_user.id, details={
              "booking_id": booking.id, 
              "ride_id": booking.ride_id,
              "penalty_applied": penalty_applied if 'penalty_applied' in locals() else False,
              "new_reputation": current_user.reputation_score if is_passenger else None
-         }, current_user.id)
+         })
     
     # Construir respuesta con información completa
     booking_dict = BookingResponse.from_orm(booking).dict()

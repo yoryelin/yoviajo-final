@@ -5,6 +5,7 @@ from sqlalchemy import func
 from app.database import get_db
 from app.api.deps import get_current_admin_user
 from app.models import User, Ride, Booking, RideRequest
+from app.models.audit import AuditLog
 from app.schemas import UserResponse, RideResponse, BookingResponse
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
@@ -61,3 +62,13 @@ def get_all_bookings(
 ):
     bookings = db.query(Booking).order_by(Booking.created_at.desc()).offset(skip).limit(limit).all()
     return bookings
+
+@router.get("/logs")
+def get_all_logs(
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    logs = db.query(AuditLog).order_by(AuditLog.timestamp.desc()).offset(skip).limit(limit).all()
+    return logs

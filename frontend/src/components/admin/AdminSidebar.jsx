@@ -8,6 +8,7 @@ const AdminSidebar = () => {
         { name: 'Rides', path: '/admin/rides', icon: '🚗' },
         { name: 'Bookings', path: '/admin/bookings', icon: '🎟️' },
         { name: 'Transactions', path: '/admin/transactions', icon: '💰' },
+        { name: 'Logs', path: '/admin/logs', icon: '🛡️' },
     ];
 
     return (
