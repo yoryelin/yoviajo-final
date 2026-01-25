@@ -52,6 +52,14 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
         }
     }, [initialData, isOpen])
 
+    // DEBUG: Validate URL on mount
+    useEffect(() => {
+        if (isOpen) {
+            console.log("OfferRideModal Open. API_URL:", API_URL);
+            // alert(`DEBUG: API_URL is ${API_URL}`); // Comentado para no molestar si funciona, o descomentar si se pide
+        }
+    }, [isOpen])
+
     // Handlers para el form
     const handleChange = (e) => setOffer({ ...offer, [e.target.name]: e.target.value })
 
@@ -90,7 +98,7 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
             }
         } catch (e) {
             console.error("Error creating ride:", e);
-            alert(`Error inesperado: ${e.message || "Error desconocido"}`);
+            alert(`DEBUG ERROR: ${e.name} - ${e.message}. URL: ${API_URL}/rides`);
         }
     }
 
