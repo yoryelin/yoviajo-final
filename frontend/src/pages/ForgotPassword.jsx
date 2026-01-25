@@ -7,7 +7,7 @@ export default function ForgotPassword() {
     const [loading, setLoading] = useState(false)
 
     // API URL logic (Reuse from Login)
-    const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
+    const RAW_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar'
     let API_BASE = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`;
     if (!API_BASE.endsWith('/api')) {
         // Just to be safe if env var has trialing slash

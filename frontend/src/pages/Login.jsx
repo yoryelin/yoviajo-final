@@ -30,7 +30,7 @@ export default function Login() {
   }, [])
 
   // API URL
-  const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
+  const RAW_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar'
   const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
 
   const handleSubmit = async (e, forcedRole = null) => {
@@ -99,7 +99,7 @@ export default function Login() {
       const isRegister = viewMode === 'register'
 
       // Normalizar URL base de forma robusta
-      let raw = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003').trim();
+      let raw = (import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar').trim();
       if (raw.endsWith('/')) {
         raw = raw.slice(0, -1);
       }

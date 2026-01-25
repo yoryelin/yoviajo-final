@@ -29,7 +29,7 @@ export default function CityAutocomplete({ label, value, onChange, placeholder =
             if (query.length >= 3 && showSuggestions) {
                 setIsLoading(true);
                 try {
-                    let raw = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003').trim();
+                    let raw = (import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar').trim();
                     if (raw.endsWith('/')) { raw = raw.slice(0, -1); }
                     const API_URL = raw.endsWith('/api') ? raw : `${raw}/api`;
                     const res = await fetch(`${API_URL}/geocode/autocomplete?q=${encodeURIComponent(query)}`);

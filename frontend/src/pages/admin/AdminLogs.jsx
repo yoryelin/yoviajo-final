@@ -13,7 +13,7 @@ const AdminLogs = () => {
         const fetchLogs = async () => {
             setLoading(true);
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                const API_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar';
                 const response = await fetch(`${API_URL}/api/admin/logs?skip=${page * LIMIT}&limit=${LIMIT}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });

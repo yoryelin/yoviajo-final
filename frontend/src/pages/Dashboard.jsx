@@ -29,7 +29,7 @@ export default function Dashboard() {
     }, [isDriver, navigate])
 
     // Normalizar URL: asegurar que termine en /api
-    const RAW_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8003'
+    const RAW_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar'
     const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
 
     // Datos y Estados

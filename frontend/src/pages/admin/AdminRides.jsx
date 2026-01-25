@@ -13,7 +13,7 @@ const AdminRides = () => {
         const fetchRides = async () => {
             setLoading(true);
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                const API_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar';
                 const response = await fetch(`${API_URL}/api/admin/rides?skip=${page * LIMIT}&limit=${LIMIT}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -84,8 +84,8 @@ const AdminRides = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${r.status === 'active' ? 'bg-green-900/50 text-green-200' :
-                                                r.status === 'completed' ? 'bg-blue-900/50 text-blue-200' :
-                                                    'bg-red-900/50 text-red-200'
+                                            r.status === 'completed' ? 'bg-blue-900/50 text-blue-200' :
+                                                'bg-red-900/50 text-red-200'
                                             }`}>
                                             {r.status}
                                         </span>

@@ -9,13 +9,16 @@ export default function TransactionsPage() {
     const [transactions, setTransactions] = useState([])
     const [loading, setLoading] = useState(true)
 
+    const RAW_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar'
+    const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
+
     useEffect(() => {
         fetchTransactions()
     }, [])
 
     const fetchTransactions = async () => {
         try {
-            const res = await authFetch('/api/bookings/admin/transactions')
+            const res = await authFetch(`${API_URL}/bookings/admin/transactions`)
             if (res.ok) {
                 const data = await res.json()
                 setTransactions(data)

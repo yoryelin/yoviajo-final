@@ -13,7 +13,7 @@ const AdminBookings = () => {
         const fetchBookings = async () => {
             setLoading(true);
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                const API_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar';
                 const response = await fetch(`${API_URL}/api/admin/bookings?skip=${page * LIMIT}&limit=${LIMIT}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -36,7 +36,7 @@ const AdminBookings = () => {
                 <div className="p-6 border-b border-slate-700 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-white">Booking Management</h2>
                     <div className="flex gap-2">
-                        <button 
+                        <button
                             disabled={page === 0}
                             onClick={() => setPage(p => Math.max(0, p - 1))}
                             className="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-50"
@@ -44,7 +44,7 @@ const AdminBookings = () => {
                             Prev
                         </button>
                         <span className="text-slate-400 self-center">Page {page + 1}</span>
-                        <button 
+                        <button
                             disabled={bookings.length < LIMIT}
                             onClick={() => setPage(p => p + 1)}
                             className="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-50"
@@ -79,19 +79,17 @@ const AdminBookings = () => {
                                         <div>Ride #{b.ride_id}</div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${
-                                            b.status === 'confirmed' ? 'bg-green-900/50 text-green-200' : 
-                                            b.status === 'cancelled' ? 'bg-red-900/50 text-red-200' :
-                                            'bg-yellow-900/50 text-yellow-200'
-                                        }`}>
+                                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${b.status === 'confirmed' ? 'bg-green-900/50 text-green-200' :
+                                                b.status === 'cancelled' ? 'bg-red-900/50 text-red-200' :
+                                                    'bg-yellow-900/50 text-yellow-200'
+                                            }`}>
                                             {b.status}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${
-                                            b.payment_status === 'paid' || b.payment_status === 'approved' ? 'bg-green-900/50 text-green-200' : 
-                                            'bg-slate-700 text-slate-400'
-                                        }`}>
+                                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${b.payment_status === 'paid' || b.payment_status === 'approved' ? 'bg-green-900/50 text-green-200' :
+                                                'bg-slate-700 text-slate-400'
+                                            }`}>
                                             {b.payment_status || 'PENDING'}
                                         </span>
                                     </td>

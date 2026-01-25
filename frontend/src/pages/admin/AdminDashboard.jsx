@@ -21,7 +21,7 @@ const AdminDashboard = () => {
                 // Use the full URL or configure proxy, assuming standard api prefix from Vite config or explicit
                 // Using relative path if proxy is set up, or strictly constructing it
                 // Based on previous issues, using explicit URL might be safer but let's try relative first or the env var
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                const API_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar';
 
                 const response = await fetch(`${API_URL}/api/admin/stats`, {
                     headers: {
