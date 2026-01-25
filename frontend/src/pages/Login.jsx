@@ -194,6 +194,9 @@ export default function Login() {
 
     } catch (err) {
       console.error("Error en submit:", err)
+      // DEBUG: Show detailed error to user
+      alert(`DEBUG ERROR: ${err.message}. INTENTANDO CONECTAR A: ${url}`)
+
       if (err.name === 'AbortError') {
         setError('El servidor tardó demasiado en responder. Intenta de nuevo.');
       } else {
