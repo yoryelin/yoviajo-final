@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const { login } = useAuth()
+  const navigate = useNavigate()
 
   // Modos: 'login' | 'register' | 'select_role'
   const [viewMode, setViewMode] = useState('login')
@@ -186,6 +187,8 @@ export default function Login() {
           // Limpiar intención y proceder
           sessionStorage.removeItem('intendedRole')
           login(data.user, data.access_token)
+          // Explicit navigation to unblock UI
+          navigate('/dashboard')
         }
       } catch (fetchErr) {
         clearTimeout(timeoutId);
