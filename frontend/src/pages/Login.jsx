@@ -472,7 +472,7 @@ export default function Login() {
             className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] mt-4 uppercase tracking-widest disabled:opacity-50"
             disabled={loading}
           >
-            {loading ? 'Procesando...' : (viewMode === 'register' ? 'Confirmar Registro' : 'Ingresar al Sistema (v2.1)')}
+            {loading ? 'Procesando...' : (viewMode === 'register' ? 'Confirmar Registro' : 'Ingresar al Sistema')}
           </button>
         </form>
 
