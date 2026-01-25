@@ -1,9 +1,11 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import AnimatedLogo from '../components/AnimatedLogo';
 import { useAuth } from '../context/AuthContext';
 
 export default function Landing() {
+    const [showHelp, setShowHelp] = useState(false);
     const navigate = useNavigate();
     const { user } = useAuth();
 
@@ -73,7 +75,7 @@ export default function Landing() {
                     <AnimatedLogo size="text-3xl" />
                 </div>
                 <div className="space-x-4 text-sm font-bold">
-                    <button className="text-slate-500 hover:text-cyan-600 transition">Ayuda</button>
+                    <button onClick={() => setShowHelp(true)} className="text-slate-500 hover:text-cyan-600 transition">Ayuda</button>
                     <button onClick={handleAction} className="bg-slate-900 text-white px-5 py-2 rounded-full hover:bg-slate-700 transition shadow-lg">
                         {user ? 'Ir a mi Dashboard' : 'Ingresar'}
                     </button>
@@ -177,6 +179,64 @@ export default function Landing() {
                 </div>
                 <p>© 2026 YoViajo Inc. Todos los derechos reservados.</p>
             </footer>
+
+            {/* HELP MODAL */}
+            <AnimatePresence>
+                {showHelp && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowHelp(false)}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden"
+                        >
+                            <div className="p-6 bg-slate-900 text-white flex justify-between items-center">
+                                <h3 className="text-xl font-bold">🤔 ¿Cómo funciona?</h3>
+                                <button onClick={() => setShowHelp(false)} className="bg-white/10 hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center transition">✕</button>
+                            </div>
+                            <div className="p-8 space-y-6 text-slate-600 overflow-y-auto max-h-[70vh]">
+                                <div>
+                                    <h4 className="font-bold text-slate-900 mb-2">🚗 Para Conductores</h4>
+                                    <ul className="list-disc pl-5 space-y-2 text-sm">
+                                        <li>Regístrate y sube tu licencia para verificar tu identidad.</li>
+                                        <li>Publica tu viaje indicando origen, destino y precio.</li>
+                                        <li>Acepta reservas y coordina con tus pasajeros.</li>
+                                        <li>¡Ahorra en nafta y peajes!</li>
+                                    </ul>
+                                </div>
+                                <hr className="border-slate-100" />
+                                <div>
+                                    <h4 className="font-bold text-slate-900 mb-2">🙋‍♂️ Para Pasajeros</h4>
+                                    <ul className="list-disc pl-5 space-y-2 text-sm">
+                                        <li>Busca viajes que coincidan con tu ruta y horario.</li>
+                                        <li>Reserva tu asiento pagando la tarifa de servicio de forma segura.</li>
+                                        <li>Accede al WhatsApp del conductor al confirmar.</li>
+                                        <li>Viaja cómodo y califica tu experiencia.</li>
+                                    </ul>
+                                </div>
+                                <div className="bg-cyan-50 p-4 rounded-xl text-xs text-cyan-800 border border-cyan-100">
+                                    <strong>💡 Tip:</strong> Usa el filtro "Solo Mujeres" si prefieres viajar únicamente con otras conductoras verificadas.
+                                </div>
+                            </div>
+                            <div className="p-6 bg-slate-50 text-center border-t border-slate-100">
+                                <button
+                                    onClick={() => setShowHelp(false)}
+                                    className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-800 transition w-full"
+                                >
+                                    ¡Entendido!
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <style>{`
         @keyframes shine {
