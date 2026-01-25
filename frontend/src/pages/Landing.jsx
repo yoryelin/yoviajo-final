@@ -203,26 +203,26 @@ export default function Landing() {
                             </div>
                             <div className="p-8 space-y-6 text-slate-600 overflow-y-auto max-h-[70vh]">
                                 <div>
-                                    <h4 className="font-bold text-slate-900 mb-2">🚗 Para Conductores</h4>
+                                    <h4 className="font-bold text-slate-900 mb-2">🚗 Para Conductores (Dueños de auto)</h4>
                                     <ul className="list-disc pl-5 space-y-2 text-sm">
-                                        <li>Regístrate y sube tu licencia para verificar tu identidad.</li>
-                                        <li>Publica tu viaje indicando origen, destino y precio.</li>
-                                        <li>Acepta reservas y coordina con tus pasajeros.</li>
-                                        <li>¡Ahorra en nafta y peajes!</li>
+                                        <li>Publica tu viaje para <strong>compartir gastos</strong> (nafta y peajes).</li>
+                                        <li>No busques lucro, sino ahorrar en tu traslado.</li>
+                                        <li>Elige a tus acompañantes de nuestra comunidad verificada.</li>
+                                        <li>Recibes la contribución de gastos directamente del pasajero al viajar.</li>
                                     </ul>
                                 </div>
                                 <hr className="border-slate-100" />
                                 <div>
                                     <h4 className="font-bold text-slate-900 mb-2">🙋‍♂️ Para Pasajeros</h4>
                                     <ul className="list-disc pl-5 space-y-2 text-sm">
-                                        <li>Busca viajes que coincidan con tu ruta y horario.</li>
-                                        <li>Reserva tu asiento pagando la tarifa de servicio de forma segura.</li>
-                                        <li>Accede al WhatsApp del conductor al confirmar.</li>
-                                        <li>Viaja cómodo y califica tu experiencia.</li>
+                                        <li>Busca tu viaje ideal.</li>
+                                        <li><strong>Paga la Tasa de Servicio</strong> online para reservar y obtener el contacto.</li>
+                                        <li>Coordina el pago de los gastos compartidos directamente con el conductor.</li>
+                                        <li>Viaja cómodo, seguro y a una fracción del costo habitual.</li>
                                     </ul>
                                 </div>
                                 <div className="bg-cyan-50 p-4 rounded-xl text-xs text-cyan-800 border border-cyan-100">
-                                    <strong>💡 Tip:</strong> Usa el filtro "Solo Mujeres" si prefieres viajar únicamente con otras conductoras verificadas.
+                                    <strong>💡 Transparencia Total:</strong> YoViajo! solo cobra el servicio de conexión. El resto es economía colaborativa pura entre usuarios.
                                 </div>
                             </div>
                             <div className="p-6 bg-slate-50 text-center border-t border-slate-100">
