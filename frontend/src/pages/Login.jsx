@@ -96,19 +96,19 @@ export default function Login() {
       }
     }
 
+    // Normalizar URL base de forma robusta
+    let raw = (import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar').trim();
+    if (raw.endsWith('/')) {
+      raw = raw.slice(0, -1);
+    }
+    // Verificar si ya incluye /api
+    const API_BASE = raw.endsWith('/api') ? raw : `${raw}/api`;
+
+    const endpoint = isRegister ? '/register' : '/login'
+    const url = `${API_BASE}${endpoint}`
+
     try {
       const isRegister = viewMode === 'register'
-
-      // Normalizar URL base de forma robusta
-      let raw = (import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar').trim();
-      if (raw.endsWith('/')) {
-        raw = raw.slice(0, -1);
-      }
-      // Verificar si ya incluye /api
-      const API_BASE = raw.endsWith('/api') ? raw : `${raw}/api`;
-
-      const endpoint = isRegister ? '/register' : '/login'
-      const url = `${API_BASE}${endpoint}`
 
       // Payload base
       let payload = {
