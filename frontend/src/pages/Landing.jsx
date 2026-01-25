@@ -202,28 +202,37 @@ export default function Landing() {
                                 <button onClick={() => setShowHelp(false)} className="bg-white/10 hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center transition">✕</button>
                             </div>
                             <div className="p-8 space-y-6 text-slate-600 overflow-y-auto max-h-[70vh]">
-                                <div>
-                                    <h4 className="font-bold text-slate-900 mb-2">🚗 Para Conductores (Dueños de auto)</h4>
-                                    <ul className="list-disc pl-5 space-y-2 text-sm">
-                                        <li>Publica tu viaje para <strong>compartir gastos</strong> (nafta y peajes).</li>
-                                        <li>No busques lucro, sino ahorrar en tu traslado.</li>
-                                        <li>Elige a tus acompañantes de nuestra comunidad verificada.</li>
-                                        <li>Recibes la contribución de gastos directamente del pasajero al viajar.</li>
-                                    </ul>
-                                </div>
-                                <hr className="border-slate-100" />
-                                <div>
-                                    <h4 className="font-bold text-slate-900 mb-2">🙋‍♂️ Para Pasajeros</h4>
-                                    <ul className="list-disc pl-5 space-y-2 text-sm">
-                                        <li>Busca tu viaje ideal.</li>
-                                        <li><strong>Paga la Tasa de Servicio</strong> online para reservar y obtener el contacto.</li>
-                                        <li>Coordina el pago de los gastos compartidos directamente con el conductor.</li>
-                                        <li>Viaja cómodo, seguro y a una fracción del costo habitual.</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-cyan-50 p-4 rounded-xl text-xs text-cyan-800 border border-cyan-100">
-                                    <strong>💡 Transparencia Total:</strong> YoViajo! solo cobra el servicio de conexión. El resto es economía colaborativa pura entre usuarios.
-                                </div>
+                                <h4 className="font-bold text-slate-900 mb-4 text-center text-lg">Entras, te registras y tu próximo viaje empieza acá:</h4>
+                                <ul className="space-y-4">
+                                    <li className="flex gap-3">
+                                        <span className="bg-cyan-100 text-cyan-600 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold">1</span>
+                                        <div>
+                                            <strong className="text-slate-900 block">Encontrar tu Viaje</strong>
+                                            <span className="text-sm">Busca por ciudad, fecha y horario. Verás usuarios verificados que van a tu mismo destino.</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex gap-3">
+                                        <span className="bg-cyan-100 text-cyan-600 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold">2</span>
+                                        <div>
+                                            <strong className="text-slate-900 block">Reservar Online</strong>
+                                            <span className="text-sm">Asegura tu asiento pagando una pequeña tasa de servicio por la plataforma.</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex gap-3">
+                                        <span className="bg-cyan-100 text-cyan-600 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold">3</span>
+                                        <div>
+                                            <strong className="text-slate-900 block">Coordinar y Viajar</strong>
+                                            <span className="text-sm">Recibe el WhatsApp del conductor, arreglen el punto de encuentro y ¡listo!</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex gap-3">
+                                        <span className="bg-cyan-100 text-cyan-600 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold">4</span>
+                                        <div>
+                                            <strong className="text-slate-900 block">¡Compartir!</strong>
+                                            <span className="text-sm">Al subir, únicamente compartes los gastos del viaje (nafta/peajes) directo con el conductor.</span>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                             <div className="p-6 bg-slate-50 text-center border-t border-slate-100">
                                 <button
