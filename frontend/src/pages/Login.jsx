@@ -97,6 +97,7 @@ export default function Login() {
     }
 
     // Normalizar URL base de forma robusta
+    const isRegister = viewMode === 'register'
     let raw = (import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar').trim();
     if (raw.endsWith('/')) {
       raw = raw.slice(0, -1);
@@ -108,7 +109,6 @@ export default function Login() {
     const url = `${API_BASE}${endpoint}`
 
     try {
-      const isRegister = viewMode === 'register'
 
       // Payload base
       let payload = {
