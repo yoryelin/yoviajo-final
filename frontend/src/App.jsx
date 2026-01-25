@@ -80,9 +80,7 @@ export default function App() {
         path="/admin/transactions"
         element={
           user ? (
-            <Layout>
-              <TransactionsPage />
-            </Layout>
+            <TransactionsPage />
           ) : <Navigate to="/" />
         }
       />

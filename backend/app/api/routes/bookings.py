@@ -46,6 +46,14 @@ def get_all_transactions(
            if booking.passenger:
                booking_dict['passenger_name'] = booking.passenger.name
                
+           # Payment Info
+           if booking.payment:
+               booking_dict['mp_id'] = booking.payment.external_id
+               booking_dict['paid_amount'] = booking.payment.amount
+           else:
+               booking_dict['mp_id'] = "N/A"
+               booking_dict['paid_amount'] = booking.fee_amount # Fallback
+               
            result.append(booking_dict)
         except Exception:
             continue

@@ -69,20 +69,33 @@ export default function ProfilePage() {
         }
     }
 
-    const handleVerify = async () => {
-        if (!confirm('¿Deseas solicitar la verificación de tu identidad? (Simulación de carga de DNI)')) return
+    const handleVerifyUpload = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
 
+        if (!confirm('¿Estás seguro de enviar este documento para verificación?')) return
+
+        const formData = new FormData()
+        formData.append('file', file)
+
+        setLoading(true)
         try {
-            const res = await authFetch(`${API_URL}/users/verify_request`, {
-                method: 'POST'
+            const res = await authFetch(`${API_URL}/users/verify`, {
+                method: 'POST',
+                body: formData
             })
             if (res.ok) {
-                const data = await res.json()
-                alert(data.message)
+                setSuccessMsg('Documento enviado. Un admin revisará tu solicitud. ⏳')
                 fetchProfile()
+            } else {
+                const err = await res.json()
+                alert(err.detail || 'Error al subir documento')
             }
         } catch (error) {
             console.error(error)
+            alert('Error de conexión')
+        } finally {
+            setLoading(false)
         }
     }
 

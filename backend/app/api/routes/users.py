@@ -12,6 +12,7 @@ from app.services.image_service import ImageService
 
 router = APIRouter(prefix="/api/users", tags=["users"])
 image_service = ImageService()
+from app.services.audit_service import AuditService
 
 
 @router.get("/me", response_model=UserResponse)
@@ -41,30 +42,52 @@ def update_my_profile(
     db.refresh(current_user)
     
     # AUDIT LOG
-    utils.log_audit(db, "PROFILE_UPDATED", update_data, current_user.id)
+    # AUDIT LOG
+    AuditService.log(db, "PROFILE_UPDATED", user_id=current_user.id, details=update_data)
     
     return current_user
 
 
-@router.post("/verify_request")
-def request_verification(
+@router.post("/verify")
+def verify_identity(
+    file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """
-    Solicitar verificación de identidad.
-    (MVP: Simplemente cambia el estado a 'pending' y hace un log mock).
-    En prod real: Subir archivos a S3 y guardar URLs.
+    Sube un documento de identidad para iniciar el proceso de verificación (KYC).
+    Estado cambia a 'pending'.
     """
     if current_user.verification_status == 'verified':
-        return {"message": "Ya estás verificado."}
-        
-    current_user.verification_status = 'verified'
-    current_user.is_verified = True
+        raise HTTPException(status_code=400, detail="Tu cuenta ya está verificada.")
+    
+    if current_user.verification_status == 'pending':
+        raise HTTPException(status_code=400, detail="Tu verificación ya está en revisión.")
+
+    # 1. Validar Imagen
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="El archivo debe ser una imagen (JPG/PNG).")
+
+    # 2. Subir a Cloudinary
+    if not image_service.enabled:
+        raise HTTPException(status_code=503, detail="Servicio de carga no disponible.")
+
+    url = image_service.upload_image(file.file, folder="yoviajo/kyc")
+    
+    if not url:
+        raise HTTPException(status_code=500, detail="Fallo al subir el documento.")
+
+    # 3. Actualizar Usuario
+    current_user.verification_document = url
+    current_user.verification_status = 'pending'
     
     db.commit()
+    db.refresh(current_user)
     
-    return {"message": "Verificación aprobada automáticamente (Modo Demo) ✅"}
+    # 4. Audit Log
+    AuditService.log(db, "VERIFICATION_REQUESTED", user_id=current_user.id, details={"doc_url": url})
+    
+    return {"message": "Documento subido exitosamente. Un administrador revisará tu solicitud."}
 
 
 @router.post("/me/photo", response_model=UserResponse)
@@ -104,6 +127,7 @@ def upload_profile_photo(
     db.refresh(current_user)
     
     # Audit
-    utils.log_audit(db, "PROFILE_PHOTO_UPDATED", {"url": url}, current_user.id)
+    # Audit
+    AuditService.log(db, "PROFILE_PHOTO_UPDATED", user_id=current_user.id, details={"url": url})
     
     return current_user

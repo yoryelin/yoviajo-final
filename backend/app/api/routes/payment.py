@@ -52,15 +52,29 @@ async def payment_webhook(
                         # 4. Actualizar Booking
                         booking.payment_status = "paid"
                         booking.status = BookingStatus.CONFIRMED.value
-                        
-                        # Guardar ID del pago también (si existiera modelo Payment, o en un log)
-                        # Por ahora actualizamos Booking directamente
                         booking.updated_at = datetime.utcnow()
+                        
+                        # 5. Crear Registro de Pago (Payment)
+                        # Verificamos si ya existe para evitar duplicados
+                        existing_payment = db.query(Payment).filter(Payment.booking_id == booking.id).first()
+                        
+                        if not existing_payment:
+                            new_payment = Payment(
+                                booking_id=booking.id,
+                                external_id=str(payment_id),
+                                status="approved",
+                                amount=payment_info.get("transaction_amount", 0.0),
+                                currency=payment_info.get("currency_id", "ARS"),
+                                payment_url=None, # Ya se pagó
+                                created_at=datetime.utcnow()
+                            )
+                            db.add(new_payment)
+                            print(f"✅ Payment Record created: {new_payment.id}")
                         
                         db.commit()
                         db.refresh(booking)
                         
-                        return {"status": "success", "message": "Booking confirmed"}
+                        return {"status": "success", "message": "Booking confirmed & Payment recorded"}
             
         return {"status": "ignored"}
 

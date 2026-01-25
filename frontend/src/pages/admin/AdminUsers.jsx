@@ -9,26 +9,52 @@ const AdminUsers = () => {
     const [page, setPage] = useState(0);
     const LIMIT = 20;
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            setLoading(true);
-            try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-                const response = await fetch(`${API_URL}/api/admin/users?skip=${page * LIMIT}&limit=${LIMIT}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setUsers(data);
-                }
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            } finally {
-                setLoading(false);
+    const fetchUsers = async () => {
+        setLoading(true);
+        try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const response = await fetch(`${API_URL}/api/admin/users?skip=${page * LIMIT}&limit=${LIMIT}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUsers(data);
             }
-        };
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchUsers();
     }, [token, page]);
+
+    const handleVerifyDecision = async (userId, decision) => {
+        if (!confirm(`Are you sure you want to ${decision.toUpperCase()} this user?`)) return;
+
+        try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const response = await fetch(`${API_URL}/api/admin/users/${userId}/verify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ status: decision }) // approved | rejected
+            });
+
+            if (response.ok) {
+                alert(`User ${decision} successfully.`);
+                fetchUsers(); // Refresh list
+            } else {
+                alert('Action failed.');
+            }
+        } catch (error) {
+            console.error("Error verify:", error);
+        }
+    };
 
     return (
         <AdminLayout>
@@ -58,11 +84,10 @@ const AdminUsers = () => {
                         <thead className="text-xs text-slate-400 uppercase bg-slate-950/50">
                             <tr>
                                 <th className="px-6 py-3">ID</th>
-                                <th className="px-6 py-3">Name</th>
-                                <th className="px-6 py-3">Email</th>
-                                <th className="px-6 py-3">Role</th>
-                                <th className="px-6 py-3">Verified</th>
-                                <th className="px-6 py-3">Reputation</th>
+                                <th className="px-6 py-3">User</th>
+                                <th className="px-6 py-3">Verification</th>
+                                <th className="px-6 py-3">Document</th>
+                                <th className="px-6 py-3">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,30 +95,53 @@ const AdminUsers = () => {
                                 <tr><td colSpan="6" className="text-center py-4">Loading...</td></tr>
                             ) : users.map((u) => (
                                 <tr key={u.id} className="border-b border-slate-800 hover:bg-slate-800/50 transition">
-                                    <td className="px-6 py-4 font-mono text-sm text-slate-500">{u.id}</td>
-                                    <td className="px-6 py-4 font-medium text-white">{u.full_name || u.name}</td>
-                                    <td className="px-6 py-4">{u.email}</td>
+                                    <td className="px-6 py-4 font-mono text-sm text-slate-500">#{u.id}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${u.role === 'admin' ? 'bg-purple-900/50 text-purple-200 border border-purple-700' : 'bg-blue-900/50 text-blue-200 border border-blue-700'}`}>
-                                            {u.role}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {u.is_verified ?
-                                            <span className="text-green-400 flex items-center gap-1">✓ Verified</span> :
-                                            <span className="text-yellow-500 flex items-center gap-1">⚠ No</span>
-                                        }
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-16 bg-slate-700 rounded-full h-2">
-                                                <div
-                                                    className="bg-cyan-500 h-2 rounded-full"
-                                                    style={{ width: `${Math.min(100, Math.max(0, u.reputation_score || 0))}%` }}
-                                                ></div>
+                                        <div>
+                                            <p className="font-medium text-white">{u.full_name || u.name}</p>
+                                            <p className="text-xs text-slate-500">{u.email}</p>
+                                            <div className="flex gap-2 mt-1">
+                                                <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${u.role === 'admin' ? 'bg-purple-900 text-purple-200' : 'bg-blue-900 text-blue-200'}`}>
+                                                    {u.role}
+                                                </span>
                                             </div>
-                                            <span className="text-xs">{u.reputation_score}</span>
                                         </div>
+                                    </td>
+
+                                    <td className="px-6 py-4">
+                                        {u.verification_status === 'verified' && <span className="text-green-400 font-bold text-xs uppercase bg-green-900/30 px-2 py-1 rounded">Verified</span>}
+                                        {u.verification_status === 'pending' && <span className="text-yellow-400 font-bold text-xs uppercase bg-yellow-900/30 px-2 py-1 rounded">Pending Review</span>}
+                                        {u.verification_status === 'rejected' && <span className="text-red-400 font-bold text-xs uppercase bg-red-900/30 px-2 py-1 rounded">Rejected</span>}
+                                        {u.verification_status === 'unverified' && <span className="text-slate-500 text-xs italic">Unverified</span>}
+                                    </td>
+
+                                    <td className="px-6 py-4">
+                                        {u.verification_document ? (
+                                            <a href={u.verification_document} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline text-xs flex items-center gap-1">
+                                                <span>📄 View Doc</span>
+                                            </a>
+                                        ) : (
+                                            <span className="text-slate-600 text-xs">-</span>
+                                        )}
+                                    </td>
+
+                                    <td className="px-6 py-4">
+                                        {u.verification_status === 'pending' && (
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => handleVerifyDecision(u.id, "approved")}
+                                                    className="p-2 bg-green-600 hover:bg-green-500 rounded text-white shadow" title="Approve"
+                                                >
+                                                    ✅
+                                                </button>
+                                                <button
+                                                    onClick={() => handleVerifyDecision(u.id, "rejected")}
+                                                    className="p-2 bg-red-600 hover:bg-red-500 rounded text-white shadow" title="Reject"
+                                                >
+                                                    ❌
+                                                </button>
+                                            </div>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

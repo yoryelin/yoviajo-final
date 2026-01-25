@@ -71,6 +71,7 @@ class UserResponse(UserBase):
     gender: str | None = None
     is_verified: bool = False
     verification_status: str = "unverified"
+    verification_document: str | None = None
     car_model: str | None = None
     car_plate: str | None = None
     car_color: str | None = None

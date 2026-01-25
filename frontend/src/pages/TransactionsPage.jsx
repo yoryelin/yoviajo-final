@@ -55,6 +55,7 @@ export default function TransactionsPage() {
                                 <thead className="bg-slate-950 text-slate-200 uppercase font-bold text-xs tracking-wider">
                                     <tr>
                                         <th className="p-4">ID</th>
+                                        <th className="p-4">MP Ref</th>
                                         <th className="p-4">Fecha</th>
                                         <th className="p-4">Pasajero (Payer)</th>
                                         <th className="p-4">Viaje / Conductor</th>
@@ -80,6 +81,7 @@ export default function TransactionsPage() {
                                                 className="hover:bg-slate-800/50 transition cursor-default"
                                             >
                                                 <td className="p-4 font-mono text-xs text-slate-500">#{tx.id}</td>
+                                                <td className="p-4 font-mono text-xs text-cyan-400">{tx.mp_id || '-'}</td>
                                                 <td className="p-4 text-white font-medium">
                                                     {new Date(tx.updated_at || tx.created_at).toLocaleDateString()} <br />
                                                     <span className="text-[10px] text-slate-500">{new Date(tx.updated_at || tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} hs</span>

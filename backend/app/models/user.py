@@ -26,6 +26,7 @@ class User(Base):
     gender = Column(String, nullable=True) # M, F, O
     is_verified = Column(Boolean, default=False)
     verification_status = Column(String, default="unverified") # unverified, pending, verified, rejected
+    verification_document = Column(String, nullable=True) # URL of DNI/License
     
     # Driver Profile
     car_model = Column(String, nullable=True)

@@ -7,6 +7,8 @@ from app.api.deps import get_current_admin_user
 from app.models import User, Ride, Booking, RideRequest
 from app.models.audit import AuditLog
 from app.schemas import UserResponse, RideResponse, BookingResponse
+from app.services.audit_service import AuditService
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -72,3 +74,41 @@ def get_all_logs(
 ):
     logs = db.query(AuditLog).order_by(AuditLog.timestamp.desc()).offset(skip).limit(limit).all()
     return logs
+
+class VerificationRequest(BaseModel):
+    status: str # "approved" or "rejected"
+
+@router.post("/users/{user_id}/verify")
+def verify_user(
+    user_id: int,
+    payload: VerificationRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    """
+    Aprueba o rechaza la verificación de identidad de un usuario.
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        
+    if payload.status == "approved":
+        user.is_verified = True
+        user.verification_status = "verified"
+        msg = "Usuario verificado exitosamente."
+    elif payload.status == "rejected":
+        user.is_verified = False
+        user.verification_status = "rejected"
+        msg = "Verificación rechazada."
+    else:
+        raise HTTPException(status_code=400, detail="Estado inválido (use 'approved' o 'rejected')")
+        
+    db.commit()
+    
+    # Audit
+    AuditService.log(db, "VERIFICATION_DECIDED", user_id=current_user.id, details={
+        "target_user_id": user.id, 
+        "decision": payload.status
+    })
+    
+    return {"message": msg, "user_status": user.verification_status}
