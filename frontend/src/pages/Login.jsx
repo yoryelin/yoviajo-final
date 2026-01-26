@@ -31,8 +31,7 @@ export default function Login() {
   }, [])
 
   // API URL
-  const RAW_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar'
-  const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
+  import { API_URL } from '../config/api'
 
   const handleSubmit = async (e, forcedRole = null) => {
     if (e) e.preventDefault()
@@ -97,16 +96,8 @@ export default function Login() {
     }
 
     // Normalizar URL base de forma robusta
-    const isRegister = viewMode === 'register'
-    let raw = (import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar').trim();
-    if (raw.endsWith('/')) {
-      raw = raw.slice(0, -1);
-    }
-    // Verificar si ya incluye /api
-    const API_BASE = raw.endsWith('/api') ? raw : `${raw}/api`;
-
     const endpoint = isRegister ? '/register' : '/login'
-    const url = `${API_BASE}${endpoint}`
+    const url = `${API_URL}${endpoint}`
 
     try {
 

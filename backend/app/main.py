@@ -33,10 +33,18 @@ logger.info("🚀 YoViajo API Starting up...")
 
 # Configuración CORS
 # Configuración CORS
+origins = [
+    "http://localhost:5173",    # Local Frontend
+    "http://127.0.0.1:5173",    # Local Frontend IP
+    "https://yoviajo.com.ar",       # Prod Domain
+    "https://www.yoviajo.com.ar",   # Prod WWW
+    "https://yoviajo-frontend.onrender.com" # Render Fallback
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

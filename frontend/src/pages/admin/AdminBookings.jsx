@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
 
+import { API_URL } from '../../config/api';
+
 const AdminBookings = () => {
     const { token } = useAuth();
     const [bookings, setBookings] = useState([]);
@@ -13,8 +15,8 @@ const AdminBookings = () => {
         const fetchBookings = async () => {
             setLoading(true);
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar';
-                const response = await fetch(`${API_URL}/api/admin/bookings?skip=${page * LIMIT}&limit=${LIMIT}`, {
+
+                const response = await fetch(`${API_URL}/admin/bookings?skip=${page * LIMIT}&limit=${LIMIT}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (response.ok) {
@@ -80,15 +82,15 @@ const AdminBookings = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${b.status === 'confirmed' ? 'bg-green-900/50 text-green-200' :
-                                                b.status === 'cancelled' ? 'bg-red-900/50 text-red-200' :
-                                                    'bg-yellow-900/50 text-yellow-200'
+                                            b.status === 'cancelled' ? 'bg-red-900/50 text-red-200' :
+                                                'bg-yellow-900/50 text-yellow-200'
                                             }`}>
                                             {b.status}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${b.payment_status === 'paid' || b.payment_status === 'approved' ? 'bg-green-900/50 text-green-200' :
-                                                'bg-slate-700 text-slate-400'
+                                            'bg-slate-700 text-slate-400'
                                             }`}>
                                             {b.payment_status || 'PENDING'}
                                         </span>

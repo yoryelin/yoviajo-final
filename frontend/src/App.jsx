@@ -8,6 +8,7 @@ import ResetPassword from './pages/ResetPassword'
 import Landing from './pages/Landing'
 import TermsPage from './pages/TermsPage'
 import PrivacyPage from './pages/PrivacyPage'
+import ContactPage from './pages/ContactPage'
 import ProfilePage from './pages/ProfilePage'
 import TransactionsPage from './pages/TransactionsPage'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -41,6 +42,7 @@ export default function App() {
       {/* Public Legal Pages */}
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/contact" element={<ContactPage />} />
 
       {/* Private Routes */}
       <Route

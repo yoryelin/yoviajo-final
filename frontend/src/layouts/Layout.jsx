@@ -83,9 +83,21 @@ const Layout = ({ children }) => {
             </header >
 
             {/* Main Content Injection */}
-            < main className="max-w-4xl mx-auto px-4 py-8" >
+            <main className="max-w-4xl mx-auto px-4 py-8 mb-auto">
                 {children}
-            </main >
+            </main>
+
+            {/* FOOTER (Logged In) */}
+            <footer className="border-t border-slate-800 py-6 text-center text-slate-500 text-xs mt-auto bg-slate-950/50">
+                <div className="flex justify-center gap-6 mb-2">
+                    <a href="/terms" className="hover:text-cyan-400 transition">Términos</a>
+                    <a href="/privacy" className="hover:text-cyan-400 transition">Privacidad</a>
+                    <a href="/contact" className="hover:text-cyan-400 transition">Contacto</a>
+                </div>
+                <p>&copy; {new Date().getFullYear()} YoViajo Argentina. Todos los derechos reservados.</p>
+            </footer>
+
+            {/* Global Modals (Like Profile) */}
 
             {/* Global Modals (Like Profile) */}
             < ProfileModal

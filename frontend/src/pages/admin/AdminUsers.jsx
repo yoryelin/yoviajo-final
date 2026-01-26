@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
 
+import { API_URL } from '../../config/api';
+
 const AdminUsers = () => {
     const { token } = useAuth();
     const [users, setUsers] = useState([]);
@@ -12,8 +14,8 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar';
-            const response = await fetch(`${API_URL}/api/admin/users?skip=${page * LIMIT}&limit=${LIMIT}`, {
+
+            const response = await fetch(`${API_URL}/admin/users?skip=${page * LIMIT}&limit=${LIMIT}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
@@ -35,8 +37,8 @@ const AdminUsers = () => {
         if (!confirm(`Are you sure you want to ${decision.toUpperCase()} this user?`)) return;
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar';
-            const response = await fetch(`${API_URL}/api/admin/users/${userId}/verify`, {
+
+            const response = await fetch(`${API_URL}/admin/users/${userId}/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

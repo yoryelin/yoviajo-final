@@ -59,6 +59,27 @@ export default function TermsPage() {
                             <li><strong>Mujeres al Volante:</strong> Conductoras pueden elegir llevar solo pasajeras mujeres.</li>
                         </ul>
                     </section>
+
+                    <section>
+                        <h2 className="text-xl font-bold text-cyan-400 mb-3">5. Política de Cancelación y Penalizaciones</h2>
+                        <p className="mb-2 text-sm text-slate-400 italic">Para garantizar la confiabilidad, aplicamos reglas estrictas:</p>
+
+                        <h3 className="font-bold text-white mt-4 mb-2">Para Conductores:</h3>
+                        <ul className="list-disc pl-5 space-y-1 text-sm">
+                            <li><strong>+48hs antes:</strong> Sin penalización.</li>
+                            <li><strong>24hs - 48hs:</strong> Pérdida de visibilidad temporal en búsquedas.</li>
+                            <li><strong>&lt; 24hs:</strong> Bloqueo de publicar por 15 días.</li>
+                            <li><strong>No-Show:</strong> Expulsión permanente de la plataforma.</li>
+                        </ul>
+
+                        <h3 className="font-bold text-white mt-4 mb-2">Para Pasajeros:</h3>
+                        <ul className="list-disc pl-5 space-y-1 text-sm">
+                            <li><strong>+48hs antes:</strong> Reembolso del 100% del Fee (Crédito).</li>
+                            <li><strong>24hs - 48hs:</strong> Reembolso del 50% del Fee.</li>
+                            <li><strong>&lt; 24hs:</strong> Sin reembolso (Pérdida del Fee).</li>
+                            <li><strong>No-Show:</strong> Sin reembolso y marca negativa en perfil.</li>
+                        </ul>
+                    </section>
                 </div>
 
                 <div className="mt-10 border-t border-slate-700 pt-6 text-center text-xs text-slate-500">

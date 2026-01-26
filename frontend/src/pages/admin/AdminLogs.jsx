@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
 
+import { API_URL } from '../../config/api';
+
 const AdminLogs = () => {
     const { token } = useAuth();
     const [logs, setLogs] = useState([]);
@@ -13,8 +15,8 @@ const AdminLogs = () => {
         const fetchLogs = async () => {
             setLoading(true);
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar';
-                const response = await fetch(`${API_URL}/api/admin/logs?skip=${page * LIMIT}&limit=${LIMIT}`, {
+
+                const response = await fetch(`${API_URL}/admin/logs?skip=${page * LIMIT}&limit=${LIMIT}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (response.ok) {
