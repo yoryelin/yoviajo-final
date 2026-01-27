@@ -33,6 +33,7 @@ logger.info("🚀 YoViajo API Starting up...")
 
 # Configuración CORS
 # Configuración CORS
+origins = [
     "http://localhost:5173",    # Local Frontend
     "http://127.0.0.1:5173",    # Local Frontend IP
     "http://localhost:4173",    # Local Preview
