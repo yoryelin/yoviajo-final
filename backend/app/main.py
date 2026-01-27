@@ -9,6 +9,14 @@ from app.models import User, Ride, RideRequest
 from app.models.audit import AuditLog
 from app.api.routes import auth, rides, requests, geocode, bookings, reports, users
 
+# Configurar Logging
+from app.core.logger import setup_logging
+setup_logging()
+
+import logging
+logger = logging.getLogger("yoviajo_api")
+logger.info("🚀 YoViajo API Starting up...")
+
 # Crear tablas en la base de datos
 # Crear tablas en la base de datos
 try:
@@ -41,13 +49,7 @@ app = FastAPI(
     debug=settings.DEBUG
 )
 
-# Configurar Logging
-from app.core.logger import setup_logging
-setup_logging()
 
-import logging
-logger = logging.getLogger("yoviajo_api")
-logger.info("🚀 YoViajo API Starting up...")
 
 
 # Configuración CORS
