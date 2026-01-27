@@ -7,6 +7,7 @@ import TicketCard from '../components/TicketCard'
 import CityAutocomplete from '../components/CityAutocomplete'
 import ReserveRideModal from '../components/ReserveRideModal'
 import PaymentModal from '../components/PaymentModal'
+import { API_URL } from '../config/api'
 
 export default function Dashboard() {
     const { user, authFetch } = useAuth()
@@ -29,7 +30,7 @@ export default function Dashboard() {
     }, [isDriver, navigate])
 
     // Normalizar URL: asegurar que termine en /api
-    import { API_URL } from '../config/api'
+
 
     // Datos y Estados
     const [rides, setRides] = useState([])

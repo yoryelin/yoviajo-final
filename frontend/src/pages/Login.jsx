@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { API_URL } from '../config/api'
 
 export default function Login() {
   const { login } = useAuth()
@@ -31,7 +32,7 @@ export default function Login() {
   }, [])
 
   // API URL
-  import { API_URL } from '../config/api'
+
 
   const handleSubmit = async (e, forcedRole = null) => {
     if (e) e.preventDefault()
