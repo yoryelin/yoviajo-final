@@ -216,6 +216,33 @@ const MyTrips = () => {
                                                 manageAction={() => alert("Funcionalidad de Edición pendiente")}
                                                 user={user}
                                             />
+                                            {/* MATCHES DRAWER (DRIVER) */}
+                                            {ride.matches_count > 0 && (
+                                                <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
+                                                    <button
+                                                        onClick={() => setExpandedTicketId(expandedTicketId === ride.id ? null : ride.id)}
+                                                        className="w-full text-center text-xs font-bold text-amber-400 uppercase tracking-widest hover:text-amber-300 transition mb-4 pb-2 border-b border-slate-700"
+                                                    >
+                                                        {expandedTicketId === ride.id ? '▼ Ocultar Candidatos' : `▶ Ver ${ride.matches_count} Pasajero(s)`}
+                                                    </button>
+
+                                                    {expandedTicketId === ride.id && (
+                                                        <div className="space-y-4 animate-fadeIn">
+                                                            {matches.filter(m => m.ride_id === ride.id).map((match, idx) => (
+                                                                <div key={idx} className="scale-95 origin-top">
+                                                                    <TicketCard
+                                                                        type="match_found"
+                                                                        data={match}
+                                                                        user={user}
+                                                                        onMatch={handleMatchAction}
+                                                                        isDriver={true}
+                                                                    />
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
