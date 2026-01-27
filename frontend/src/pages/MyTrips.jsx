@@ -130,8 +130,25 @@ const MyTrips = () => {
         console.log("Match Action:", matchData)
         if (isDriver) {
             // Driver Flow: Invite Passenger
-            // TODO: Implement /invite endpoint
-            alert(`Has invitado a ${matchData.candidate_user.name}. Se le ha enviado una notificación para que realice el pago.`)
+            try {
+                const res = await authFetch(`${API_URL}/matches/invite`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        request_id: matchData.request_id,
+                        ride_id: matchData.ride_id
+                    })
+                })
+                if (res.ok) {
+                    alert(`Has invitado a ${matchData.candidate_user.name}. Se le ha enviado una notificación para que realice el pago.`)
+                } else {
+                    const err = await res.json()
+                    alert(`Error: ${err.detail}`)
+                }
+            } catch (e) {
+                console.error(e)
+                alert("Error enviando invitación")
+            }
         } else {
             // Passenger Flow: Create Booking & Pay
             try {

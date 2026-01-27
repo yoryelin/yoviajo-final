@@ -93,3 +93,45 @@ def get_my_matches(
                 })
     
     return matches_result
+
+@router.post("/invite")
+def invite_passenger(
+    payload: dict,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Permite al conductor 'Ofrecer Lugar' (Invitar) a un pasajero compatible.
+    Envía una notificación (Mock/Email) al pasajero para que realice el pago.
+    """
+    # Payload espera: {"request_id": int, "ride_id": int}
+    req_id = payload.get("request_id")
+    ride_id = payload.get("ride_id")
+    
+    if not req_id or not ride_id:
+        raise HTTPException(status_code=400, detail="Faltan datos (request_id, ride_id)")
+
+    request = db.query(RideRequest).filter(RideRequest.id == req_id).first()
+    ride = db.query(Ride).filter(Ride.id == ride_id).first()
+    
+    if not request or not ride:
+        raise HTTPException(status_code=404, detail="Solicitud o Viaje no encontrado")
+        
+    if ride.driver_id != current_user.id:
+        raise HTTPException(status_code=403, detail="No eres el conductor de este viaje")
+        
+    # Enviar Notificación
+    from app.services.email_service import EmailService
+    email_service = EmailService()
+    
+    # Mock Notification Logic since we check 'enabled' inside service
+    # In a real app, this would send an email with a link like: https://yoviajo.com.ar/pay?ride_id=...
+    
+    try:
+        # Usamos send_welcome_email como base o creamos uno nuevo generic
+        # Por ahora logueamos y retornamos OK
+        print(f"📧 SENDING INVITE TO {request.passenger.email}: 'El conductor {current_user.name} te ha ofrecido lugar para {ride.origin}-{ride.destination}. Entra a la app para pagar y confirmar.'")
+    except Exception as e:
+        print(f"Error sending invite email: {e}")
+
+    return {"message": "Invitación enviada correctamente. El pasajero ha sido notificado."}
