@@ -10,7 +10,26 @@ from app.models.audit import AuditLog
 from app.api.routes import auth, rides, requests, geocode, bookings, reports, users
 
 # Crear tablas en la base de datos
-Base.metadata.create_all(bind=engine)
+# Crear tablas en la base de datos
+try:
+    logger.info("🔧 Attempting to create tables...")
+    Base.metadata.create_all(bind=engine)
+    logger.info("✅ Tables created (or already existed).")
+    
+    # Verify User table existence directly
+    from sqlalchemy import inspect
+    inspector = inspect(engine)
+    tables = inspector.get_table_names()
+    logger.info(f"📊 Current Tables in DB: {tables}")
+    
+    if "users" not in tables:
+        logger.error("❌ CRITICAL: 'users' table is MISSING after create_all!")
+    else:
+        logger.info("✅ 'users' table exists.")
+        
+except Exception as e:
+    logger.error(f"❌ Error creating tables: {e}")
+    # Don't exit, let migrations try to run, but log heavily.
 
 # Ejecutar Migraciones Manuales (Columnas faltantes)
 from app.db_migration import run_migrations
