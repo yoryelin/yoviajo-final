@@ -39,6 +39,8 @@ export default function Login() {
     setError(null)
     setLoading(true)
 
+    const isRegister = viewMode === 'register'
+
     // Validacion básica
     if (!formData.dni || !formData.password) {
       setError("Por favor completa DNI y Contraseña.")
