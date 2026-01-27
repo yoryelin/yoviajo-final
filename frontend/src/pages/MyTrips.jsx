@@ -17,6 +17,8 @@ const MyTrips = () => {
         booking: null
     })
 
+    const [matches, setMatches] = useState([])
+    const [expandedTicketId, setExpandedTicketId] = useState(null)
 
     const isDriver = user?.role === 'C'
 
@@ -28,6 +30,14 @@ const MyTrips = () => {
         setLoading(true)
         console.log("MyTrips: Fetching data...", { isDriver, user })
         try {
+            // 1. Fetch Matches (Coincidencias)
+            const resMatches = await authFetch(`${API_URL}/matches`)
+            if (resMatches.ok) {
+                const data = await resMatches.json()
+                console.log("MyTrips: Matches fetched:", data)
+                setMatches(data)
+            }
+
             if (isDriver) {
                 const res = await authFetch(`${API_URL}/rides/me`)
                 if (res.ok) {
@@ -112,6 +122,46 @@ const MyTrips = () => {
             } catch (e) {
                 console.error(e)
                 alert("Error de conexión")
+            }
+        }
+    }
+
+    const handleMatchAction = async (matchData) => {
+        console.log("Match Action:", matchData)
+        if (isDriver) {
+            // Driver Flow: Invite Passenger
+            // TODO: Implement /invite endpoint
+            alert(`Has invitado a ${matchData.candidate_user.name}. Se le ha enviado una notificación para que realice el pago.`)
+        } else {
+            // Passenger Flow: Create Booking & Pay
+            try {
+                // 1. Create Booking
+                const payload = {
+                    ride_id: matchData.ride_id,
+                    seats_booked: 1 // Default 1 seat for match
+                }
+                const res = await authFetch(`${API_URL}/bookings/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+
+                if (res.ok) {
+                    const bookingData = await res.json()
+                    // 2. Redirect to MercadoPago
+                    if (bookingData.payment_init_point) {
+                        window.location.href = bookingData.payment_init_point
+                    } else {
+                        alert("Reserva creada. Ve a 'Mis Reservas' para completar el pago.")
+                        fetchData()
+                    }
+                } else {
+                    const err = await res.json()
+                    alert(`Error al reservar: ${err.detail}`)
+                }
+            } catch (error) {
+                console.error("Booking Error:", error)
+                alert("Error de conexión al procesar la reserva.")
             }
         }
     }
@@ -224,6 +274,33 @@ const MyTrips = () => {
                                                     isManagement={true}
                                                     user={user}
                                                 />
+                                                {/* MATCHES DRAWER (PASSENGER) */}
+                                                {req.matches_count > 0 && (
+                                                    <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
+                                                        <button
+                                                            onClick={() => setExpandedTicketId(expandedTicketId === req.id ? null : req.id)}
+                                                            className="w-full text-center text-xs font-bold text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition mb-4 pb-2 border-b border-slate-700"
+                                                        >
+                                                            {expandedTicketId === req.id ? '▼ Ocultar Coincidencias' : `▶ Ver ${req.matches_count} Coincidencia(s)`}
+                                                        </button>
+
+                                                        {expandedTicketId === req.id && (
+                                                            <div className="space-y-4 animate-fadeIn">
+                                                                {matches.filter(m => m.request_id === req.id).map((match, idx) => (
+                                                                    <div key={idx} className="scale-95 origin-top">
+                                                                        <TicketCard
+                                                                            type="match_found"
+                                                                            data={match}
+                                                                            user={user}
+                                                                            onMatch={handleMatchAction}
+                                                                            isDriver={false}
+                                                                        />
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
