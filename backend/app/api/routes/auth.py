@@ -82,33 +82,48 @@ def login(user_credentials: UserLogin, request: Request, db: Session = Depends(g
     Login de usuario existente. Devuelve token JWT.
     Identificación directa por DNI (Cuenta Única).
     """
-    logger.info(f"Login Request for DNI={user_credentials.dni}")
+    try:
+        logger.info(f"Login Request for DNI={user_credentials.dni}")
 
-    # Buscar UNICA cuenta con este DNI
-    user = db.query(User).filter(User.dni == user_credentials.dni).first()
+        # Buscar UNICA cuenta con este DNI
+        user = db.query(User).filter(User.dni == user_credentials.dni).first()
 
-    if not user:
-        # Por seguridad no deberiamos decir si existe o no, pero para UX diremos credenciales incorrectas
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas (DNI o Password)")
+        if not user:
+            logger.warning(f"Login failed: User {user_credentials.dni} not found.")
+            # Por seguridad no deberiamos decir si existe o no, pero para UX diremos credenciales incorrectas
+            raise HTTPException(status_code=401, detail="Credenciales incorrectas (DNI o Password)")
 
-    # Verificar Password
-    if not auth.verify_password(user_credentials.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas (DNI o Password)")
+        # Verificar Password
+        try:
+            if not auth.verify_password(user_credentials.password, user.hashed_password):
+                logger.warning(f"Login failed: Invalid password for {user_credentials.dni}")
+                raise HTTPException(status_code=401, detail="Credenciales incorrectas (DNI o Password)")
+        except ValueError as ve:
+             logger.error(f"Bcrypt Error for {user_credentials.dni}: {ve}")
+             raise HTTPException(status_code=500, detail="Error de seguridad interno (Hash Invalido)")
 
-    # Login Exitoso
-    access_token = auth.create_access_token(
-        data={"sub": user.dni, "id": user.id} 
-    )
-    
-    # AUDIT LOG
-    ip = request.client.host if request.client else "0.0.0.0"
-    AuditService.log(db, "USER_LOGIN", user_id=user.id, details={"dni": user.dni, "role": user.role}, ip_address=ip)
+        # Login Exitoso
+        access_token = auth.create_access_token(
+            data={"sub": user.dni, "id": user.id} 
+        )
+        
+        # AUDIT LOG
+        ip = request.client.host if request.client else "0.0.0.0"
+        AuditService.log(db, "USER_LOGIN", user_id=user.id, details={"dni": user.dni, "role": user.role}, ip_address=ip)
 
-    return {
-        "access_token": access_token, 
-        "token_type": "bearer", 
-        "user": user
-    }
+        logger.info(f"Login Successful for {user_credentials.dni}")
+        return {
+            "access_token": access_token, 
+            "token_type": "bearer", 
+            "user": user
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"CRITICAL LOGIN ERROR: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Internal Login Error: {str(e)}")
 
 
 # SCHEMAS PARA RESET
