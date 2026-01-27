@@ -138,5 +138,33 @@ def run_migrations():
                 except Exception as e:
                     logger.error(f"❌ Failed to add 'profile_picture' to users: {e}")
 
+            # 9. Check 'verification_document' in 'users' (Trust & Safety)
+            try:
+                connection.execute(text("SELECT verification_document FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'verification_document' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN verification_document VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'verification_document' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'verification_document' to users: {e}")
+
+            # 10. Check 'verification_status' in 'users' (Trust & Safety)
+            try:
+                connection.execute(text("SELECT verification_status FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'verification_status' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN verification_status VARCHAR DEFAULT 'unverified'"))
+                    connection.commit()
+                    logger.info("✅ Added 'verification_status' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'verification_status' to users: {e}")
+
         except Exception as e:
             logger.error(f"Migration Error: {e}")
