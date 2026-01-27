@@ -44,7 +44,7 @@ const Layout = ({ children }) => {
                     {/* USUARIO */}
                     {user && (
                         <div className="flex items-center gap-4">
-                            <a href="/my-trips" className="hidden md:block text-sm font-bold text-slate-400 hover:text-white transition uppercase tracking-widest">
+                            <a href="/my-trips" className="text-xs md:text-sm font-bold text-slate-400 hover:text-white transition uppercase tracking-widest whitespace-nowrap">
                                 Mis Viajes
                             </a>
 
