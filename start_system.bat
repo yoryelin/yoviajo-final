@@ -4,7 +4,7 @@ echo       INICIANDO SISTEMA YO VIAJO
 echo ==========================================
 
 echo.
-echo [1/3] Iniciando Backend (Puerto 8001)...
+echo [1/3] Iniciando Backend (Puerto 8003)...
 start "YoViajo Backend" cmd /k "cd backend && call venv\Scripts\activate && python run.py"
 
 echo.

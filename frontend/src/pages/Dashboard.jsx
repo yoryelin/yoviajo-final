@@ -7,7 +7,7 @@ import TicketCard from '../components/TicketCard'
 import CityAutocomplete from '../components/CityAutocomplete'
 import ReserveRideModal from '../components/ReserveRideModal'
 import PaymentModal from '../components/PaymentModal'
-import { API_URL } from '../config/api'
+import { API_URL } from '@config/api.js'
 
 export default function Dashboard() {
     const { user, authFetch } = useAuth()

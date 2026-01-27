@@ -33,9 +33,9 @@ logger.info("🚀 YoViajo API Starting up...")
 
 # Configuración CORS
 # Configuración CORS
-origins = [
     "http://localhost:5173",    # Local Frontend
     "http://127.0.0.1:5173",    # Local Frontend IP
+    "http://localhost:4173",    # Local Preview
     "https://yoviajo.com.ar",       # Prod Domain
     "https://www.yoviajo.com.ar",   # Prod WWW
     "https://yoviajo-frontend.onrender.com" # Render Fallback

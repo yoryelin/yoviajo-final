@@ -3,7 +3,7 @@ import AdminLayout from '../../layouts/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-import { API_URL } from '../../config/api';
+import { API_URL } from '@config/api.js';
 
 const AdminDashboard = () => {
     const { user, token } = useAuth();

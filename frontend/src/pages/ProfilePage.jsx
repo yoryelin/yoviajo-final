@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '@config/api.js'
 
 export default function ProfilePage() {
     const { user, login } = useAuth() // login actually updates user state if we pass full user object? Use a refresh function if available or just re-fetch.
@@ -16,8 +17,7 @@ export default function ProfilePage() {
     const [formData, setFormData] = useState({})
     const [successMsg, setSuccessMsg] = useState('')
 
-    const RAW_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar'
-    const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
+
 
     const authFetch = async (url, options = {}) => {
         const token = localStorage.getItem('token')
@@ -407,7 +407,7 @@ export default function ProfilePage() {
                                 </div>
 
                                 <button
-                                    onClick={handleVerify}
+                                    onClick={() => alert("Función de verificación simulada enviada.")}
                                     className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black py-4 px-10 rounded-xl shadow-lg shadow-green-900/20 transition transform active:scale-[0.98]"
                                 >
                                     SOLICITAR VERIFICACIÓN

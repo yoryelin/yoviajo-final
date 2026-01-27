@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
 
-import { API_URL } from '../../config/api';
+import { API_URL } from '@config/api.js';
 
 const AdminBookings = () => {
     const { token } = useAuth();

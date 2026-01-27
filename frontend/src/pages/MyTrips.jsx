@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import TicketCard from '../components/TicketCard'
 import PassengerActionModal from '../components/PassengerActionModal'
+import { API_URL } from '@config/api.js'
 
 const MyTrips = () => {
     const { user, authFetch } = useAuth()
@@ -16,8 +17,7 @@ const MyTrips = () => {
         booking: null
     })
 
-    const RAW_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar'
-    const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
+
     const isDriver = user?.role === 'C'
 
     useEffect(() => {
