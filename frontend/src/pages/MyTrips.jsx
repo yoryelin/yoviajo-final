@@ -20,11 +20,37 @@ const MyTrips = () => {
     const [matches, setMatches] = useState([])
     const [expandedTicketId, setExpandedTicketId] = useState(null)
 
+    // New: Store bookings for specific rides (for Driver view)
+    const [rideBookings, setRideBookings] = useState({})
+    const [expandedBookingsId, setExpandedBookingsId] = useState(null)
+
     const isDriver = user?.role === 'C'
 
     useEffect(() => {
         fetchData()
     }, [user])
+
+    const fetchRideBookings = async (rideId) => {
+        if (rideBookings[rideId]) return // Already fetched
+        try {
+            const res = await authFetch(`${API_URL}/bookings/ride/${rideId}`)
+            if (res.ok) {
+                const data = await res.json()
+                setRideBookings(prev => ({ ...prev, [rideId]: data }))
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const toggleBookings = (rideId) => {
+        if (expandedBookingsId === rideId) {
+            setExpandedBookingsId(null)
+        } else {
+            setExpandedBookingsId(rideId)
+            fetchRideBookings(rideId)
+        }
+    }
 
     const fetchData = async () => {
         setLoading(true)
