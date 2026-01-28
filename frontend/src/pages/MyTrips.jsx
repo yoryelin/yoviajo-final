@@ -286,6 +286,35 @@ const MyTrips = () => {
                                                     )}
                                                 </div>
                                             )}
+
+                                            {/* BOOKINGS DRAWER (DRIVER - Paid Passengers) */}
+                                            {ride.bookings_count > 0 && (
+                                                <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
+                                                    <button
+                                                        onClick={() => toggleBookings(ride.id)}
+                                                        className="w-full text-center text-xs font-bold text-green-400 uppercase tracking-widest hover:text-green-300 transition mb-4 pb-2 border-b border-slate-700"
+                                                    >
+                                                        {expandedBookingsId === ride.id ? '▼ Ocultar Reservas' : `▶ Ver ${ride.bookings_count} Reserva(s) Confirmada(s)`}
+                                                    </button>
+
+                                                    {expandedBookingsId === ride.id && (
+                                                        <div className="space-y-4 animate-fadeIn">
+                                                            {rideBookings[ride.id] ? rideBookings[ride.id].map((booking, idx) => (
+                                                                <div key={idx} className="scale-95 origin-top">
+                                                                    <TicketCard
+                                                                        type="booking"
+                                                                        data={booking}
+                                                                        user={user}
+                                                                        isDriver={true}
+                                                                    />
+                                                                </div>
+                                                            )) : (
+                                                                <div className="text-center py-4 text-slate-500 text-xs">Cargando...</div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>

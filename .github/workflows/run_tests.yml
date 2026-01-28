@@ -1,0 +1,39 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Creamos un .env dummy para que no falle la validación de configuración
+      - name: Create .env file
+        run: |
+          echo "PROJECT_NAME=YoViajo Test" > .env
+          echo "MP_ACCESS_TOKEN=TEST-PLACEHOLDER" >> .env
+          echo "SECRET_KEY=testing_secret" >> .env
+
+      - name: Run Tests
+        run: |
+          pytest

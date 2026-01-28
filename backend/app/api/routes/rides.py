@@ -94,7 +94,7 @@ def get_rides(
         print(f"CRITICAL ERROR in get_rides: {e}")
         raise HTTPException(status_code=500, detail=f"Debug Error: {str(e)}")
 
-@router.post("", response_model=RideResponse)
+@router.post("", response_model=RideResponse, status_code=201)
 def create_ride(
     ride: RideCreate, 
     db: Session = Depends(get_db),

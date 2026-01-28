@@ -1,163 +1,171 @@
+
 import requests
-import json
-import logging
-from datetime import datetime, timedelta
-
-# Config
-BASE_URL = "http://127.0.0.1:8003/api"
-EMAIL_DRIVER = "driver_test_e2e@test.com"
-EMAIL_PASSENGER = "passenger_test_e2e@test.com"
-PASSWORD = "password123"
-
-# Setup Logger
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-logger = logging.getLogger("e2e_test")
-
-def login(dni, password):
-    res = requests.post(f"{BASE_URL}/login", json={"dni": dni, "password": password})
-    if res.status_code == 200:
-        return res.json()["access_token"]
-    logger.error(f"Login failed: {res.status_code} {res.text}")
-    return None
-
-def register_user(email, role):
-    suffix = email.split('_')[1].split('@')[0]
-    prefix = "99" if role == "driver" else "88"
-    dni = f"{prefix}{suffix}" # Use suffix for DNI to ensure uniqueness and match email
-    data = {
-        "email": email,
-        "password": PASSWORD,
-        "name": f"User {role}",
-        "dni": dni,
-        "birth_date": "1990-01-01",
-        "gender": "male",
-        "address": "Test Address",
-        "role": role # Send role, though backend might ignore it for now
-    }
-    r = requests.post(f"{BASE_URL}/register", json=data, timeout=5)
-    if r.status_code in [200, 201]:
-        logger.info(f"Created/Found user {role} with DNI {dni}")
-        # If response has DNI, use it.
-        try:
-             return r.json().get('dni', dni)
-        except:
-             return dni
-    elif r.status_code == 400:
-        logger.info(f"User {role} already exists, proceeding to login.")
-        return dni
-    else:
-        logger.error(f"Failed to register {role}: {r.status_code} {r.text} at {r.url}")
-        return None
-
-def delete_user(email):
-    pass
-
 import random
+import string
+import time
 
-def run_test():
-    logger.info("--- STARTING END-TO-END PAYMENT TEST ---")
-    
-    # Use unique emails to avoid conflicts
-    suffix = random.randint(10000, 99999)
-    email_driver = f"driver_{suffix}@test.com" 
-    email_passenger = f"passenger_{suffix}@test.com"
+API_URL = "http://localhost:8000/api" # Local Testing
+# API_URL = "https://api.yoviajo.com.ar/api" # Production Testing
 
-    # 1. Setup Users
-    dni_driver = register_user(email_driver, "driver")
-    dni_passenger = register_user(email_passenger, "passenger")
-    
-    if not dni_driver or not dni_passenger:
-        logger.error("❌ Registration failed")
-        return
+def generate_random_string(length=8):
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
-    # Login with DNI
-    token_driver = login(dni_driver, PASSWORD)
-    token_passenger = login(dni_passenger, PASSWORD)
-    
-    if not token_driver or not token_passenger:
-        logger.error("❌ Login failed")
-        return
+def generate_dni():
+    return str(random.randint(10000000, 99999999))
 
-    # Update Driver Profile (needed for creating rides)
-    requests.put(
-        f"{BASE_URL}/users/profile/driver",
-        headers={"Authorization": f"Bearer {token_driver}"},
-        json={"car_model": "Ford Focus", "license_plate": "ABC 123"}
-    )
+def register_user(role, name_prefix):
+    email = f"test_{name_prefix}_{generate_random_string()}@yoviajo.com"
+    password = "password123"
+    dni = generate_dni()
     
-    # 2. Driver Creates Ride
-    logger.info("🚗 Client A (Driver) creating ride...")
-    ride_data = {
-        "origin": "Cordoba",
-        "destination": "Villa Carlos Paz",
-        "departure_time": (datetime.utcnow() + timedelta(days=1)).isoformat(),
-        "available_seats": 4,
-        "price": 5000,
-        "origin_lat": -31.4201, 
-        "origin_lng": -64.1888,
-        "destination_lat": -31.4201, # Mock same for simplicity
-        "destination_lng": -64.4993
+    print(f"[{role}] Registering user: {email}...")
+    
+    payload = {
+        "email": email,
+        "password": password,
+        "name": f"Test {role} {generate_random_string(4)}",
+        "dni": dni,
+        "phone": "+5491112345678",
+        "role": "C" if role == "Driver" else "P"
     }
-    res_ride = requests.post(
-        f"{BASE_URL}/rides/",
-        headers={"Authorization": f"Bearer {token_driver}"},
-        json=ride_data
-    )
-    if res_ride.status_code not in [200, 201]:
-        logger.error(f"❌ Failed to create ride: {res_ride.text}")
-        return
-    ride_id = res_ride.json()["id"]
-    logger.info(f"✅ Ride Created. ID: {ride_id}")
-
-    # 3. Passenger Creates Booking (Initiates Match/Join)
-    logger.info("👋 Client B (Passenger) joining ride...")
-    booking_data = {"ride_id": ride_id, "seats_booked": 1}
-    res_booking = requests.post(
-        f"{BASE_URL}/bookings/",
-        headers={"Authorization": f"Bearer {token_passenger}"},
-        json=booking_data
-    )
     
-    if res_booking.status_code not in [200, 201]:
-        logger.error(f"❌ Failed to create booking: {res_booking.text}")
-        return
-    
-    booking = res_booking.json()
-    logger.info(f"✅ Booking Created. Status: {booking['status']}, Payment: {booking['payment_status']}")
-
-    if booking['payment_status'] != 'unpaid':
-        logger.error("❌ Initial payment status should be 'unpaid'")
-        return
-
-    # 4. Simulate Payment
-    logger.info("💳 Client B paying fee...")
-    res_pay = requests.post(
-        f"{BASE_URL}/payment/simulate",
-        headers={"Authorization": f"Bearer {token_passenger}"},
-        json={"booking_id": booking['id']}
-    )
-    
-    if res_pay.status_code != 200:
-        logger.error(f"❌ Payment failed: {res_pay.text}")
-        return
+    try:
+        # Register
+        requests.post(f"{API_URL}/register", json=payload)
         
-    payment_res = res_pay.json()
-    logger.info(f"✅ Payment Simulated. Status: {payment_res['status']}")
+        # Login
+        resp = requests.post(f"{API_URL}/login", json={"dni": dni, "password": password})
+        if resp.status_code != 200:
+             print(f"Login failed: {resp.text}")
+             return None, None
+             
+        token = resp.json()["access_token"]
+        return token, email
+    except Exception as e:
+        print(f"Registration/Login failed: {e}")
+        return None, None
 
-    # 5. Verify Booking is Confirmed
-    logger.info("🔍 Verifying final status...")
-    res_verify = requests.get(
-        f"{BASE_URL}/bookings/me",
-        headers={"Authorization": f"Bearer {token_passenger}"}
-    )
+def run_simulation():
+    print("Starting Payment Flow verification Simulation...")
     
-    my_bookings = res_verify.json()
-    target_booking = next((b for b in my_bookings if b['id'] == booking['id']), None)
+    # 1. Setup Users
+    driver_token, driver_email = register_user("Driver", "D")
+    passenger_token, passenger_email = register_user("Passenger", "P")
     
-    if target_booking and target_booking['payment_status'] == 'paid' and target_booking['status'] == 'confirmed':
-        logger.info("🎉 SUCCESS: Booking is PAID and CONFIRMED. Contact unlocked.")
-    else:
-        logger.error(f"❌ Verification failed. Final Status: {target_booking['status'] if target_booking else 'NotFound'}")
+    if not driver_token or not passenger_token:
+        print("Failed to create test users. Aborting.")
+        return
+
+    created_ride_id = None
+    created_request_id = None
+    created_booking_id = None
+
+    try:
+        # 2. Driver Posts Ride
+        print("\nDriver posting ride...")
+        ride_payload = {
+            "origin": "TestCityA",
+            "destination": "TestCityB",
+            "departure_time": "2026-12-31T10:00:00", # Future date
+            "price": 10000,
+            "available_seats": 4,
+            "allow_luggage": True
+        }
+        headers_driver = {"Authorization": f"Bearer {driver_token}"}
+        print(f"Debug: Driver Token Prefix: {driver_token[:10]}...")
+        # print(f"Debug: Headers: {headers_driver}") 
+        
+        # Try without trailing slash to avoid potential redirect header dropping
+        res_ride = requests.post(f"{API_URL}/rides", json=ride_payload, headers=headers_driver)
+        
+        if res_ride.history:
+             print(f"Debug: Request was redirected: {[r.url for r in res_ride.history]}")
+             
+        if res_ride.status_code != 200:
+            print(f"Failed to create ride: {res_ride.status_code} - {res_ride.text}")
+            return
+        ride_data = res_ride.json()
+        created_ride_id = ride_data["id"]
+        print(f"Ride created. ID: {created_ride_id}")
+
+        # 3. Passenger Posts Request
+        print("\nPassenger posting request...")
+        req_payload = {
+            "origin": "TestCityA",
+            "destination": "TestCityB",
+            "date": "2026-12-31",
+            "time_window_start": "09:00",
+            "time_window_end": "12:00",
+            "seats_needed": 1
+        }
+        headers_passenger = {"Authorization": f"Bearer {passenger_token}"}
+        res_req = requests.post(f"{API_URL}/requests/", json=req_payload, headers=headers_passenger)
+        if res_req.status_code != 200:
+             print(f"Failed to create request: {res_req.text}")
+             return
+        req_data = res_req.json()
+        created_request_id = req_data["id"]
+        print(f"Request created. ID: {created_request_id}")
+
+        # 4. Check Matches (Passenger View)
+        print("\nChecking for matches...")
+        time.sleep(2) # Give DB a moment
+        res_matches = requests.get(f"{API_URL}/matches", headers=headers_passenger)
+        matches = res_matches.json()
+        
+        match_found = next((m for m in matches if m.get("ride_id") == created_ride_id), None)
+        
+        if match_found:
+            print("Match confirmed by System!")
+        else:
+            print("Match NOT found immediately (might be async or cached). Proceeding to book by ID anyway for test.")
+
+        # 5. Passenger Creates Booking (Simulate 'Solicitar Unirme')
+        print("\nSimulating 'Solicitar Unirme' & Payment Link Generation...")
+        booking_payload = {
+            "ride_id": created_ride_id,
+            "seats_booked": 1
+        }
+        res_booking = requests.post(f"{API_URL}/bookings/", json=booking_payload, headers=headers_passenger)
+        
+        if res_booking.status_code == 201:
+            booking_data = res_booking.json()
+            created_booking_id = booking_data["id"]
+            
+            print(f"Booking Created. ID: {created_booking_id}")
+            
+            init_point = booking_data.get("payment_init_point")
+            if init_point:
+                 print(f"SUCCESS! Payment Link Generated: {init_point}")
+                 print("The system is ready to accept payments.")
+            else:
+                 print("Booking created but NO Payment Link found. Check Payment Service configuration.")
+        else:
+             print(f"Failed to create booking: {res_booking.text}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    finally:
+        print("\nCleaning up simulation data...")
+        # Signup User cleanup is skipped (safe soft delete usually prefered in production)
+        
+        # Cancel Booking
+        if created_booking_id:
+            requests.patch(f"{API_URL}/bookings/{created_booking_id}", json={"status": "cancelled"}, headers=headers_passenger)
+            print(f"Booking {created_booking_id} cancelled.")
+            
+        # Cancel Request
+        if created_request_id:
+             requests.delete(f"{API_URL}/requests/{created_request_id}", headers=headers_passenger)
+             print(f"Request {created_request_id} deleted.")
+             
+        # Cancel Ride
+        if created_ride_id:
+            requests.delete(f"{API_URL}/rides/{created_ride_id}", headers=headers_driver)
+            print(f"Ride {created_ride_id} deleted.")
+            
+        print("Simulation Complete.")
 
 if __name__ == "__main__":
-    run_test()
+    run_simulation()

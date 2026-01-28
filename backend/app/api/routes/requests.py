@@ -76,7 +76,7 @@ def get_requests(db: Session = Depends(get_db)):
         result.append(req_dict)
     return result
 
-@router.post("", response_model=RequestResponse)
+@router.post("", response_model=RequestResponse, status_code=201)
 def create_request(
     request: RequestCreate, 
     db: Session = Depends(get_db),
