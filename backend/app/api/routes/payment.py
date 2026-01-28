@@ -17,6 +17,59 @@ class PaymentRequest(BaseModel):
 from app.services.payment_service import PaymentService
 from fastapi import Request
 
+@router.post("/check/{booking_id}")
+def check_payment_status(
+    booking_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Busca activamente si existe un pago aprobado para esta reserva.
+    Útil si el webhook falla o tarda.
+    """
+    # 1. Verificar Booking existente
+    booking = db.query(Booking).filter(Booking.id == booking_id).first()
+    if not booking:
+        raise HTTPException(status_code=404, detail="Reserva no encontrada")
+        
+    if booking.payment_status == "paid":
+        return {"status": "paid", "message": "La reserva ya está pagada."}
+
+    # 2. Consultar a Mercado Pago
+    service = PaymentService()
+    payment_data = service.search_payment_by_reference(str(booking_id))
+    
+    if payment_data and payment_data.get("status") == "approved":
+        print(f"✅ Active Check: Payment Found for Booking {booking_id}")
+        
+        # 3. Actualizar Booking
+        booking.payment_status = "paid"
+        booking.status = BookingStatus.CONFIRMED.value
+        booking.updated_at = datetime.utcnow()
+        
+        # 4. Crear Registro de Pago si no existe
+        existing_payment = db.query(Payment).filter(Payment.booking_id == booking.id).first()
+        
+        if not existing_payment:
+            new_payment = Payment(
+                booking_id=booking.id,
+                external_id=str(payment_data.get("id")),
+                status="approved",
+                amount=payment_data.get("transaction_amount", 0.0),
+                currency=payment_data.get("currency_id", "ARS"),
+                payment_url=None,
+                created_at=datetime.utcnow()
+            )
+            db.add(new_payment)
+        
+        db.commit()
+        db.refresh(booking)
+        
+        return {"status": "paid", "message": "Pago verificado y reserva confirmada."}
+    
+    return {"status": booking.payment_status, "message": "No se encontró pago aprobado aún."}
+
+
+
 @router.post("/webhook")
 async def payment_webhook(
     request: Request,

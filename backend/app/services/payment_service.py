@@ -113,3 +113,31 @@ class PaymentService:
         except Exception as e:
             print(f"Error consultando pago MP: {e}")
             return None
+
+    def search_payment_by_reference(self, external_reference: str):
+        """
+        Busca un pago en MP usando la external_reference (booking_id).
+        Retorna el primer pago aprobado encontrado o None.
+        """
+        try:
+            if not self.sdk:
+                return None
+            
+            filters = {
+                "external_reference": external_reference,
+                "status": "approved" # Solo nos interesan los aprobados
+            }
+            
+            search_result = self.sdk.payment().search(filters)
+            
+            if search_result["status"] == 200:
+                results = search_result["response"]["results"]
+                if results and len(results) > 0:
+                    # Retornamos el más reciente (aunque debería haber solo uno válido idealmente)
+                    return results[0]
+            
+            return None
+
+        except Exception as e:
+            print(f"Error buscando pago por referencia {external_reference}: {e}")
+            return None
