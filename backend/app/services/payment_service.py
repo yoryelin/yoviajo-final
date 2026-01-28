@@ -15,7 +15,7 @@ class PaymentService:
             print("⚠️ Warning: MercadoPago SDK not installed or not found.")
             self.sdk = None
 
-    def create_preference(self, booking_id: int, title: str, price: float, payer_email: str):
+    def create_preference(self, booking_id: int, title: str, price: float, payer_email: str, payer_name: str = "Pasajero", payer_surname: str = "YoViajo", payer_dni: str = None):
         """
         Crea una preferencia de pago en MercadoPago.
         Retorna el ID de la preferencia y la URL de pago (init_point).
@@ -37,6 +37,19 @@ class PaymentService:
 
         print(f"🔗 MP Back URL Base: {base_url}") # Debug log
         
+        # Construir objeto Payer con datos enriquecidos para evitar CPT01
+        payer_data = {
+            "email": payer_email,
+            "name": payer_name,
+            "surname": payer_surname,
+        }
+        
+        if payer_dni:
+            payer_data["identification"] = {
+                "type": "DNI",
+                "number": payer_dni
+            }
+        
         preference_data = {
             "items": [
                 {
@@ -47,15 +60,14 @@ class PaymentService:
                     "currency_id": "ARS" 
                 }
             ],
-            "payer": {
-                "email": payer_email
-            },
+            "payer": payer_data,
             "back_urls": {
                 "success": f"{base_url}/dashboard?payment_status=success&booking_id={booking_id}",
                 "failure": f"{base_url}/dashboard?payment_status=failure&booking_id={booking_id}",
                 "pending": f"{base_url}/dashboard?payment_status=pending&booking_id={booking_id}"
             },
             "auto_return": "approved",
+            "binary_mode": True, # IMPORTANTE: Evita pagos pendientes, solo Aprobado o Rechazado
             "external_reference": str(booking_id), # Sirve para conciliar después
             "statement_descriptor": "YO VIAJO APP"
         }

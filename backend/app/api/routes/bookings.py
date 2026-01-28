@@ -251,18 +251,25 @@ def create_booking(
         ride.destination_lng
     )
 
-    # ---------------------------------------------------------
     # MONETIZATION: GENERATE MERCADOPAGO PREFERENCE
     # ---------------------------------------------------------
     try:
         from app.services.payment_service import PaymentService
         payment_service = PaymentService()
         
+        # Split name helper
+        name_parts = current_user.name.split(" ", 1) if current_user.name else ["Pasajero", "YoViajo"]
+        p_name = name_parts[0]
+        p_surname = name_parts[1] if len(name_parts) > 1 else "Usuario"
+        
         preference = payment_service.create_preference(
             booking_id=new_booking.id,
             title=f"Reserva de Viaje: {ride.origin} -> {ride.destination}",
             price=new_booking.fee_amount, # Fixed Fee (5000)
-            payer_email=current_user.email
+            payer_email=current_user.email,
+            payer_name=p_name,
+            payer_surname=p_surname,
+            payer_dni=current_user.dni
         )
         
         if preference:
