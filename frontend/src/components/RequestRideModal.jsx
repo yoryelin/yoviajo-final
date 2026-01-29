@@ -153,10 +153,7 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
                             </div>
                         </div>
 
-                        <div>
-                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Presupuesto (Opcional)</label>
-                            <input className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none text-white transition placeholder-slate-600" name="price" onChange={handleChange} placeholder="$ Oferta" type="number" value={reqData.price} />
-                        </div>
+                        {/* Budget field removed per user request */}
 
                         <button className="w-full bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-black py-4 rounded-xl shadow-lg shadow-pink-900/20 transition transform active:scale-[0.98] text-sm uppercase tracking-widest mt-2">
                             CONFIRMAR PUBLICACIÓN

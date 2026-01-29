@@ -171,25 +171,35 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
         <div className="text-right ml-4">
           <div className="flex flex-col items-end">
 
-            {/* TOTAL CONSUMPTION ONLY (Per User Request) */}
-            <div className="flex items-center gap-1">
-              <span className="text-2xl">⛽</span>
-              <span className="text-3xl font-black text-white tracking-tighter">
-                {data.fuel_liters_total ? Number(data.fuel_liters_total).toFixed(0) : (data.price / 1750).toFixed(0)} L
-              </span>
-            </div>
+            {/* TOTAL CONSUMPTION Display - Hide if 0 (Requests) */}
+            {(data.fuel_liters_total > 0 || data.price > 0) ? (
+              <>
+                <div className="flex items-center gap-1">
+                  <span className="text-2xl">⛽</span>
+                  <span className="text-3xl font-black text-white tracking-tighter">
+                    {data.fuel_liters_total ? Number(data.fuel_liters_total).toFixed(0) : (data.price / 1750).toFixed(0)} L
+                  </span>
+                </div>
 
-            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">
-              Consumo Est. Total
-            </div>
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">
+                  Consumo Est. Total
+                </div>
 
-            {/* Fee notice only for Passengers */}
-            {!viewerIsDriver && (
-              <div className="mt-1 text-[10px] text-cyan-500/80 font-medium">
-                + Fee de Gestión
+                {/* Fee notice only for Passengers */}
+                {!viewerIsDriver && (
+                  <div className="mt-1 text-[10px] text-cyan-500/80 font-medium">
+                    + Fee de Gestión
+                  </div>
+                )}
+                {viewerIsDriver && <div className="h-4"></div>}
+              </>
+            ) : (
+              <div className="flex flex-col items-end opacity-50">
+                <span className="text-2xl">🤝</span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">A Convenir</span>
+                <div className="h-4"></div>
               </div>
             )}
-            {viewerIsDriver && <div className="h-4"></div>}
           </div>
           <div className="mt-1">
             <span className="text-[10px] font-bold text-slate-500 uppercase">{data.available_seats} Asientos</span>

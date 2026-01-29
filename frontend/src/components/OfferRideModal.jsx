@@ -3,6 +3,19 @@ import CityAutocomplete from './CityAutocomplete'
 import { useAuth } from '../context/AuthContext'
 import ConfirmationModal from './ConfirmationModal'
 
+// Haversine Formula for distance estimation (straight line * road factor)
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const straightDist = R * c;
+    return Math.round(straightDist * 1.3); // 1.3 approximate road factor
+}
+
 const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initialData }) => {
     const { user } = useAuth()
     const userIsFemale = user?.gender === 'F'
@@ -54,11 +67,25 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
         }
     }, [initialData, isOpen])
 
+    // Auto-calculate distance
+    useEffect(() => {
+        if (offer.origin_lat && offer.origin_lng && offer.destination_lat && offer.destination_lng) {
+            const dist = calculateDistance(offer.origin_lat, offer.origin_lng, offer.destination_lat, offer.destination_lng);
+            const totalLiters = dist / 10;
+            // Only update if distance hasn't been manually set or looks like an auto-calc update
+            setOffer(prev => ({
+                ...prev,
+                distance: dist,
+                fuel_liters: totalLiters,
+                price: (dist * 175)
+            }));
+        }
+    }, [offer.origin_lat, offer.origin_lng, offer.destination_lat, offer.destination_lng]);
+
     // DEBUG: Validate URL on mount
     useEffect(() => {
         if (isOpen) {
             console.log("OfferRideModal Open. API_URL:", API_URL);
-            // alert(`DEBUG: API_URL is ${API_URL}`); // Comentado para no molestar si funciona, o descomentar si se pide
         }
     }, [isOpen])
 
@@ -276,81 +303,82 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                                 </div>
                             </div>
 
-                            <div className="bg-slate-800/50 rounded-xl p-3 flex flex-col justify-center border border-dashed border-slate-700">
-                                <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1 block">Cálculo "Patrón Nafta"</label>
-                                <div className="flex items-end gap-1">
-                                    <span className="text-2xl">⛽</span>
-                                    <span className="text-xl font-bold text-white">
-                                        {offer.fuel_liters ? (offer.fuel_liters / offer.available_seats).toFixed(1) : '-'} L
-                                    </span>
-                                    <span className="text-xs text-slate-400 mb-1">/ asiento</span>
-                                </div>
-                                <div className="text-[10px] text-slate-500">
-                                    (Estimado dividiendo consumo total por {offer.available_seats} asientos)
-                                </div>
-                            </div>
-
-                            {/* WOMEN ONLY TOGGLE */}
-                            {userIsFemale && (
-                                <div className="bg-pink-900/10 border border-pink-500/20 rounded-xl p-3 flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-pink-500/20 p-2 rounded-lg">
-                                            🌸
-                                        </div>
-                                        <div>
-                                            <p className="text-pink-200 text-xs font-bold uppercase">Solo Mujeres</p>
-                                            <p className="text-[10px] text-pink-400/70">Viaje exclusivo para pasajeras</p>
-                                        </div>
-                                    </div>
-                                    <label className="relative inline-flex items-center cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            className="sr-only peer"
-                                            checked={offer.women_only || false}
-                                            onChange={(e) => setOffer({ ...offer, women_only: e.target.checked })}
-                                        />
-                                        <div className="w-11 h-6 bg-slate-800 border border-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 peer-checked:border-pink-500"></div>
-                                    </label>
-                                </div>
-                            )}
-
-                            {/* ACTIONS */}
-                            <div className="flex gap-3 pt-2">
-                                {/* Only show Cancel if initialData exists (Manage Mode) */}
-                                {initialData && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowCancelModal(true)}
-                                        className="flex-1 bg-red-900/40 hover:bg-red-900/60 text-red-400 border border-red-900/50 font-bold py-4 rounded-xl shadow-lg transition transform active:scale-[0.98] text-sm uppercase tracking-widest"
-                                    >
-                                        Cancelar Viaje
-                                    </button>
-                                )}
-
-                                <button
-                                    type="submit"
-                                    className="flex-[2] bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] text-sm uppercase tracking-widest"
-                                >
-                                    {initialData ? 'GUARDAR CAMBIOS' : 'CONFIRMAR PUBLICACIÓN'}
-                                </button>
-                            </div>
-                        </form>
                     </div>
 
-                </div >
+                    <div className="bg-slate-800/50 rounded-xl p-3 flex flex-col justify-center border border-dashed border-slate-700">
+                        <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1 block">Consumo Estimado Total</label>
+                        <div className="flex items-center gap-2">
+                            <span className="text-3xl">⛽</span>
+                            <span className="text-2xl font-black text-white">
+                                {offer.fuel_liters ? Math.round(offer.fuel_liters) : '-'} L
+                            </span>
+                        </div>
+                        <div className="text-[10px] text-slate-500 mt-1">
+                            Referencia Total para el viaje ({offer.distance || '-'} km)
+                        </div>
+                    </div>
+
+                    {/* WOMEN ONLY TOGGLE */}
+                    {userIsFemale && (
+                        <div className="bg-pink-900/10 border border-pink-500/20 rounded-xl p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="bg-pink-500/20 p-2 rounded-lg">
+                                    🌸
+                                </div>
+                                <div>
+                                    <p className="text-pink-200 text-xs font-bold uppercase">Solo Mujeres</p>
+                                    <p className="text-[10px] text-pink-400/70">Viaje exclusivo para pasajeras</p>
+                                </div>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="sr-only peer"
+                                    checked={offer.women_only || false}
+                                    onChange={(e) => setOffer({ ...offer, women_only: e.target.checked })}
+                                />
+                                <div className="w-11 h-6 bg-slate-800 border border-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 peer-checked:border-pink-500"></div>
+                            </label>
+                        </div>
+                    )}
+
+                    {/* ACTIONS */}
+                    <div className="flex gap-3 pt-2">
+                        {/* Only show Cancel if initialData exists (Manage Mode) */}
+                        {initialData && (
+                            <button
+                                type="button"
+                                onClick={() => setShowCancelModal(true)}
+                                className="flex-1 bg-red-900/40 hover:bg-red-900/60 text-red-400 border border-red-900/50 font-bold py-4 rounded-xl shadow-lg transition transform active:scale-[0.98] text-sm uppercase tracking-widest"
+                            >
+                                Cancelar Viaje
+                            </button>
+                        )}
+
+                        <button
+                            type="submit"
+                            className="flex-[2] bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] text-sm uppercase tracking-widest"
+                        >
+                            {initialData ? 'GUARDAR CAMBIOS' : 'CONFIRMAR PUBLICACIÓN'}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div >
             </div >
 
-            {/* CONFIRMATION MODAL */}
-            < ConfirmationModal
-                isOpen={showCancelModal}
-                onClose={() => setShowCancelModal(false)}
-                onConfirm={handleCancelRide}
-                title="¿Cancelar este viaje?"
-                message="Esta acción cancelará todos los lugares reservados y notificará a los pasajeros."
-                warning={initialData ? getPenaltyWarning() : null}
-                confirmText="Sí, Cancelar Viaje"
-                isDanger={true}
-            />
+    {/* CONFIRMATION MODAL */ }
+    < ConfirmationModal
+isOpen = { showCancelModal }
+onClose = {() => setShowCancelModal(false)}
+onConfirm = { handleCancelRide }
+title = "¿Cancelar este viaje?"
+message = "Esta acción cancelará todos los lugares reservados y notificará a los pasajeros."
+warning = { initialData? getPenaltyWarning(): null }
+confirmText = "Sí, Cancelar Viaje"
+isDanger = { true}
+    />
         </>
     )
 }
