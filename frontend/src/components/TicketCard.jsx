@@ -170,19 +170,26 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
         </div>
         <div className="text-right ml-4">
           <div className="flex flex-col items-end">
-            {/* FUEL STANDARD DISPLAY */}
+
+            {/* TOTAL CONSUMPTION ONLY (Per User Request) */}
             <div className="flex items-center gap-1">
               <span className="text-2xl">⛽</span>
-              <span className="text-2xl font-black text-white tracking-tighter">
-                {data.price_per_seat_liters ? data.price_per_seat_liters : (data.price ? (data.price / 1750).toFixed(1) : '0')} L
+              <span className="text-3xl font-black text-white tracking-tighter">
+                {data.fuel_liters_total ? Number(data.fuel_liters_total).toFixed(0) : (data.price / 1750).toFixed(0)} L
               </span>
             </div>
-            <div className="text-[10px] font-bold text-slate-500 uppercase">
-              ≈ $ {data.price_per_seat_liters ? (data.price_per_seat_liters * 1750).toLocaleString() : data.price} ARS
+
+            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">
+              Consumo Est. Total
             </div>
-            <div className="mt-1 text-[10px] text-cyan-500/80 font-medium">
-              + Fee de Gestión
-            </div>
+
+            {/* Fee notice only for Passengers */}
+            {!viewerIsDriver && (
+              <div className="mt-1 text-[10px] text-cyan-500/80 font-medium">
+                + Fee de Gestión
+              </div>
+            )}
+            {viewerIsDriver && <div className="h-4"></div>}
           </div>
           <div className="mt-1">
             <span className="text-[10px] font-bold text-slate-500 uppercase">{data.available_seats} Asientos</span>
