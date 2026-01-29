@@ -14,6 +14,7 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
         time_start: '08:00',
         time_end: '10:00',
         price: '',
+        available_seats: 4, // Default seats
         origin_lat: null,
         origin_lng: null,
         destination_lat: null,
@@ -44,11 +45,12 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                 destination_lat: initialData.destination_lat || null,
                 destination_lng: initialData.destination_lng || null,
                 women_only: initialData.women_only || false,
-                fuel_liters: initialData.fuel_liters_total || (initialData.price ? initialData.price / 1750 * 4 : 0) // Estimacion si no viene
+                fuel_liters: initialData.fuel_liters_total || (initialData.price ? initialData.price / 1750 * 4 : 0),
+                available_seats: initialData.available_seats || 4
             })
         } else {
             // Reset if no initial data
-            setOffer({ origin: '', destination: '', date: '', time_start: '08:00', time_end: '10:00', price: '', origin_lat: null, origin_lng: null, destination_lat: null, destination_lng: null })
+            setOffer({ origin: '', destination: '', date: '', time_start: '08:00', time_end: '10:00', price: '', available_seats: 4, origin_lat: null, origin_lng: null, destination_lat: null, destination_lng: null })
         }
     }, [initialData, isOpen])
 
@@ -72,13 +74,13 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                     ...offer,
                     departure_time: `${offer.date}T${offer.time_start}`,
                     price: parseInt(offer.price),
-                    available_seats: 4
+                    available_seats: parseInt(offer.available_seats)
                 })
             })
 
             if (response.ok) {
                 alert("¡Viaje Publicado!")
-                setOffer({ origin: '', destination: '', date: '', time_start: '08:00', time_end: '10:00', price: '' })
+                setOffer({ origin: '', destination: '', date: '', time_start: '08:00', time_end: '10:00', price: '', available_seats: 4 })
 
                 console.log("Success! Calling callbacks...");
                 if (typeof onPublish === 'function') {
@@ -243,7 +245,20 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                             </div>
 
                             <div className="flex gap-3">
-                                <div className="w-1/2">
+                                <div className="w-1/3">
+                                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Asientos Disp.</label>
+                                    <input
+                                        className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-cyan-500 outline-none text-white transition text-center font-bold"
+                                        name="available_seats"
+                                        onChange={handleChange}
+                                        required
+                                        type="number"
+                                        min="1"
+                                        max="8"
+                                        value={offer.available_seats}
+                                    />
+                                </div>
+                                <div className="w-2/3">
                                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Distancia (km)</label>
                                     <input
                                         className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm focus:border-cyan-500 outline-none text-white transition placeholder-slate-600"
@@ -259,18 +274,19 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                                         value={offer.distance || ''}
                                     />
                                 </div>
-                                <div className="w-1/2 bg-slate-800/50 rounded-xl p-3 flex flex-col justify-center border border-dashed border-slate-700">
-                                    <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1 block">Cálculo "Patrón Nafta"</label>
-                                    <div className="flex items-end gap-1">
-                                        <span className="text-2xl">⛽</span>
-                                        <span className="text-xl font-bold text-white">
-                                            {offer.fuel_liters ? (offer.fuel_liters / 4).toFixed(1) : '-'} L
-                                        </span>
-                                        <span className="text-xs text-slate-400 mb-1">/ asiento</span>
-                                    </div>
-                                    <div className="text-[10px] text-slate-500">
-                                        ≈ ${offer.price ? (offer.price / 4).toLocaleString() : '-'} ARS
-                                    </div>
+                            </div>
+
+                            <div className="bg-slate-800/50 rounded-xl p-3 flex flex-col justify-center border border-dashed border-slate-700">
+                                <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1 block">Cálculo "Patrón Nafta"</label>
+                                <div className="flex items-end gap-1">
+                                    <span className="text-2xl">⛽</span>
+                                    <span className="text-xl font-bold text-white">
+                                        {offer.fuel_liters ? (offer.fuel_liters / offer.available_seats).toFixed(1) : '-'} L
+                                    </span>
+                                    <span className="text-xs text-slate-400 mb-1">/ asiento</span>
+                                </div>
+                                <div className="text-[10px] text-slate-500">
+                                    (Estimado dividiendo consumo total por {offer.available_seats} asientos)
                                 </div>
                             </div>
 
