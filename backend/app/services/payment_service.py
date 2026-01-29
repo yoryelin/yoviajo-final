@@ -67,7 +67,7 @@ class PaymentService:
                 "pending": f"{base_url}/dashboard?payment_status=pending&booking_id={booking_id}"
             },
             "auto_return": "approved",
-            "binary_mode": False, # Permitimos estados pendientes para evitar rechazos CPT01 por revisiones de seguridad
+            "binary_mode": True, # Forzamos decisión binaria (Aprobado/Rechazado) para reducir errores CPT01 de revisión
             "external_reference": str(booking_id), # Sirve para conciliar después
             "statement_descriptor": "YO VIAJO APP"
         }
