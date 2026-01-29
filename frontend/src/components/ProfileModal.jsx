@@ -42,12 +42,7 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
         return Math.abs(ageDate.getUTCFullYear() - 1970);
     }
 
-    const formatPhone = (val) => {
-        // Strip non-digits
-        let clean = val.replace(/\D/g, '')
-        // Verify length or prefix if needed, but for now just return clean or formatted
-        return clean
-    }
+
 
     const toTitleCase = (str) => {
         if (!str) return ""
