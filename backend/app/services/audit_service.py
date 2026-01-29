@@ -16,6 +16,14 @@ class AuditService:
             # Serializar detalles si existen
             details_json = details if details else {}
             
+            # SAFE-GUARD: Convert objects like 'date' or 'datetime' to string to avoid JSON errors
+            # Using json.loads/dumps trick to normalize
+            try:
+                details_json = json.loads(json.dumps(details_json, default=str))
+            except Exception:
+                # Fallback: if complex objects fail, convert only top level or just stringify the whole dict
+                details_json = {"raw_error_data": str(details_json)}
+
             # Crear el objeto DB
             audit_entry = AuditLog(
                 user_id=user_id,

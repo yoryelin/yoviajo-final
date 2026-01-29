@@ -3,6 +3,7 @@ Rutas de Viajes (Ofertas de conductores).
 """
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import cast, TIMESTAMP
 from typing import List
 from app.database import get_db
 from app.models.user import User
@@ -63,9 +64,8 @@ def get_rides(
 
         # C) Time Filter: Solo viajes FUTUROS para el buscador público
         # Usamos datetime.utcnow() para evitar problemas de timezone naive
-        # Ojo: departure_time en DB no tiene tzinfo, asumimos UTC o Local consistente.
-        # Para ser seguros, usamos now() simple si la DB es simple.
-        query = query.filter(Ride.departure_time >= datetime.now())
+        # CAST column to TIMESTAMP to avoid 'operator does not exist: character varying >= timestamp' error
+        query = query.filter(cast(Ride.departure_time, TIMESTAMP) >= datetime.now())
 
         rides = query.all()
         
@@ -251,7 +251,7 @@ def get_my_rides(
         limit_date = datetime.now() - timedelta(hours=24)
         rides = db.query(Ride).filter(
             Ride.driver_id == current_user.id,
-            Ride.departure_time >= limit_date
+            cast(Ride.departure_time, TIMESTAMP) >= limit_date
         ).all()
         result = []
         for ride in rides:
