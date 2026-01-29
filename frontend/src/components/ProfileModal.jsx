@@ -88,11 +88,7 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
         if (name === 'car_plate') {
             val = value.toUpperCase()
         }
-        if (name === 'name' || name === 'address' || name === 'car_model' || name === 'car_color') {
-            // Let user type naturally, maybe capitalize on blur instead? 
-            // Doing it live might be annoying if correcting mid-word. 
-            // Let's rely on onBlur for title case.
-        }
+
 
         setFormData(prev => ({ ...prev, [name]: val }))
     }
@@ -132,11 +128,11 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
         setLoading(true)
 
         try {
-            console.log("Saving profile...")
+
 
             // 1. Upload Photo if changed
             if (photoFile) {
-                console.log("Uploading photo...")
+
                 const photoData = new FormData()
                 photoData.append('file', photoFile)
 
@@ -157,11 +153,11 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
                 })
 
                 if (!photoRes.ok) throw new Error("Error subiendo foto")
-                console.log("Photo uploaded.")
+
             }
 
             // 2. Update Data
-            console.log("Updating data...")
+
             const response = await authFetch(`${API_URL}/users/me`, {
                 method: 'PATCH',
                 body: JSON.stringify(formData)
@@ -179,7 +175,7 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
             }
 
         } catch (error) {
-            console.error(error)
+
             alert(`❌ Algo salió mal: ${error.message}`)
         }
         setLoading(false)
