@@ -379,6 +379,7 @@ warning = { initialData? getPenaltyWarning(): null }
 confirmText = "Sí, Cancelar Viaje"
 isDanger = { true}
     />
+    />
         </>
     )
 }
