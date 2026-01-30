@@ -77,6 +77,7 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
 
     // 2. DRIVER MODE
     if (viewerIsDriver) {
+      if (isBooking) return { label: null } // Hide button for Driver viewing a Booking (cleanup)
       if (isRequest) return { label: '⚡ Hacer Match', action: () => onMatch && onMatch(data), disabled: false }
       return { label: 'Gestionar', action: () => onManage && onManage(data), disabled: false }
     } else {
@@ -251,13 +252,15 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
             <span>🗺️</span>
             <span>Ver Ruta</span>
           </button>
-          <button
-            onClick={btnAction}
-            className={`flex-1 px-4 py-2 rounded-lg text-white text-[10px] font-bold uppercase tracking-widest shadow-lg transition-all active:scale-95 ${finalBtnClass} ${btnDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={btnDisabled}
-          >
-            {btnLabel}
-          </button>
+          {btnLabel && (
+            <button
+              onClick={btnAction}
+              className={`flex-1 px-4 py-2 rounded-lg text-white text-[10px] font-bold uppercase tracking-widest shadow-lg transition-all active:scale-95 ${finalBtnClass} ${btnDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={btnDisabled}
+            >
+              {btnLabel}
+            </button>
+          )}
         </div>
       </div>
     </div>
