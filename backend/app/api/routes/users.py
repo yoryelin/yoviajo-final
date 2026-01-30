@@ -122,7 +122,7 @@ def upload_profile_photo(
         )
         
     # Actualizar DB
-    current_user.avatar_url = url
+    current_user.profile_picture = url
     db.commit()
     db.refresh(current_user)
     
