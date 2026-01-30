@@ -406,11 +406,10 @@ export default function ProfilePage() {
                                     </p>
                                 </div>
                             </div>
-                            </div>
-                )}
-        </div>
-    )
-}
+                        )}
+                    </div>
+                )
+            }
         </div >
     )
 }
