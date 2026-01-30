@@ -303,7 +303,6 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                                 </div>
                             </div>
 
-                    </div>
 
                     <div className="bg-slate-800/50 rounded-xl p-3 flex flex-col justify-center border border-dashed border-slate-700">
                         <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1 block">Consumo Estimado Total</label>
@@ -365,21 +364,19 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                 </form>
             </div>
 
-        </div >
-            </div >
+            </div>
+        </div>
 
-    {/* CONFIRMATION MODAL */ }
-    < ConfirmationModal
-isOpen = { showCancelModal }
-onClose = {() => setShowCancelModal(false)}
-onConfirm = { handleCancelRide }
-title = "¿Cancelar este viaje?"
-message = "Esta acción cancelará todos los lugares reservados y notificará a los pasajeros."
-warning = { initialData? getPenaltyWarning(): null }
-confirmText = "Sí, Cancelar Viaje"
-isDanger = { true}
-    />
-    />
+        <ConfirmationModal
+            isOpen={showCancelModal}
+            onClose={() => setShowCancelModal(false)}
+            onConfirm={handleCancelRide}
+            title="¿Cancelar este viaje?"
+            message="Esta acción cancelará todos los lugares reservados y notificará a los pasajeros."
+            warning={initialData ? getPenaltyWarning() : null}
+            confirmText="Sí, Cancelar Viaje"
+            isDanger={true}
+        />
         </>
     )
 }
