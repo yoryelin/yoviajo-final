@@ -229,13 +229,14 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
               {/* CONTACT INFO (Checkmate) */}
               {(data.driver_phone || data.passenger_phone) && (
                 <a
-                  href={`https://wa.me/${(data.driver_phone || data.passenger_phone).replace(/\D/g, '')}`}
+                  href={`https://wa.me/${(data.driver_phone || data.passenger_phone).replace(/\D/g, '')}?text=${encodeURIComponent(`Hola, soy ${user?.username || 'un usuario de YoViajo'}. Te escribo por el viaje a ${data.destination}.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-1 inline-flex items-center gap-1 text-[10px] font-bold text-green-400 hover:text-green-300 transition"
+                  className="mt-2 w-full flex items-center justify-center gap-2 bg-green-600/20 hover:bg-green-600/30 text-green-400 border border-green-600/50 py-1.5 rounded-lg transition-all group"
+                  title="Abrir WhatsApp"
                 >
-                  <span className="text-sm">🟢</span>
-                  chat en vivo
+                  <span className="text-sm group-hover:scale-110 transition-transform">💬</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">Contactar</span>
                 </a>
               )}
             </div>

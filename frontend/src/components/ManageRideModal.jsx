@@ -101,16 +101,17 @@ export default function ManageRideModal({ isOpen, onClose, ride, authFetch, API_
                                     </div>
                                     {booking.passenger_phone ? (
                                         <a
-                                            href={`https://wa.me/${booking.passenger_phone}`}
+                                            href={`https://wa.me/${booking.passenger_phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${booking.passenger_name.split(' ')[0]}, soy ${ride.driver_name || 'tu conductor'}. Vi tu reserva para el viaje a ${ride.destination}. ¿Todo listo? 🚗`)}`}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="bg-green-600 hover:bg-green-500 text-white p-2 rounded-full transition-colors"
-                                            title="Contactar por WhatsApp"
+                                            className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded-lg transition-colors shadow-lg shadow-green-900/20 group"
+                                            title="Enviar mensaje de coordinación"
                                         >
-                                            💬
+                                            <span className="text-lg">💬</span>
+                                            <span className="text-xs font-bold uppercase tracking-wide">Coordinar</span>
                                         </a>
                                     ) : (
-                                        <span className="text-xs text-slate-600" title="Sin teléfono">📵</span>
+                                        <span className="text-xs text-slate-600 italic px-2" title="Sin teléfono registrado">Sin contacto 📵</span>
                                     )}
                                 </div>
                             ))}
