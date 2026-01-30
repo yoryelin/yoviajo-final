@@ -382,44 +382,35 @@ export default function ProfilePage() {
                                 </div>
 
                                 <div className="grid gap-4 max-w-md mx-auto py-6">
-                                    <button className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group">
+                                    <label className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group cursor-pointer">
                                         <div className="flex items-center gap-3">
                                             <span className="text-2xl opacity-50 group-hover:opacity-100">📄</span>
                                             <div className="text-left">
-                                                <p className="font-bold text-white">Foto del DNI (Frente)</p>
-                                                <p className="text-xs text-slate-500">Pendiente de carga</p>
+                                                <p className="font-bold text-white">Documento de Identidad</p>
+                                                <p className="text-xs text-slate-500">Sube una foto clara de tu DNI o Licencia</p>
                                             </div>
                                         </div>
                                         <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
-                                    </button>
-                                    {isDriver && (
-                                        <button className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group">
-                                            <div className="flex items-center gap-3">
-                                                <span className="text-2xl opacity-50 group-hover:opacity-100">🚙</span>
-                                                <div className="text-left">
-                                                    <p className="font-bold text-white">Licencia de Conducir</p>
-                                                    <p className="text-xs text-slate-500">Pendiente de carga</p>
-                                                </div>
-                                            </div>
-                                            <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
-                                        </button>
-                                    )}
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={handleVerifyUpload}
+                                        />
+                                    </label>
                                 </div>
 
-                                <button
-                                    onClick={() => alert("Función de verificación simulada enviada.")}
-                                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black py-4 px-10 rounded-xl shadow-lg shadow-green-900/20 transition transform active:scale-[0.98]"
-                                >
-                                    SOLICITAR VERIFICACIÓN
-                                </button>
-                                <p className="text-xs text-slate-500">
-                                    Al hacer clic, simularás el envío de documentos para esta Demo.
-                                </p>
+                                <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/30">
+                                    <p className="text-xs text-blue-200">
+                                        ℹ️ Al subir el documento, tu solicitud quedará en estado <strong>Pendiente</strong> hasta que un administrador la apruebe.
+                                    </p>
+                                </div>
                             </div>
-                        )}
-                    </div>
-                )
-            }
+                            </div>
+                )}
+        </div>
+    )
+}
         </div >
     )
 }
