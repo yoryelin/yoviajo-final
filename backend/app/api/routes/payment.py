@@ -131,8 +131,55 @@ async def payment_webhook(
             
         return {"status": "ignored"}
 
+
     except Exception as e:
         print(f"❌ Webhook Error: {e}")
         # Retornamos 200 siempre a MP para que no reintente infinitamente si es un error lógico nuestro
         return {"status": "error"}
+
+
+@router.get("/history")
+def debug_payment_history(
+    limit: int = 5,
+    db: Session = Depends(get_db)
+):
+    """
+    DEBUG: Ver los últimos pagos APROBADOS en la cuenta de Mercado Pago.
+    Ayuda a encontrar pagos perdidos o con referencias incorrectas.
+    """
+    try:
+        service = PaymentService()
+        if not service.sdk:
+             return {"error": "SDK no inicializado"}
+             
+        # Buscar últimos pagos aprobados
+        filters = {
+            "status": "approved",
+            "limit": limit,
+            "offset": 0,
+            "sort": "date_created",
+            "criteria": "desc"
+        }
+        
+        search_result = service.sdk.payment().search(filters)
+        
+        if search_result["status"] == 200:
+            results = search_result["response"]["results"]
+            simplified = []
+            for p in results:
+                simplified.append({
+                    "id": p["id"],
+                    "date_created": p["date_created"],
+                    "amount": p["transaction_amount"],
+                    "status": p["status"],
+                    "external_reference": p.get("external_reference"),
+                    "payer_email": p.get("payer", {}).get("email"),
+                    "description": p.get("description")
+                })
+            return simplified
+        else:
+            return {"error": "MP Search Failed", "details": search_result}
+            
+    except Exception as e:
+        return {"error": str(e)}
 
