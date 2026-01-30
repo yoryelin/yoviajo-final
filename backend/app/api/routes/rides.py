@@ -270,12 +270,11 @@ def get_my_rides(
                 active_bookings = [b for b in ride.bookings if b.status != BookingStatus.CANCELLED.value]
                 ride_dict['bookings_count'] = len(active_bookings)
                 
-                # Calcular coincidencias (Solicitudes de pasajeros con mismo Origen/Destino)
-                matches = db.query(RideRequest).filter(
-                    RideRequest.origin == ride.origin,
-                    RideRequest.destination == ride.destination
-                ).count()
-                ride_dict['matches_count'] = matches
+                # Calcular coincidencias REALES (Smart Matching)
+                # Esto asegura que el badge rojo coincida con la lista despliegue
+                from app.utils.matching import find_matches_for_ride
+                candidates = find_matches_for_ride(ride, db)
+                ride_dict['matches_count'] = len(candidates)
 
                 result.append(ride_dict)
             except Exception as e:
