@@ -216,266 +216,261 @@ export default function ProfilePage() {
                                 🌸 Conductora
                             </span>
                         )}
-                        {!isDriver && (
-                            <button
-                                onClick={() => handleUpdate({ preventDefault: () => { }, target: { value: 'C' } }, 'C')}
-                                className="ml-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg transition animate-pulse"
-                            >
-                                ✨ ¡QUIERO SER CONDUCTOR!
-                            </button>
-                        )}
                     </div>
 
+                    <button
+                        onClick={() => document.getElementById('photo-upload-input').click()}
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2 px-4 rounded-lg shadow-lg transition mt-2 border border-blue-400"
                     >
-                    <span>📷 CAMBIAR FOTO</span>
-                </button>
-                <input
-                    id="photo-upload-input"
-                    type="file"
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handlePhotoUpload}
-                />
+                        <span>📷 CAMBIAR FOTO</span>
+                    </button>
+                    <input
+                        id="photo-upload-input"
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                    />
+                </div>
             </div>
-        </div>
 
-            {/* Tabs */ }
-    <div className="flex gap-4 border-b border-white/10 pb-1">
-        <button
-            onClick={() => setActiveTab('info')}
-            className={`px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors border-b-2 ${activeTab === 'info' ? 'border-cyan-500 text-cyan-400' : 'border-transparent text-slate-500 hover:text-white'}`}
-        >
-            Mis Datos
-        </button>
-        {
-            isDriver && (
+            {/* Tabs */}
+            <div className="flex gap-4 border-b border-white/10 pb-1">
                 <button
-                    onClick={() => setActiveTab('car')}
-                    className={`px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors border-b-2 ${activeTab === 'car' ? 'border-cyan-500 text-cyan-400' : 'border-transparent text-slate-500 hover:text-white'}`}
+                    onClick={() => setActiveTab('info')}
+                    className={`px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors border-b-2 ${activeTab === 'info' ? 'border-cyan-500 text-cyan-400' : 'border-transparent text-slate-500 hover:text-white'}`}
                 >
-                    Mi Vehículo
+                    Mis Datos
                 </button>
-            )
-        }
-        <button
-            onClick={() => setActiveTab('verify')}
-            className={`px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors border-b-2 ${activeTab === 'verify' ? 'border-cyan-500 text-cyan-400' : 'border-transparent text-slate-500 hover:text-white'}`}
-        >
-            Verificación
-        </button>
-    </div >
+                {
+                    isDriver && (
+                        <button
+                            onClick={() => setActiveTab('car')}
+                            className={`px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors border-b-2 ${activeTab === 'car' ? 'border-cyan-500 text-cyan-400' : 'border-transparent text-slate-500 hover:text-white'}`}
+                        >
+                            Mi Vehículo
+                        </button>
+                    )
+                }
+                <button
+                    onClick={() => setActiveTab('verify')}
+                    className={`px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors border-b-2 ${activeTab === 'verify' ? 'border-cyan-500 text-cyan-400' : 'border-transparent text-slate-500 hover:text-white'}`}
+                >
+                    Verificación
+                </button>
+            </div >
 
-    {
-        successMsg && (
-            <div className="bg-green-500/10 border border-green-500/50 text-green-400 p-4 rounded-xl font-bold flex items-center gap-2">
-                ✅ {successMsg}
-            </div>
-        )
-    }
-
-    {/* Content Info */ }
-    {
-        activeTab === 'info' && (
-            <form onSubmit={handleUpdate} className="grid gap-6 md:grid-cols-2 bg-slate-900/30 p-6 rounded-2xl border border-white/5">
-                <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Email</label>
-                    <input type="text" value={profile?.email} disabled className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-400 cursor-not-allowed" />
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">WhatsApp / Teléfono</label>
-                    <input
-                        type="tel"
-                        value={formData.phone || ''}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, '') })}
-                        placeholder="Ej: 5491112345678 (Sin guiones)"
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
-                    />
-                    <p className="text-[10px] text-slate-500 mt-1">Solo se compartirá con quien confirmes viaje.</p>
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-2">DNI</label>
-                    <input type="text" value={profile?.dni} disabled className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-400 cursor-not-allowed" />
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Fecha de Nacimiento</label>
-                    <input
-                        type="date"
-                        value={formData.birth_date || ''}
-                        onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
-                    />
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Dirección</label>
-                    <input
-                        type="text"
-                        value={formData.address || ''}
-                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                        placeholder="Calle 123, Mar del Plata"
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
-                    />
-                </div>
-                <div className="md:col-span-2 flex justify-end">
-                    <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-cyan-900/20 transition">
-                        Guardar Cambios
-                    </button>
-                </div>
-            </form>
-        )
-    }
-
-    {/* Content Car */ }
-    {
-        activeTab === 'car' && (
-            <form onSubmit={handleUpdate} className="space-y-6 bg-slate-900/30 p-6 rounded-2xl border border-white/5">
-                <div className="grid gap-6 md:grid-cols-3">
-                    <div>
-                        <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Modelo</label>
-                        <input
-                            type="text"
-                            value={formData.car_model || ''}
-                            onChange={(e) => setFormData({ ...formData, car_model: e.target.value })}
-                            placeholder="Ej: Toyota Corolla"
-                            className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
-                        />
+            {
+                successMsg && (
+                    <div className="bg-green-500/10 border border-green-500/50 text-green-400 p-4 rounded-xl font-bold flex items-center gap-2">
+                        ✅ {successMsg}
                     </div>
-                    <div>
-                        <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Patente</label>
-                        <input
-                            type="text"
-                            value={formData.car_plate || ''}
-                            onChange={(e) => setFormData({ ...formData, car_plate: e.target.value })}
-                            placeholder="AA 123 BB"
-                            className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none uppercase"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Color</label>
-                        <input
-                            type="text"
-                            value={formData.car_color || ''}
-                            onChange={(e) => setFormData({ ...formData, car_color: e.target.value })}
-                            placeholder="Ej: Blanco Perla"
-                            className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
-                        />
-                    </div>
-                </div>
+                )
+            }
 
-                <div className="border-t border-white/10 pt-6">
-                    <h3 className="text-lg font-bold text-white mb-4">Preferencias de Viaje</h3>
-                    <div className="flex gap-6 flex-wrap">
-                        <label className="flex items-center gap-3 cursor-pointer bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-cyan-500 transition px-6">
-                            <input
-                                type="checkbox"
-                                checked={formData.prefs_smoking || false}
-                                onChange={(e) => setFormData({ ...formData, prefs_smoking: e.target.checked })}
-                                className="w-5 h-5 accent-cyan-500"
-                            />
-                            <span className="text-sm font-bold text-slate-300">🚬 Permitido Fumar</span>
-                        </label>
-                        <label className="flex items-center gap-3 cursor-pointer bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-cyan-500 transition px-6">
-                            <input
-                                type="checkbox"
-                                checked={formData.prefs_pets || false}
-                                onChange={(e) => setFormData({ ...formData, prefs_pets: e.target.checked })}
-                                className="w-5 h-5 accent-cyan-500"
-                            />
-                            <span className="text-sm font-bold text-slate-300">🐶 Mascotas OK</span>
-                        </label>
-                        <label className="flex items-center gap-3 cursor-pointer bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-cyan-500 transition px-6">
-                            <input
-                                type="checkbox"
-                                checked={formData.prefs_luggage !== false} // Default true
-                                onChange={(e) => setFormData({ ...formData, prefs_luggage: e.target.checked })}
-                                className="w-5 h-5 accent-cyan-500"
-                            />
-                            <span className="text-sm font-bold text-slate-300">🧳 Equipaje Grande</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div className="border-t border-white/10 pt-6">
-                    <h3 className="text-lg font-bold text-white mb-4">Documentación del Conductor</h3>
-                    <div className="grid gap-6 md:grid-cols-2">
-                        <label className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group cursor-pointer">
-                            <div className="flex items-center gap-3">
-                                <span className="text-2xl opacity-50 group-hover:opacity-100">🚙</span>
-                                <div className="text-left">
-                                    <p className="font-bold text-white">Licencia de Conducir</p>
-                                    <p className="text-xs text-slate-500">{profile?.driver_license ? 'Licencia Cargada ✅' : 'Subir foto de licencia'}</p>
-                                </div>
-                            </div>
-                            <span className="text-cyan-500 text-sm font-bold">{profile?.driver_license ? 'CAMBIAR' : 'SUBIR'}</span>
-                            <input
-                                type="file"
-                                className="hidden"
-                                accept="image/*"
-                                onChange={handleLicenseUpload}
-                            />
-                        </label>
-                    </div>
-                </div>
-
-                <div className="flex justify-end">
-                    <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-cyan-900/20 transition">
-                        Actualizar Vehículo
-                    </button>
-                </div>
-            </form>
-        )
-    }
-
-    {/* Content Verify */ }
-    {
-        activeTab === 'verify' && (
-            <div className="bg-slate-900/30 p-8 rounded-2xl border border-white/5 text-center">
-                {profile?.is_verified ? (
-                    <div className="space-y-4">
-                        <div className="text-6xl">✅</div>
-                        <h2 className="text-2xl font-black text-white">¡Tu identidad está Verificada!</h2>
-                        <p className="text-slate-400">Ahora tienes acceso a todas las funcionalidades de seguridad y el Badge verificado en tus viajes.</p>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto text-4xl border border-slate-700">
-                            🛡️
+            {/* Content Info */}
+            {
+                activeTab === 'info' && (
+                    <form onSubmit={handleUpdate} className="grid gap-6 md:grid-cols-2 bg-slate-900/30 p-6 rounded-2xl border border-white/5">
+                        <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Email</label>
+                            <input type="text" value={profile?.email} disabled className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-400 cursor-not-allowed" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-white">Verifica tu Identidad</h2>
-                            <p className="text-slate-400 mt-2 max-w-lg mx-auto">
-                                Para aumentar la confianza en la comunidad, necesitamos validar tu DNI y Licencia de Conducir.
-                            </p>
+                            <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">WhatsApp / Teléfono</label>
+                            <input
+                                type="tel"
+                                value={formData.phone || ''}
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, '') })}
+                                placeholder="Ej: 5491112345678 (Sin guiones)"
+                                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
+                            />
+                            <p className="text-[10px] text-slate-500 mt-1">Solo se compartirá con quien confirmes viaje.</p>
                         </div>
+                        <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">DNI</label>
+                            <input type="text" value={profile?.dni} disabled className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-400 cursor-not-allowed" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Fecha de Nacimiento</label>
+                            <input
+                                type="date"
+                                value={formData.birth_date || ''}
+                                onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+                                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Dirección</label>
+                            <input
+                                type="text"
+                                value={formData.address || ''}
+                                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                placeholder="Calle 123, Mar del Plata"
+                                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
+                            />
+                        </div>
+                        <div className="md:col-span-2 flex justify-end">
+                            <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-cyan-900/20 transition">
+                                Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                )
+            }
 
-                        <div className="grid gap-4 max-w-md mx-auto py-6">
-                            <label className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group cursor-pointer">
-                                <div className="flex items-center gap-3">
-                                    <span className="text-2xl opacity-50 group-hover:opacity-100">📄</span>
-                                    <div className="text-left">
-                                        <p className="font-bold text-white">Documento de Identidad (DNI)</p>
-                                        <p className="text-xs text-slate-500">Sube una foto clara de tu DNI</p>
-                                    </div>
-                                </div>
-                                <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
+            {/* Content Car */}
+            {
+                activeTab === 'car' && (
+                    <form onSubmit={handleUpdate} className="space-y-6 bg-slate-900/30 p-6 rounded-2xl border border-white/5">
+                        <div className="grid gap-6 md:grid-cols-3">
+                            <div>
+                                <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Modelo</label>
                                 <input
-                                    type="file"
-                                    className="hidden"
-                                    accept="image/*"
-                                    onChange={handleVerifyUpload}
+                                    type="text"
+                                    value={formData.car_model || ''}
+                                    onChange={(e) => setFormData({ ...formData, car_model: e.target.value })}
+                                    placeholder="Ej: Toyota Corolla"
+                                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
                                 />
-                            </label>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Patente</label>
+                                <input
+                                    type="text"
+                                    value={formData.car_plate || ''}
+                                    onChange={(e) => setFormData({ ...formData, car_plate: e.target.value })}
+                                    placeholder="AA 123 BB"
+                                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none uppercase"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-cyan-400 uppercase mb-2">Color</label>
+                                <input
+                                    type="text"
+                                    value={formData.car_color || ''}
+                                    onChange={(e) => setFormData({ ...formData, car_color: e.target.value })}
+                                    placeholder="Ej: Blanco Perla"
+                                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-cyan-500 outline-none"
+                                />
+                            </div>
                         </div>
 
-                        <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/30">
-                            <p className="text-xs text-blue-200">
-                                ℹ️ Al subir el documento, tu solicitud quedará en estado <strong>Pendiente</strong> hasta que un administrador la apruebe.
-                            </p>
+                        <div className="border-t border-white/10 pt-6">
+                            <h3 className="text-lg font-bold text-white mb-4">Preferencias de Viaje</h3>
+                            <div className="flex gap-6 flex-wrap">
+                                <label className="flex items-center gap-3 cursor-pointer bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-cyan-500 transition px-6">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.prefs_smoking || false}
+                                        onChange={(e) => setFormData({ ...formData, prefs_smoking: e.target.checked })}
+                                        className="w-5 h-5 accent-cyan-500"
+                                    />
+                                    <span className="text-sm font-bold text-slate-300">🚬 Permitido Fumar</span>
+                                </label>
+                                <label className="flex items-center gap-3 cursor-pointer bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-cyan-500 transition px-6">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.prefs_pets || false}
+                                        onChange={(e) => setFormData({ ...formData, prefs_pets: e.target.checked })}
+                                        className="w-5 h-5 accent-cyan-500"
+                                    />
+                                    <span className="text-sm font-bold text-slate-300">🐶 Mascotas OK</span>
+                                </label>
+                                <label className="flex items-center gap-3 cursor-pointer bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-cyan-500 transition px-6">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.prefs_luggage !== false} // Default true
+                                        onChange={(e) => setFormData({ ...formData, prefs_luggage: e.target.checked })}
+                                        className="w-5 h-5 accent-cyan-500"
+                                    />
+                                    <span className="text-sm font-bold text-slate-300">🧳 Equipaje Grande</span>
+                                </label>
+                            </div>
                         </div>
+
+                        <div className="border-t border-white/10 pt-6">
+                            <h3 className="text-lg font-bold text-white mb-4">Documentación del Conductor</h3>
+                            <div className="grid gap-6 md:grid-cols-2">
+                                <label className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group cursor-pointer">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-2xl opacity-50 group-hover:opacity-100">🚙</span>
+                                        <div className="text-left">
+                                            <p className="font-bold text-white">Licencia de Conducir</p>
+                                            <p className="text-xs text-slate-500">{profile?.driver_license ? 'Licencia Cargada ✅' : 'Subir foto de licencia'}</p>
+                                        </div>
+                                    </div>
+                                    <span className="text-cyan-500 text-sm font-bold">{profile?.driver_license ? 'CAMBIAR' : 'SUBIR'}</span>
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleLicenseUpload}
+                                    />
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end">
+                            <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-cyan-900/20 transition">
+                                Actualizar Vehículo
+                            </button>
+                        </div>
+                    </form>
+                )
+            }
+
+            {/* Content Verify */}
+            {
+                activeTab === 'verify' && (
+                    <div className="bg-slate-900/30 p-8 rounded-2xl border border-white/5 text-center">
+                        {profile?.is_verified ? (
+                            <div className="space-y-4">
+                                <div className="text-6xl">✅</div>
+                                <h2 className="text-2xl font-black text-white">¡Tu identidad está Verificada!</h2>
+                                <p className="text-slate-400">Ahora tienes acceso a todas las funcionalidades de seguridad y el Badge verificado en tus viajes.</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-6">
+                                <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto text-4xl border border-slate-700">
+                                    🛡️
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black text-white">Verifica tu Identidad</h2>
+                                    <p className="text-slate-400 mt-2 max-w-lg mx-auto">
+                                        Para aumentar la confianza en la comunidad, necesitamos validar tu DNI y Licencia de Conducir.
+                                    </p>
+                                </div>
+
+                                <div className="grid gap-4 max-w-md mx-auto py-6">
+                                    <label className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-2xl opacity-50 group-hover:opacity-100">📄</span>
+                                            <div className="text-left">
+                                                <p className="font-bold text-white">Documento de Identidad (DNI)</p>
+                                                <p className="text-xs text-slate-500">Sube una foto clara de tu DNI</p>
+                                            </div>
+                                        </div>
+                                        <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={handleVerifyUpload}
+                                        />
+                                    </label>
+                                </div>
+
+                                <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/30">
+                                    <p className="text-xs text-blue-200">
+                                        ℹ️ Al subir el documento, tu solicitud quedará en estado <strong>Pendiente</strong> hasta que un administrador la apruebe.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-        )
-    }
+                )
+            }
         </div >
     )
 }
