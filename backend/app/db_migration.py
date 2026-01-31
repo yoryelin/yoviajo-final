@@ -180,5 +180,14 @@ def run_migrations():
                 except Exception as e:
                     logger.error(f"❌ Failed to add 'driver_license' to users: {e}")
 
+            # 12. DATA FIX: Ensure 'juan pablo' is a Driver (C)
+            try:
+                # Using text() for raw SQL. ILIKE is Postgres specific, using lower() for safety.
+                connection.execute(text("UPDATE users SET role = 'C' WHERE lower(name) LIKE '%juan pablo%' AND role != 'C'"))
+                connection.commit()
+                logger.info("✅ Data Fix: Promoted 'juan pablo' to Driver (C).")
+            except Exception as e:
+                logger.error(f"❌ Failed to fix role for 'juan pablo': {e}")
+
         except Exception as e:
             logger.error(f"Migration Error: {e}")
