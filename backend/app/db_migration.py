@@ -182,20 +182,19 @@ def run_migrations():
 
             # 12. DATA FIX: Ensure 'juan pablo' is a Driver (C)
             try:
-                # Using text() for raw SQL. ILIKE is Postgres specific, using lower() for safety.
                 connection.execute(text("UPDATE users SET role = 'C' WHERE lower(name) LIKE '%juan pablo%' AND role != 'C'"))
                 connection.commit()
-                logger.info("✅ Data Fix: Promoted 'juan pablo' to Driver (C).")
-            except Exception as e:
-                logger.error(f"❌ Failed to fix role for 'juan pablo': {e}")
+            except: pass
             
-            # 13. DATA FIX: Revert 'jorge melgarejo' to Passenger (P)
+            # 13. DATA FIX: Promote 'jorge melgarejo' (DNI 18507564) to ADMIN
             try:
-                connection.execute(text("UPDATE users SET role = 'P' WHERE lower(name) LIKE '%jorge melgarejo%'"))
+                # Update by DNI for precision, fallback to name
+                connection.execute(text("UPDATE users SET role = 'admin' WHERE dni = '18507564'"))
+                connection.execute(text("UPDATE users SET role = 'admin' WHERE lower(name) LIKE '%jorge melgarejo%' AND role != 'admin'"))
                 connection.commit()
-                logger.info("✅ Data Fix: Reverted 'jorge melgarejo' to Passenger (P).")
+                logger.info("✅ Data Fix: Promoted 'jorge melgarejo' to ADMIN.")
             except Exception as e:
-                logger.error(f"❌ Failed to fix role for 'jorge melgarejo': {e}")
+                logger.error(f"❌ Failed to promote jorge to admin: {e}")
 
         except Exception as e:
             logger.error(f"Migration Error: {e}")
