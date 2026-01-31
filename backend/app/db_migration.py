@@ -166,5 +166,19 @@ def run_migrations():
                 except Exception as e:
                     logger.error(f"❌ Failed to add 'verification_status' to users: {e}")
 
+            # 11. Check 'driver_license' in 'users' (Trust & Safety)
+            try:
+                connection.execute(text("SELECT driver_license FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'driver_license' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN driver_license VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'driver_license' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'driver_license' to users: {e}")
+
         except Exception as e:
             logger.error(f"Migration Error: {e}")
