@@ -8,7 +8,8 @@ export default function AdminDashboard() {
     const [stats, setStats] = useState(null)
     const [loading, setLoading] = useState(true)
     const [selectedUser, setSelectedUser] = useState(null)
-    const { token } = useAuth()
+    // REMOVED: const { token } = useAuth() - AuthContext does not expose token
+    const token = localStorage.getItem('token')
 
     useEffect(() => {
         fetchStats()

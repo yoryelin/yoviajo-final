@@ -6,7 +6,8 @@ import UserDetailModal from '../../components/admin/UserDetailModal';
 import { API_URL } from '@config/api.js';
 
 const AdminUsers = () => {
-    const { token } = useAuth();
+    // REMOVED: const { token } = useAuth();
+    const token = localStorage.getItem('token');
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
