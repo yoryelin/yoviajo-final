@@ -16,6 +16,8 @@ import AdminUsers from './pages/admin/AdminUsers'
 import AdminRides from './pages/admin/AdminRides'
 import AdminBookings from './pages/admin/AdminBookings'
 import AdminLogs from './pages/admin/AdminLogs'
+import AdminLayout from './layouts/AdminLayout'
+import AdminVerifications from './pages/admin/AdminVerifications'
 // Force Frontend Deploy - Admin Route Update
 import { useAuth } from './context/AuthContext'
 
