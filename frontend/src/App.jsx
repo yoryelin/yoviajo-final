@@ -78,59 +78,16 @@ export default function App() {
         }
       />
 
-      <Route
-        path="/admin/transactions"
-        element={
-          user ? (
-            <TransactionsPage />
-          ) : <Navigate to="/" />
-        }
-      />
-
-      <Route
-        path="/admin/dashboard"
-        element={
-          user ? (
-            <AdminDashboard />
-          ) : <Navigate to="/" />
-        }
-      />
-
-      <Route
-        path="/admin/users"
-        element={
-          user ? (
-            <AdminUsers />
-          ) : <Navigate to="/" />
-        }
-      />
-
-      <Route
-        path="/admin/rides"
-        element={
-          user ? (
-            <AdminRides />
-          ) : <Navigate to="/" />
-        }
-      />
-
-      <Route
-        path="/admin/bookings"
-        element={
-          user ? (
-            <AdminBookings />
-          ) : <Navigate to="/" />
-        }
-      />
-
-      <Route
-        path="/admin/logs"
-        element={
-          user ? (
-            <AdminLogs />
-          ) : <Navigate to="/" />
-        }
-      />
+      {/* Admin Routes with Layout */}
+      <Route path="/admin" element={user ? <AdminLayout /> : <Navigate to="/" />}>
+        <Route index element={<Navigate to="/admin/dashboard" replace />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="verifications" element={<AdminVerifications />} />
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="rides" element={<AdminRides />} />
+        <Route path="bookings" element={<AdminBookings />} />
+        <Route path="logs" element={<AdminLogs />} />
+      </Route>
 
       {/* Catch-all Redirect */}
       <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} />} />

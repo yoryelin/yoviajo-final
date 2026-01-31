@@ -24,6 +24,9 @@ def get_admin_stats(
     active_rides = db.query(func.count(Ride.id)).filter(Ride.status == "active").scalar()
     total_bookings = db.query(func.count(Booking.id)).scalar()
     
+    # Calculate Revenue (Sum of fee_amount for paid bookings)
+    total_revenue = db.query(func.sum(Booking.fee_amount)).filter(Booking.payment_status == "approved").scalar() or 0.0
+
     # Fetch recent users for preview
     recent_users = db.query(User).order_by(User.id.desc()).limit(5).all()
 
@@ -32,6 +35,7 @@ def get_admin_stats(
         "total_rides": total_rides,
         "active_rides": active_rides,
         "total_bookings": total_bookings,
+        "total_revenue": total_revenue,
         "users_preview": recent_users
     }
 
@@ -39,10 +43,16 @@ def get_admin_stats(
 def get_all_users(
     skip: int = 0,
     limit: int = 50,
+    verification_status: str = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_admin_user)
 ):
-    users = db.query(User).offset(skip).limit(limit).all()
+    query = db.query(User)
+    
+    if verification_status:
+        query = query.filter(User.verification_status == verification_status)
+        
+    users = query.order_by(User.id.desc()).offset(skip).limit(limit).all()
     return users
 
 @router.get("/rides", response_model=List[RideResponse])

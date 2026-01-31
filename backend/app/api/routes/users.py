@@ -157,6 +157,11 @@ def upload_driver_license(
         
     # Actualizar DB
     current_user.driver_license = url
+    
+    # Trigger verification if not already verified
+    if current_user.verification_status in ['unverified', 'rejected']:
+        current_user.verification_status = 'pending'
+
     db.commit()
     db.refresh(current_user)
     
