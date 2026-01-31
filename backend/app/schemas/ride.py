@@ -42,7 +42,16 @@ class RideResponse(RideBase):
     maps_url: Optional[str] = None
     status: str
     bookings_count: int = 0
+    bookings_count: int = 0
     matches_count: int = 0 # Matches with active requests
+    
+    # Driver Extras
+    driver_name: Optional[str] = None
+    driver_verified: Optional[bool] = False
+    driver_phone: Optional[str] = None
+    driver_photo: Optional[str] = None
+    car_model: Optional[str] = None
+    car_color: Optional[str] = None
 
     class Config:
         from_attributes = True

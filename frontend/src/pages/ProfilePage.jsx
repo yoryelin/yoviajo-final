@@ -93,7 +93,8 @@ export default function ProfilePage() {
                 fetchProfile()
             } else {
                 const err = await res.json()
-                alert(err.detail || 'Error al subir documento')
+                const errMsg = typeof err.detail === 'string' ? err.detail : JSON.stringify(err.detail)
+                alert(errMsg || 'Error al subir documento')
             }
         } catch (error) {
             console.error(error)
@@ -424,11 +425,28 @@ export default function ProfilePage() {
             {
                 activeTab === 'verify' && (
                     <div className="bg-slate-900/30 p-8 rounded-2xl border border-white/5 text-center">
-                        {profile?.is_verified ? (
-                            <div className="space-y-4">
-                                <div className="text-6xl">✅</div>
-                                <h2 className="text-2xl font-black text-white">¡Tu identidad está Verificada!</h2>
-                                <p className="text-slate-400">Ahora tienes acceso a todas las funcionalidades de seguridad y el Badge verificado en tus viajes.</p>
+                        {profile?.verification_status === 'verified' ? (
+                            <div className="space-y-4 animate-in zoom-in duration-300">
+                                <div className="text-6xl filter drop-shadow-[0_0_15px_rgba(74,222,128,0.5)]">✅</div>
+                                <h2 className="text-2xl font-black text-white">¡Identidad Verificada!</h2>
+                                <p className="text-slate-400">Tu perfil cuenta con la insignia oficial de confianza.</p>
+                            </div>
+                        ) : profile?.verification_status === 'pending' ? (
+                            <div className="space-y-6 animate-in fade-in duration-500">
+                                <div className="w-24 h-24 bg-yellow-900/20 rounded-full flex items-center justify-center mx-auto text-5xl border-2 border-yellow-500/30 shadow-[0_0_20px_rgba(234,179,8,0.2)]">
+                                    ⏳
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black text-white">Solicitud en Revisión</h2>
+                                    <p className="text-yellow-200/80 mt-2 max-w-lg mx-auto font-medium">
+                                        Hemos recibido tu documentación. Un administrador revisará tus datos a la brevedad.
+                                    </p>
+                                </div>
+                                <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800 max-w-md mx-auto">
+                                    <p className="text-xs text-slate-500">
+                                        ℹ️ Te notificaremos cuando el proceso finalice. No es necesario que subas el archivo nuevamente.
+                                    </p>
+                                </div>
                             </div>
                         ) : (
                             <div className="space-y-6">
@@ -438,20 +456,25 @@ export default function ProfilePage() {
                                 <div>
                                     <h2 className="text-2xl font-black text-white">Verifica tu Identidad</h2>
                                     <p className="text-slate-400 mt-2 max-w-lg mx-auto">
-                                        Para aumentar la confianza en la comunidad, necesitamos validar tu DNI y Licencia de Conducir.
+                                        Para mantener la seguridad de la comunidad, necesitamos validar tu DNI.
                                     </p>
+                                    <div className="bg-yellow-900/10 border border-yellow-500/20 p-3 rounded-lg mt-3 inline-block">
+                                        <p className="text-[10px] text-yellow-500 font-bold uppercase tracking-wider">
+                                            ⚠️ Importante: Tus datos serán sometidos a revisión manual
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <div className="grid gap-4 max-w-md mx-auto py-6">
-                                    <label className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group cursor-pointer">
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-2xl opacity-50 group-hover:opacity-100">📄</span>
+                                    <label className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group cursor-pointer relative overflow-hidden">
+                                        <div className="flex items-center gap-3 relative z-10">
+                                            <span className="text-2xl opacity-50 group-hover:opacity-100 transition">📄</span>
                                             <div className="text-left">
-                                                <p className="font-bold text-white">Documento de Identidad (DNI)</p>
-                                                <p className="text-xs text-slate-500">Sube una foto clara de tu DNI</p>
+                                                <p className="font-bold text-white group-hover:text-cyan-400 transition">Documento de Identidad (DNI)</p>
+                                                <p className="text-xs text-slate-500">Sube una foto clara (Frente)</p>
                                             </div>
                                         </div>
-                                        <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
+                                        <span className="bg-cyan-900/30 text-cyan-400 px-3 py-1 rounded-lg text-xs font-bold uppercase border border-cyan-500/30 group-hover:bg-cyan-500 group-hover:text-white transition">SUBIR</span>
                                         <input
                                             type="file"
                                             className="hidden"
@@ -463,7 +486,7 @@ export default function ProfilePage() {
 
                                 <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/30">
                                     <p className="text-xs text-blue-200">
-                                        ℹ️ Al subir el documento, tu solicitud quedará en estado <strong>Pendiente</strong> hasta que un administrador la apruebe.
+                                        🛡️ <strong>Confidencialidad Garantizada:</strong> Tus documentos personales no serán visibles para otros usuarios. Solo se utilizan para validar que eres una persona real.
                                     </p>
                                 </div>
                             </div>

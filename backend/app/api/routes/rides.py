@@ -83,8 +83,19 @@ def get_rides(
 
                 )
                 # Calcular reservas activas
+                # Calcular reservas activas
                 active_bookings = [b for b in ride.bookings if b.status != BookingStatus.CANCELLED.value]
                 ride_dict['bookings_count'] = len(active_bookings)
+                
+                # Driver Info Inclusion
+                if ride.driver:
+                    ride_dict['driver_name'] = ride.driver.name
+                    ride_dict['driver_verified'] = ride.driver.is_verified
+                    ride_dict['driver_photo'] = ride.driver.profile_picture
+                    ride_dict['driver_phone'] = ride.driver.phone
+                    ride_dict['car_model'] = ride.driver.car_model
+                    ride_dict['car_color'] = ride.driver.car_color
+                    
                 result.append(ride_dict)
             except Exception as e:
                 print(f"Skipping corrupt ride {ride.id}: {e}")

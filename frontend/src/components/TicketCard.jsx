@@ -218,7 +218,9 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
 
                 {/* Verified Badge */}
                 {isOffer && data.driver_verified && (
-                  <span className="text-green-500 text-xs" title="Identidad Verificada">✅</span>
+                  <span className="ml-2 inline-flex items-center gap-1 bg-green-900/50 text-green-400 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border border-green-500/30" title="Identidad Verificada">
+                    ✅ Verificado
+                  </span>
                 )}
               </span>
 
