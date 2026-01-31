@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AdminLayout from '../../layouts/AdminLayout';
+// import AdminLayout from '../../layouts/AdminLayout'; // Not needed as wrapper
 import { useAuth } from '../../context/AuthContext';
 import UserDetailModal from '../../components/admin/UserDetailModal';
 
@@ -99,7 +99,7 @@ const AdminUsers = () => {
     };
 
     return (
-        <AdminLayout>
+        <>
             <div className="bg-slate-900 rounded-lg border border-slate-700 overflow-hidden">
                 <div className="p-6 border-b border-slate-700 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-white">User Management</h2>
@@ -231,7 +231,7 @@ const AdminUsers = () => {
                     onAction={handleAction}
                 />
             )}
-        </AdminLayout>
+        </>
     );
 };
 
