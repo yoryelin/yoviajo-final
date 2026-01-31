@@ -48,6 +48,17 @@ const AdminUsers = () => {
 
             if (response.ok) {
                 alert(`User ${verb}D successfully.`);
+
+                // WHATSAPP INTEGRATION (Option B)
+                if (action === "approve") {
+                    const user = users.find(u => u.id === userId);
+                    if (user && user.phone) {
+                        const message = `Hola ${user.name}! 👋\n\nTu cuenta en *YoViajo!* ha sido aprobada por un administrador.\n\nYa puedes ingresar y comenzar a viajar: https://yoviajo-frontend.onrender.com`;
+                        const url = `https://wa.me/${user.phone}?text=${encodeURIComponent(message)}`;
+                        window.open(url, '_blank');
+                    }
+                }
+
                 fetchUsers(); // Refresh list
             } else {
                 const err = await response.json();

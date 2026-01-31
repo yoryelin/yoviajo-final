@@ -158,7 +158,7 @@ export default function Login() {
 
         // Login/Registro Exitoso
         if (isRegister) {
-          alert("¡Cuenta creada! Por favor inicia sesión.")
+          alert("¡Registro Exitoso! 📝\n\nTu cuenta ha sido creada y está PENDIENTE DE APROBACIÓN por un administrador.\n\nRecibirás una notificación cuando sea activada.")
           setViewMode('login')
           setFormData({
             dni: formData.dni, password: '', name: '', role: 'P', email: '', gender: 'M',
