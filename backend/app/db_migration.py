@@ -188,6 +188,14 @@ def run_migrations():
                 logger.info("✅ Data Fix: Promoted 'juan pablo' to Driver (C).")
             except Exception as e:
                 logger.error(f"❌ Failed to fix role for 'juan pablo': {e}")
+            
+            # 13. DATA FIX: Revert 'jorge melgarejo' to Passenger (P)
+            try:
+                connection.execute(text("UPDATE users SET role = 'P' WHERE lower(name) LIKE '%jorge melgarejo%'"))
+                connection.commit()
+                logger.info("✅ Data Fix: Reverted 'jorge melgarejo' to Passenger (P).")
+            except Exception as e:
+                logger.error(f"❌ Failed to fix role for 'jorge melgarejo': {e}")
 
         except Exception as e:
             logger.error(f"Migration Error: {e}")
