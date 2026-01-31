@@ -50,12 +50,16 @@ export default function ProfilePage() {
         fetchProfile()
     }, [])
 
-    const handleUpdate = async (e) => {
-        e.preventDefault()
+    const handleUpdate = async (e, forceRole = null) => {
+        if (e && e.preventDefault) e.preventDefault()
+
+        const payload = { ...formData }
+        if (forceRole) payload.role = forceRole
+
         try {
             const res = await authFetch(`${API_URL}/users/me`, {
                 method: 'PATCH',
-                body: JSON.stringify(formData)
+                body: JSON.stringify(payload)
             })
             if (res.ok) {
                 setSuccessMsg('Perfil actualizado correctamente ✅')
@@ -211,6 +215,14 @@ export default function ProfilePage() {
                             <span className="flex items-center gap-1 bg-pink-900/50 text-pink-400 px-3 py-1 rounded-full text-xs font-bold uppercase border border-pink-500/30">
                                 🌸 Conductora
                             </span>
+                        )}
+                        {!isDriver && (
+                            <button
+                                onClick={() => handleUpdate({ preventDefault: () => { }, target: { value: 'C' } }, 'C')}
+                                className="ml-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg transition animate-pulse"
+                            >
+                                ✨ ¡QUIERO SER CONDUCTOR!
+                            </button>
                         )}
                     </div>
 

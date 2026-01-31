@@ -132,3 +132,12 @@ class UserUpdate(BaseModel):
     prefs_smoking: Optional[bool] = None
     prefs_pets: Optional[bool] = None
     prefs_luggage: Optional[bool] = None
+
+    role: Optional[str] = None
+    
+    @field_validator('role')
+    @classmethod
+    def validate_role(cls, v: str) -> str:
+        if v not in ['C', 'P']:
+            raise ValueError('Rol inválido. Solo C o P.')
+        return v
