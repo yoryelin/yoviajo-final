@@ -48,6 +48,12 @@ const Layout = ({ children }) => {
                                 Mis Viajes
                             </a>
 
+                            {user.role === 'admin' && (
+                                <a href="/admin" className="text-xs md:text-sm font-bold text-purple-400 hover:text-purple-300 transition uppercase tracking-widest whitespace-nowrap border border-purple-500/30 px-3 py-1 rounded-full bg-purple-900/10">
+                                    Admin Panel
+                                </a>
+                            )}
+
                             <div className="flex items-center gap-3 bg-slate-900/50 border border-slate-700/50 px-4 py-1.5 rounded-full hover:border-slate-600 transition cursor-default">
                                 <div
                                     className="flex items-center space-x-3 bg-slate-800/50 hover:bg-slate-700/50 p-2 rounded-xl border border-slate-700/50 transition cursor-pointer"
