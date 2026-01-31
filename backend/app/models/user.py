@@ -32,6 +32,7 @@ class User(Base):
     car_model = Column(String, nullable=True)
     car_plate = Column(String, nullable=True)
     car_color = Column(String, nullable=True) # Added color
+    driver_license = Column(String, nullable=True) # URL of Driver License
     phone_verified = Column(Boolean, default=False)
     email_verified = Column(Boolean, default=False)
     

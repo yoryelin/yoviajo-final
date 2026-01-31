@@ -75,6 +75,7 @@ class UserResponse(UserBase):
     car_model: str | None = None
     car_plate: str | None = None
     car_color: str | None = None
+    driver_license: str | None = None
     
     # Extended
     birth_date: date | None = None

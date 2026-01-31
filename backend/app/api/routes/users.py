@@ -126,8 +126,41 @@ def upload_profile_photo(
     db.commit()
     db.refresh(current_user)
     
-    # Audit
+    
     # Audit
     AuditService.log(db, "PROFILE_PHOTO_UPDATED", user_id=current_user.id, details={"url": url})
+    
+    return current_user
+
+
+@router.post("/me/license", response_model=UserResponse)
+def upload_driver_license(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Sube la Licencia de Conducir a Cloudinary y actualiza el usuario.
+    """
+    if not image_service.enabled:
+        raise HTTPException(status_code=503, detail="Servicio de carga no disponible.")
+
+    # Validar tipo
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="El archivo debe ser una imagen.")
+
+    # Subir a Cloudinary (Carpeta KYC o Driver)
+    url = image_service.upload_image(file.file, folder="yoviajo/licenses")
+    
+    if not url:
+        raise HTTPException(status_code=500, detail="Error al subir la licencia.")
+        
+    # Actualizar DB
+    current_user.driver_license = url
+    db.commit()
+    db.refresh(current_user)
+    
+    # Audit
+    AuditService.log(db, "LICENSE_UPLOADED", user_id=current_user.id, details={"url": url})
     
     return current_user

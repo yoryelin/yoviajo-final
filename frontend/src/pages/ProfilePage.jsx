@@ -139,6 +139,41 @@ export default function ProfilePage() {
         }
     }
 
+    const handleLicenseUpload = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        const formData = new FormData()
+        formData.append('file', file)
+
+        setLoading(true)
+        try {
+            const token = localStorage.getItem('token')
+            const res = await fetch(`${API_URL}/users/me/license`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            })
+
+            if (res.ok) {
+                const updatedUser = await res.json()
+                setProfile(updatedUser)
+                setSuccessMsg('Licencia subida correctamente 🚙')
+                setTimeout(() => setSuccessMsg(''), 3000)
+            } else {
+                const err = await res.json()
+                alert(err.detail || 'Error al subir licencia')
+            }
+        } catch (error) {
+            console.error(error)
+            alert('Error de conexión')
+        } finally {
+            setLoading(false)
+        }
+    }
+
     if (loading) return <div className="p-10 text-center text-white">Cargando perfil...</div>
 
     const isDriver = profile?.role === 'C'
@@ -350,6 +385,28 @@ export default function ProfilePage() {
                             </div>
                         </div>
 
+                        <div className="border-t border-white/10 pt-6">
+                            <h3 className="text-lg font-bold text-white mb-4">Documentación del Conductor</h3>
+                            <div className="grid gap-6 md:grid-cols-2">
+                                <label className="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition group cursor-pointer">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-2xl opacity-50 group-hover:opacity-100">🚙</span>
+                                        <div className="text-left">
+                                            <p className="font-bold text-white">Licencia de Conducir</p>
+                                            <p className="text-xs text-slate-500">{profile?.driver_license ? 'Licencia Cargada ✅' : 'Subir foto de licencia'}</p>
+                                        </div>
+                                    </div>
+                                    <span className="text-cyan-500 text-sm font-bold">{profile?.driver_license ? 'CAMBIAR' : 'SUBIR'}</span>
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleLicenseUpload}
+                                    />
+                                </label>
+                            </div>
+                        </div>
+
                         <div className="flex justify-end">
                             <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-cyan-900/20 transition">
                                 Actualizar Vehículo
@@ -386,8 +443,8 @@ export default function ProfilePage() {
                                         <div className="flex items-center gap-3">
                                             <span className="text-2xl opacity-50 group-hover:opacity-100">📄</span>
                                             <div className="text-left">
-                                                <p className="font-bold text-white">Documento de Identidad</p>
-                                                <p className="text-xs text-slate-500">Sube una foto clara de tu DNI o Licencia</p>
+                                                <p className="font-bold text-white">Documento de Identidad (DNI)</p>
+                                                <p className="text-xs text-slate-500">Sube una foto clara de tu DNI</p>
                                             </div>
                                         </div>
                                         <span className="text-cyan-500 text-sm font-bold">SUBIR</span>
