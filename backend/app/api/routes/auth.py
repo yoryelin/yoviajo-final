@@ -93,6 +93,10 @@ def login(user_credentials: UserLogin, request: Request, db: Session = Depends(g
             # Por seguridad no deberiamos decir si existe o no, pero para UX diremos credenciales incorrectas
             raise HTTPException(status_code=401, detail="Credenciales incorrectas (DNI o Password)")
 
+        if not user.is_active:
+            logger.warning(f"Login failed: User {user.dni} is inactive (Pending Approval).")
+            raise HTTPException(status_code=403, detail="Tu cuenta está pendiente de aprobación por un administrador.")
+
         # Verificar Password
         try:
             if not auth.verify_password(user_credentials.password, user.hashed_password):

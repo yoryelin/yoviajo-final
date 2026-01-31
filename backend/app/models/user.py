@@ -18,7 +18,7 @@ class User(Base):
     phone = Column(String, nullable=True) # WhatsApp
     profile_picture = Column(String, nullable=True) # URL Cloudinary
     role = Column(String, default="user")
-    is_active = Column(Boolean, default=True)
+    is_active = Column(Boolean, default=False) # Changed to False for Gatekeeper Protocol
     cancellation_count = Column(Integer, default=0)
     reputation_score = Column(Integer, default=100)
 

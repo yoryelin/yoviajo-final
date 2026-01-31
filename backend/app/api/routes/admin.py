@@ -122,3 +122,61 @@ def verify_user(
     })
     
     return {"message": msg, "user_status": user.verification_status}
+
+@router.post("/users/{user_id}/approve")
+def approve_user_access(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    """
+    ACTIVAR usuario (Gatekeeper). Permite login.
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    user.is_active = True
+    db.commit()
+    
+    AuditService.log(db, "USER_ACTIVATED", user_id=current_user.id, details={"target_user_id": user.id})
+    return {"message": f"Usuario {user.name} activado correctamente."}
+
+@router.post("/users/{user_id}/block")
+def block_user_access(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    """
+    BLOQUEAR usuario. Impide login.
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    user.is_active = False
+    db.commit()
+    
+    AuditService.log(db, "USER_BLOCKED", user_id=current_user.id, details={"target_user_id": user.id})
+    return {"message": f"Usuario {user.name} bloqueado temporalmente."}
+
+@router.post("/rides/{ride_id}/cancel")
+def admin_cancel_ride(
+    ride_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    """
+    Cancelación Forzosa de viaje por Admin.
+    """
+    ride = db.query(Ride).filter(Ride.id == ride_id).first()
+    if not ride:
+        raise HTTPException(status_code=404, detail="Viaje no encontrado")
+        
+    ride.status = "cancelled"
+    # Logic to refund bookings could go here
+    db.commit()
+    
+    AuditService.log(db, "RIDE_CANCELLED_ADMIN", user_id=current_user.id, details={"ride_id": ride.id})
+    return {"message": "Viaje cancelado por administración."}

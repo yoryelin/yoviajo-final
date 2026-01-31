@@ -32,6 +32,29 @@ const AdminRides = () => {
         fetchRides();
     }, [token, page]);
 
+    const handleCancelRide = async (rideId) => {
+        if (!confirm('Are you sure you want to FORCE CANCEL this ride?')) return;
+
+        try {
+            const response = await fetch(`${API_URL}/admin/rides/${rideId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                alert('Ride cancelled successfully.');
+                // Refresh list logic or reload page
+                window.location.reload();
+            } else {
+                alert('Action failed.');
+            }
+        } catch (error) {
+            console.error("Error cancelling ride:", error);
+        }
+    };
+
     return (
         <AdminLayout>
             <div className="bg-slate-900 rounded-lg border border-slate-700 overflow-hidden">
@@ -65,11 +88,12 @@ const AdminRides = () => {
                                 <th className="px-6 py-3">Date</th>
                                 <th className="px-6 py-3">Status</th>
                                 <th className="px-6 py-3">Seats</th>
+                                <th className="px-6 py-3">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {loading ? (
-                                <tr><td colSpan="6" className="text-center py-4">Loading...</td></tr>
+                                <tr><td colSpan="7" className="text-center py-4">Loading...</td></tr>
                             ) : rides.map((r) => (
                                 <tr key={r.id} className="border-b border-slate-800 hover:bg-slate-800/50 transition">
                                     <td className="px-6 py-4 font-mono text-sm text-slate-500">{r.id}</td>
@@ -94,6 +118,17 @@ const AdminRides = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         {r.available_seats} disp.
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {r.status === 'active' && (
+                                            <button
+                                                onClick={() => handleCancelRide(r.id)}
+                                                className="p-2 bg-red-600 hover:bg-red-500 rounded text-white shadow text-xs font-bold"
+                                                title="Force Cancel Ride"
+                                            >
+                                                CANCEL
+                                            </button>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

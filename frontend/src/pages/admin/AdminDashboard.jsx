@@ -58,6 +58,23 @@ export default function AdminDashboard() {
                 </div>
             </div>
 
+            {/* Pending Approvals Widget */}
+            {stats?.users_preview?.some(u => !u.is_active) && (
+                <div className="bg-yellow-900/10 border border-yellow-600/30 rounded-2xl overflow-hidden animate-pulse-slow">
+                    <div className="p-4 border-b border-yellow-600/30 flex justify-between items-center bg-yellow-900/20">
+                        <h2 className="text-lg font-bold text-yellow-400 flex items-center gap-2">
+                            ⚠️ Solicitudes de Ingreso Pendientes
+                        </h2>
+                        <Link to="/admin/users" className="text-xs text-yellow-400 hover:text-white font-bold border border-yellow-400 px-3 py-1 rounded-full uppercase">
+                            Gestionar
+                        </Link>
+                    </div>
+                    <div className="p-4">
+                        <p className="text-slate-400 text-sm">Hay usuarios nuevos esperando aprobación para acceder a la plataforma.</p>
+                    </div>
+                </div>
+            )}
+
             {/* Recent Activity / Users Preview */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
                 <div className="p-6 border-b border-slate-800 flex justify-between items-center">
@@ -94,17 +111,22 @@ export default function AdminDashboard() {
                                     </td>
                                     <td className="p-4">
                                         <span className={`px-2 py-1 rounded text-xs font-bold ${user.role === 'admin' ? 'bg-purple-900 text-purple-200' :
-                                                user.role === 'C' ? 'bg-cyan-900 text-cyan-200' :
-                                                    'bg-slate-800 text-slate-300'
+                                            user.role === 'C' ? 'bg-cyan-900 text-cyan-200' :
+                                                'bg-slate-800 text-slate-300'
                                             }`}>
                                             {user.role}
                                         </span>
                                     </td>
                                     <td className="p-4">
-                                        {user.is_verified ? (
-                                            <span className="text-green-400 font-bold flex items-center gap-1">✅ Verificado</span>
+                                        {user.is_active ? (
+                                            <span className="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>
                                         ) : (
-                                            <span className="text-slate-500">Pendiente</span>
+                                            <span className="w-2 h-2 rounded-full bg-yellow-500 inline-block mr-2" title="Pending Approval"></span>
+                                        )}
+                                        {user.is_verified ? (
+                                            <span className="text-green-400 font-bold text-xs uppercase">Verificado</span>
+                                        ) : (
+                                            <span className="text-slate-500 text-xs">Pendiente</span>
                                         )}
                                     </td>
                                     <td className="p-4 text-slate-500">
