@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
+import UserDetailModal from '../../components/admin/UserDetailModal';
 
 import { API_URL } from '@config/api.js';
 
@@ -9,6 +10,7 @@ const AdminUsers = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
+    const [selectedUser, setSelectedUser] = useState(null);
     const LIMIT = 20;
 
     const fetchUsers = async () => {
@@ -47,11 +49,10 @@ const AdminUsers = () => {
             });
 
             if (response.ok) {
-                alert(`User ${verb}D successfully.`);
 
                 // WHATSAPP INTEGRATION (Option B)
                 if (action === "approve") {
-                    const user = users.find(u => u.id === userId);
+                    const user = users.find(u => u.id === userId) || selectedUser;
                     if (user && user.phone) {
                         const message = `Hola ${user.name}! 👋\n\nTu cuenta en *YoViajo!* ha sido aprobada por un administrador.\n\nYa puedes ingresar y comenzar a viajar: https://yoviajo-frontend.onrender.com`;
                         const url = `https://wa.me/${user.phone}?text=${encodeURIComponent(message)}`;
@@ -59,7 +60,9 @@ const AdminUsers = () => {
                     }
                 }
 
+                alert(`User ${verb}D successfully.`);
                 fetchUsers(); // Refresh list
+                if (selectedUser) setSelectedUser(null);
             } else {
                 const err = await response.json();
                 alert(`Action failed: ${err.detail}`);
@@ -99,6 +102,7 @@ const AdminUsers = () => {
             <div className="bg-slate-900 rounded-lg border border-slate-700 overflow-hidden">
                 <div className="p-6 border-b border-slate-700 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-white">User Management</h2>
+                    <p className="text-xs text-slate-500 mr-auto ml-4">(Click para ver detalle)</p>
                     <div className="flex gap-2">
                         <button
                             disabled={page === 0}
@@ -123,6 +127,7 @@ const AdminUsers = () => {
                             <tr>
                                 <th className="px-6 py-3">ID</th>
                                 <th className="px-6 py-3">User</th>
+                                <th className="px-6 py-3">Status</th>
                                 <th className="px-6 py-3">Verification</th>
                                 <th className="px-6 py-3">Document</th>
                                 <th className="px-6 py-3">Actions</th>
@@ -132,7 +137,11 @@ const AdminUsers = () => {
                             {loading ? (
                                 <tr><td colSpan="6" className="text-center py-4">Loading...</td></tr>
                             ) : users.map((u) => (
-                                <tr key={u.id} className="border-b border-slate-800 hover:bg-slate-800/50 transition">
+                                <tr
+                                    key={u.id}
+                                    className="border-b border-slate-800 hover:bg-slate-800/50 transition cursor-pointer"
+                                    onClick={() => setSelectedUser(u)}
+                                >
                                     <td className="px-6 py-4 font-mono text-sm text-slate-500">#{u.id}</td>
                                     <td className="px-6 py-4">
                                         <div>
@@ -163,7 +172,7 @@ const AdminUsers = () => {
 
                                     <td className="px-6 py-4">
                                         {u.verification_document ? (
-                                            <a href={u.verification_document} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline text-xs flex items-center gap-1">
+                                            <a href={u.verification_document} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline text-xs flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                                                 <span>📄 View Doc</span>
                                             </a>
                                         ) : (
@@ -171,7 +180,7 @@ const AdminUsers = () => {
                                         )}
                                     </td>
 
-                                    <td className="px-6 py-4 flex gap-2">
+                                    <td className="px-6 py-4 flex gap-2" onClick={(e) => e.stopPropagation()}>
                                         {!u.is_active && (
                                             <button
                                                 onClick={() => handleAction(u.id, "approve")}
@@ -213,6 +222,14 @@ const AdminUsers = () => {
                     </table>
                 </div>
             </div>
+
+            {selectedUser && (
+                <UserDetailModal
+                    user={selectedUser}
+                    onClose={() => setSelectedUser(null)}
+                    onAction={handleAction}
+                />
+            )}
         </AdminLayout>
     );
 };

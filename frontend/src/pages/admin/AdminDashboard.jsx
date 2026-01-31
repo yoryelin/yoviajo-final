@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { API_URL } from '@config/api.js'
+import { useAuth } from '../../context/AuthContext'
+import UserDetailModal from '../../components/admin/UserDetailModal'
 
 export default function AdminDashboard() {
     const [stats, setStats] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [selectedUser, setSelectedUser] = useState(null)
+    const { token } = useAuth()
 
     useEffect(() => {
         fetchStats()
@@ -12,7 +16,6 @@ export default function AdminDashboard() {
 
     const fetchStats = async () => {
         try {
-            const token = localStorage.getItem('token')
             const res = await fetch(`${API_URL}/admin/stats`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -28,6 +31,42 @@ export default function AdminDashboard() {
             setLoading(false)
         }
     }
+
+    const handleUserAction = async (userId, action) => {
+        const verb = action === "approve" ? "ACTIVATE" : "BLOCK";
+        if (!confirm(`Are you sure you want to ${verb} this user?`)) return;
+
+        try {
+            const response = await fetch(`${API_URL}/admin/users/${userId}/${action}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                // WHATSAPP INTEGRATION (Mirroring AdminUsers logic)
+                if (action === "approve") {
+                    const user = stats?.users_preview?.find(u => u.id === userId); // Or selectedUser
+                    if (user && user.phone) {
+                        const message = `Hola ${user.name}! 👋\n\nTu cuenta en *YoViajo!* ha sido aprobada por un administrador.\n\nYa puedes ingresar: https://yoviajo-frontend.onrender.com`;
+                        const url = `https://wa.me/${user.phone}?text=${encodeURIComponent(message)}`;
+                        window.open(url, '_blank');
+                    }
+                }
+
+                alert(`User ${verb}D successfully.`);
+                fetchStats();
+                setSelectedUser(null);
+            } else {
+                const err = await response.json();
+                alert(`Action failed: ${err.detail}`);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     if (loading) return <div className="text-white">Cargando estadísticas...</div>
 
@@ -79,6 +118,7 @@ export default function AdminDashboard() {
             <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
                 <div className="p-6 border-b border-slate-800 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-white">Usuarios Recientes</h2>
+                    <p className="text-xs text-slate-500 mr-auto ml-4">(Click para gestionar)</p>
                     <Link to="/admin/users" className="text-sm text-cyan-400 hover:text-cyan-300 font-bold">Ver Todos</Link>
                 </div>
                 <div className="overflow-x-auto">
@@ -94,7 +134,11 @@ export default function AdminDashboard() {
                         </thead>
                         <tbody className="divide-y divide-slate-800 text-slate-300 text-sm">
                             {stats?.users_preview?.map(user => (
-                                <tr key={user.id} className="hover:bg-slate-800/50 transition">
+                                <tr
+                                    key={user.id}
+                                    className="hover:bg-slate-800/50 transition cursor-pointer"
+                                    onClick={() => setSelectedUser(user)}
+                                >
                                     <td className="p-4 font-mono text-slate-500">#{user.id}</td>
                                     <td className="p-4 flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs overflow-hidden">
@@ -138,6 +182,14 @@ export default function AdminDashboard() {
                     </table>
                 </div>
             </div>
+
+            {selectedUser && (
+                <UserDetailModal
+                    user={selectedUser}
+                    onClose={() => setSelectedUser(null)}
+                    onAction={handleUserAction}
+                />
+            )}
         </div>
     )
 }
