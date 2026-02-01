@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import TicketCard from '../components/TicketCard'
 import PassengerActionModal from '../components/PassengerActionModal'
 import ReviewModal from '../components/reviews/ReviewModal'
+import OfferRideModal from '../components/OfferRideModal'
 import { API_URL } from '@config/api.js'
 
 const MyTrips = () => {
@@ -16,6 +17,11 @@ const MyTrips = () => {
         isOpen: false,
         type: null,
         booking: null
+    })
+
+    const [offerModal, setOfferModal] = useState({
+        isOpen: false,
+        rideData: null
     })
 
     const [matches, setMatches] = useState([])
@@ -101,6 +107,13 @@ const MyTrips = () => {
 
     const handleActionRequest = (booking, type) => {
         setActionModal({ isOpen: true, type, booking })
+    }
+
+    const handleEditRide = (ride) => {
+        setOfferModal({
+            isOpen: true,
+            rideData: ride
+        })
     }
 
     const handleConfirmAction = async (booking, type) => {
@@ -233,6 +246,47 @@ const MyTrips = () => {
         }
     }
 
+    // Helper: Filter old items (24h rule)
+    const shouldShowItem = (item) => {
+        // If cancelled by system/user, maybe still show but marked? 
+        // User asked to REMOVE active ones if > 24h. 
+        // We will filter out anything that is clearly past execution time + 24h.
+
+        let targetTime = null;
+        if (item.departure_time) targetTime = item.departure_time; // Rides / Booking.ride
+        else if (item.ride?.departure_time) targetTime = item.ride.departure_time; // Booking with relation
+        else if (item.time_window_start) targetTime = item.time_window_start; // Requests (using start of window)
+
+        if (!targetTime) return true; // Fallback
+
+        // Check format. If 'HH:MM' (generic time), we can't filter by date properly unless we have the date field too.
+        // Assuming ISO string or date + time. 
+        // Rides have 'departure_time' as ISO8601 usually.
+        // Requests have 'date' and 'time_window_start'.
+
+        let dateObj = new Date(targetTime);
+        if (isNaN(dateObj.getTime())) {
+            // It might be split (Requests)
+            if (item.date && item.time_window_start) {
+                dateObj = new Date(`${item.date}T${item.time_window_start}`);
+            } else {
+                return true;
+            }
+        }
+
+        const now = new Date();
+        const diffHours = (now - dateObj) / (1000 * 60 * 60);
+
+        // If diffHours > 24 (24 hours passed since departure), hide it.
+        if (diffHours > 24) return false;
+
+        return true;
+    }
+
+    const visibleRides = myRides.filter(shouldShowItem);
+    const visibleBookings = myBookings.filter(shouldShowItem);
+    const visibleRequests = myRequests.filter(shouldShowItem);
+
     return (
         <div className="w-full">
             <PassengerActionModal
@@ -248,6 +302,15 @@ const MyTrips = () => {
                 onClose={() => setReviewModal({ ...reviewModal, isOpen: false })}
                 booking={reviewModal.booking}
                 onSubmit={handleReviewSubmit}
+            />
+
+            <OfferRideModal
+                isOpen={offerModal.isOpen}
+                onClose={() => setOfferModal({ isOpen: false, rideData: null })}
+                authFetch={authFetch}
+                API_URL={API_URL}
+                onPublish={fetchData} // Refresh list on update/cancel
+                initialData={offerModal.rideData}
             />
 
             <div className="mb-8">
@@ -270,13 +333,13 @@ const MyTrips = () => {
                             <h3 className="text-xl font-bold text-cyan-400 mb-6 flex items-center gap-2">
                                 <span>📢</span> Mis Ofertas Publicadas
                             </h3>
-                            {myRides.length === 0 ? (
+                            {visibleRides.length === 0 ? (
                                 <div className="text-center p-8 border border-dashed border-slate-800 rounded-xl bg-slate-900/50">
-                                    <p className="text-slate-500">No has publicado viajes aún.</p>
+                                    <p className="text-slate-500">No tienes viajes activos recientes.</p>
                                 </div>
                             ) : (
                                 <div className="grid gap-6 md:grid-cols-2">
-                                    {myRides.map(ride => (
+                                    {visibleRides.map(ride => (
                                         <div key={ride.id} className="relative group">
                                             {ride.matches_count > 0 && ride.status === 'active' && (
                                                 <div className="absolute -top-3 -right-3 z-20 bg-gradient-to-r from-yellow-400 to-orange-500 text-slate-900 text-xs font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
@@ -287,7 +350,7 @@ const MyTrips = () => {
                                                 type="ride"
                                                 data={ride}
                                                 isManagement={true}
-                                                manageAction={() => alert("Funcionalidad de Edición pendiente")}
+                                                manageAction={() => handleEditRide(ride)}
                                                 user={user}
                                             />
                                             {/* MATCHES DRAWER (DRIVER) */}
@@ -360,13 +423,13 @@ const MyTrips = () => {
                                 <h3 className="text-xl font-bold text-pink-400 mb-6 flex items-center gap-2">
                                     <span>🎟️</span> Mis Reservas
                                 </h3>
-                                {myBookings.length === 0 ? (
+                                {visibleBookings.length === 0 ? (
                                     <div className="text-center p-8 border border-dashed border-slate-800 rounded-xl bg-slate-900/50">
-                                        <p className="text-slate-500">No tienes reservas activas.</p>
+                                        <p className="text-slate-500">No tienes reservas activas recientes.</p>
                                     </div>
                                 ) : (
                                     <div className="grid gap-6 md:grid-cols-2">
-                                        {myBookings.map(booking => (
+                                        {visibleBookings.map(booking => (
                                             <TicketCard
                                                 key={booking.id}
                                                 type="booking"
@@ -386,13 +449,13 @@ const MyTrips = () => {
                                 <h3 className="text-xl font-bold text-purple-400 mb-6 flex items-center gap-2">
                                     <span>🙋‍♂️</span> Mis Solicitudes
                                 </h3>
-                                {myRequests.length === 0 ? (
+                                {visibleRequests.length === 0 ? (
                                     <div className="text-center p-8 border border-dashed border-slate-800 rounded-xl bg-slate-900/50">
-                                        <p className="text-slate-500">No tienes solicitudes pendientes.</p>
+                                        <p className="text-slate-500">No tienes solicitudes pendientes recientes.</p>
                                     </div>
                                 ) : (
                                     <div className="grid gap-6 md:grid-cols-2">
-                                        {myRequests.map(req => (
+                                        {visibleRequests.map(req => (
                                             <div key={req.id} className="relative">
                                                 {req.matches_count > 0 && (
                                                     <div className="absolute -top-3 -right-3 z-20 bg-gradient-to-r from-emerald-400 to-green-500 text-slate-900 text-xs font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
