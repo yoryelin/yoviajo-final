@@ -79,31 +79,53 @@ export default function ProfilePage() {
 
         if (!confirm('¿Estás seguro de enviar este documento para verificación?')) return
 
+        // Validations
+        if (file.size > 5 * 1024 * 1024) {
+            alert("❌ El archivo es muy pesado (>5MB). Intenta con uno más liviano.")
+            return
+        }
+
         const formData = new FormData()
-        formData.append('file', file)
+        // Force filename to ensure multipart parser recognizes it as a file upload
+        formData.append('file', file, file.name || "dni.jpg")
 
         setLoading(true)
         try {
             const token = localStorage.getItem('token')
+            console.log("📤 Uploading:", file.name, file.type, file.size)
+
             const res = await fetch(`${API_URL}/users/verify`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
-                    // Content-Type must be undefined for FormData
+                    // Explicitly NO Content-Type to let browser set boundary
                 },
                 body: formData
             })
+
+            console.log("📥 Response status:", res.status)
+
             if (res.ok) {
                 setSuccessMsg('Documento enviado. Un admin revisará tu solicitud. ⏳')
                 fetchProfile()
             } else {
-                const err = await res.json()
-                const errMsg = typeof err.detail === 'string' ? err.detail : JSON.stringify(err.detail)
-                alert(errMsg || 'Error al subir documento')
+                const errText = await res.text()
+                console.error("❌ Upload error body:", errText)
+                try {
+                    const err = JSON.parse(errText)
+                    // Handling standard FastAPI/Pydantic errors
+                    if (Array.isArray(err.detail)) {
+                        alert(`Error de validación: ${err.detail[0]?.msg || JSON.stringify(err.detail)}`)
+                    } else {
+                        alert(err.detail || "Error al subir documento")
+                    }
+                } catch (e) {
+                    alert(`Error inesperado: ${errText}`)
+                }
             }
         } catch (error) {
-            console.error(error)
-            alert('Error de conexión')
+            console.error("❌ Network Exception:", error)
+            alert('Error de conexión: ' + error.message)
         } finally {
             setLoading(false)
         }
