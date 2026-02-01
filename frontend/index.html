@@ -9,8 +9,34 @@
   <meta name="theme-color" content="#0f172a" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/pwa-icon.png" />
-  <title>YoViajo!</title>
-</head>
+  <title>YoViajo! - Carpooling Argentina</title>
+  <meta name="description"
+    content="La plataforma de viajes compartidos más segura de Argentina. Conecta con conductores verificados, ahorra dinero y viaja cómodo." />
+
+  <!-- Google Analytics (Deferred to avoid blocking) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-91YDM80ELH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    // Replace G-PLACEHOLDER with your actual ID from Google Analytics
+    // You can also use logic to pull from window.env if needed
+    gtag('config', 'G-91YDM80ELH');
+  </script>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="YoViajo! - Acercando personas, uniendo destinos" />
+  <meta property="og:description"
+    content="Únete a la comunidad de carpooling más segura. Comparte gastos y viaja cómodo." />
+  <meta property="og:image" content="/pwa-icon.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:title" content="YoViajo! - Carpooling Argentina" />
+  <meta property="twitter:description" content="Viaja mejor, paga menos. Tu próximo destino está a un clic." />
+  <meta property="twitter:image" content="/pwa-icon.png" />
 
 <body>
   <div id="root"></div>
