@@ -28,7 +28,7 @@ const UserDetailModal = ({ user, onClose, onAction }) => {
                             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                                 {user.name}
                                 <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase ${user.role === 'admin' ? 'bg-purple-900 text-purple-200' :
-                                        user.role === 'C' ? 'bg-cyan-900 text-cyan-200' : 'bg-blue-900 text-blue-200'
+                                    user.role === 'C' ? 'bg-cyan-900 text-cyan-200' : 'bg-blue-900 text-blue-200'
                                     }`}>
                                     {user.role === 'C' ? 'Conductor' : user.role === 'P' ? 'Pasajero' : 'Admin'}
                                 </span>
@@ -84,6 +84,10 @@ const UserDetailModal = ({ user, onClose, onAction }) => {
                             <h3 className="text-sm font-bold text-slate-500 uppercase border-b border-slate-800 pb-1">Datos Personales</h3>
                             <div className="space-y-2 text-sm">
                                 <p className="text-slate-300 flex justify-between">
+                                    <span className="text-slate-500">DNI:</span>
+                                    <span className="font-mono font-bold text-white">{user.dni}</span>
+                                </p>
+                                <p className="text-slate-300 flex justify-between">
                                     <span className="text-slate-500">Teléfono:</span>
                                     <span className="font-mono">{user.phone || '-'}</span>
                                 </p>
@@ -137,7 +141,7 @@ const UserDetailModal = ({ user, onClose, onAction }) => {
                                 <p className="text-sm font-bold text-white">Documento de Identidad / Licencia</p>
                                 <p className="text-xs text-slate-400">
                                     Estado: <span className={`uppercase font-bold ${user.verification_status === 'verified' ? 'text-green-400' :
-                                            user.verification_status === 'rejected' ? 'text-red-400' : 'text-yellow-400'
+                                        user.verification_status === 'rejected' ? 'text-red-400' : 'text-yellow-400'
                                         }`}>{user.verification_status}</span>
                                 </p>
                             </div>

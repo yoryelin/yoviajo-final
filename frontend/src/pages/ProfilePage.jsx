@@ -84,8 +84,13 @@ export default function ProfilePage() {
 
         setLoading(true)
         try {
-            const res = await authFetch(`${API_URL}/users/verify`, {
+            const token = localStorage.getItem('token')
+            const res = await fetch(`${API_URL}/users/verify`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                    // Content-Type must be undefined for FormData
+                },
                 body: formData
             })
             if (res.ok) {
@@ -471,14 +476,14 @@ export default function ProfilePage() {
                                             <span className="text-2xl opacity-50 group-hover:opacity-100 transition">📄</span>
                                             <div className="text-left">
                                                 <p className="font-bold text-white group-hover:text-cyan-400 transition">Documento de Identidad (DNI)</p>
-                                                <p className="text-xs text-slate-500">Sube una foto clara (Frente)</p>
+                                                <p className="text-xs text-slate-500">Sube una foto clara (Frente). <span className="text-cyan-500 font-bold">Formatos: JPG, PNG</span></p>
                                             </div>
                                         </div>
                                         <span className="bg-cyan-900/30 text-cyan-400 px-3 py-1 rounded-lg text-xs font-bold uppercase border border-cyan-500/30 group-hover:bg-cyan-500 group-hover:text-white transition">SUBIR</span>
                                         <input
                                             type="file"
                                             className="hidden"
-                                            accept="image/*"
+                                            accept="image/jpeg, image/png, image/jpg"
                                             onChange={handleVerifyUpload}
                                         />
                                     </label>

@@ -171,7 +171,8 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
                 setPhotoFile(null) // Reset pending photo
             } else {
                 const err = await response.json()
-                throw new Error(err.detail || "Error al guardar datos")
+                const errMsg = typeof err.detail === 'string' ? err.detail : JSON.stringify(err.detail)
+                throw new Error(errMsg || "Error al guardar datos")
             }
 
         } catch (error) {

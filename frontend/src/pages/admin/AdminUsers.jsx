@@ -173,11 +173,20 @@ const AdminUsers = () => {
 
                                     <td className="px-6 py-4">
                                         {u.verification_document ? (
-                                            <a href={u.verification_document} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline text-xs flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                                                <span>📄 View Doc</span>
+                                            <a
+                                                href={u.verification_document}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 px-3 py-1.5 rounded-lg transition group"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <span className="text-xl">📄</span>
+                                                <span className="text-xs font-bold text-cyan-400 group-hover:text-cyan-300">Ver Archivo</span>
                                             </a>
                                         ) : (
-                                            <span className="text-slate-600 text-xs">-</span>
+                                            <span className="inline-flex items-center gap-1 opacity-40">
+                                                <span className="text-slate-500 text-xs font-mono">No Adjunto</span>
+                                            </span>
                                         )}
                                     </td>
 
