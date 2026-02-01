@@ -10,7 +10,7 @@ from app.models.user import User
 from app.models.booking import Booking
 from app.models.review import Review
 from app.models.ride import Ride
-from app.core.security import get_current_user
+from app.api.deps import get_current_user
 
 router = APIRouter(
     prefix="/reviews",
