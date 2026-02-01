@@ -92,6 +92,9 @@ app.include_router(debug.router)
 from app.api.routes import admin
 app.include_router(admin.router)
 
+from app.api.routes import reviews
+app.include_router(reviews.router)
+
 
 @app.get("/")
 def read_root():

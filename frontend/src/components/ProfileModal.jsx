@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import StarRating from './common/StarRating'
 
 export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch, onUpdate }) {
     if (!isOpen) return null
@@ -12,6 +13,37 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
     const [photoFile, setPhotoFile] = useState(null)
     const [photoPreview, setPhotoPreview] = useState(null)
     const fileInputRef = useRef(null)
+
+    // Reviews State
+    const [reviews, setReviews] = useState([])
+    const [loadingReviews, setLoadingReviews] = useState(false)
+
+    useEffect(() => {
+        if (isOpen && user && API_URL) {
+            fetchReviews()
+        }
+    }, [isOpen, user, API_URL])
+
+    const fetchReviews = async () => {
+        setLoadingReviews(true)
+        try {
+            // Use simple fetch or authFetch. Since reviews are public-ish, simple fetch might work if endpoint is open.
+            // But usually we use authFetch if we have it. The component receives authFetch.
+            // However, the endpoint might not require auth. Let's check reviews.py.
+            // reviews.py: get_user_reviews has Depends(get_db) but NOT Depends(get_current_user) explicitly?
+            // Wait, reviews.py: router = APIRouter... get_user_reviews...
+            // It has db dependency. It does NOT enforce login for reading reviews.
+            const res = await fetch(`${API_URL}/reviews/user/${user.id}`)
+            if (res.ok) {
+                const data = await res.json()
+                setReviews(data)
+            }
+        } catch (error) {
+            console.error("Error fetching reviews", error)
+        } finally {
+            setLoadingReviews(false)
+        }
+    }
 
     const [formData, setFormData] = useState({
         dni: '',
@@ -359,6 +391,36 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
                         )}
 
                     </form>
+                </div>
+
+                {/* REVIEWS SECTION */}
+                <div className="border-t border-slate-800 p-6 bg-slate-900/30">
+                    <h4 className="text-sm font-bold text-slate-400 uppercase mb-4 flex items-center gap-2">
+                        <span>💬</span> Comentarios ({reviews.length})
+                    </h4>
+
+                    {loadingReviews ? (
+                        <p className="text-xs text-slate-500">Cargando reseñas...</p>
+                    ) : reviews.length > 0 ? (
+                        <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                            {reviews.map(review => (
+                                <div key={review.id} className="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <span className="font-bold text-cyan-400 text-sm">{review.reviewer_name}</span>
+                                        <span className="text-[10px] text-slate-600">{new Date(review.created_at).toLocaleDateString()}</span>
+                                    </div>
+                                    <div className="mb-2">
+                                        <StarRating rating={review.rating} readonly size={12} />
+                                    </div>
+                                    {review.comment && (
+                                        <p className="text-slate-300 text-xs italic">"{review.comment}"</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-xs text-slate-500 italic">No hay reseñas aún.</p>
+                    )}
                 </div>
 
                 {/* FOOTER ACTIONS */}

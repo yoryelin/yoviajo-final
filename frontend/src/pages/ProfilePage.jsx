@@ -110,7 +110,6 @@ export default function ProfilePage() {
                 fetchProfile()
             } else {
                 const errText = await res.text()
-                console.error("❌ Upload error body:", errText)
                 try {
                     const err = JSON.parse(errText)
                     // Handling standard FastAPI/Pydantic errors

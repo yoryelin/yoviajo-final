@@ -1,11 +1,18 @@
-import React, { useEffect } from 'react'
-import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom' // Ensure Link is imported if used
+import React, { useEffect, useState, useRef } from 'react'
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { API_URL } from '@config/api.js'
+import NotificationToast from '../components/admin/NotificationToast'
 
 export default function AdminLayout() {
     const { user, loading } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
+
+    // Notification System
+    const [notifications, setNotifications] = useState([])
+    const previousStats = useRef(null)
+    const audioRef = useRef(new Audio('/notification.mp3')) // Expects file in public folder, or will just fail silently
 
     useEffect(() => {
         if (!loading) {
@@ -14,6 +21,110 @@ export default function AdminLayout() {
             }
         }
     }, [user, loading, navigate])
+
+    // Polling for Notifications
+    useEffect(() => {
+        if (!user || user.role !== 'admin') return;
+
+        const checkStats = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_URL}/admin/stats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    const currentStats = await res.json();
+
+                    if (previousStats.current) {
+                        const prev = previousStats.current;
+                        const newNotifs = [];
+
+                        // 1. Check for New Users
+                        if (currentStats.total_users > prev.total_users) {
+                            newNotifs.push({
+                                id: Date.now() + 'user',
+                                type: 'user',
+                                title: 'Nuevo Usuario',
+                                message: 'Se ha registrado un nuevo usuario en la plataforma.',
+                                timestamp: Date.now()
+                            });
+                        }
+
+                        // 2. Check for New Rides
+                        if (currentStats.total_rides > prev.total_rides) {
+                            newNotifs.push({
+                                id: Date.now() + 'ride',
+                                type: 'ride',
+                                title: 'Nuevo Viaje',
+                                message: 'Un conductor ha publicado un nuevo viaje.',
+                                timestamp: Date.now()
+                            });
+                        }
+
+                        // 3. New Bookings (Paid)
+                        if (currentStats.total_bookings > prev.total_bookings) {
+                            newNotifs.push({
+                                id: Date.now() + 'booking',
+                                type: 'booking',
+                                title: 'Nueva Reserva',
+                                message: 'Se ha realizado una nueva reserva de viaje.',
+                                timestamp: Date.now()
+                            });
+                        }
+
+                        // 4. Pending User Approvals (Action Required)
+                        if (currentStats.pending_users > prev.pending_users) {
+                            newNotifs.push({
+                                id: Date.now() + 'pending_user',
+                                type: 'verification',
+                                title: 'Solicitud de Ingreso',
+                                message: 'Un usuario requiere aprobación manual para ingresar.',
+                                timestamp: Date.now()
+                            });
+                        }
+
+                        // 5. Pending Verifications (Docs)
+                        if (currentStats.pending_verifications > prev.pending_verifications) {
+                            newNotifs.push({
+                                id: Date.now() + 'pending_verif',
+                                type: 'verification',
+                                title: 'Verificación Documental',
+                                message: 'Un usuario ha subido documentos para verificación.',
+                                timestamp: Date.now()
+                            });
+                        }
+
+                        if (newNotifs.length > 0) {
+                            setNotifications(prevNotifs => [...prevNotifs, ...newNotifs]);
+                            try {
+                                audioRef.current.play().catch(e => console.log('Audio autoplay blocked', e));
+                            } catch (e) {
+                                console.error("Error playing sound", e);
+                            }
+                        }
+                    }
+
+                    // Update ref
+                    previousStats.current = currentStats;
+                }
+            } catch (error) {
+                console.error("Error polling admin stats:", error);
+            }
+        };
+
+        // Initial fetch
+        checkStats();
+
+        // Interval
+        const intervalId = setInterval(checkStats, 30000); // Poll every 30 seconds
+
+        return () => clearInterval(intervalId);
+    }, [user]);
+
+    const dismissNotification = (id) => {
+        setNotifications(prev => prev.filter(n => n.id !== id));
+    };
 
     if (loading) return <div className="text-white p-10">Cargando panel...</div>
 
@@ -48,8 +159,8 @@ export default function AdminLayout() {
                                 key={item.path}
                                 to={item.path}
                                 className={`px-4 py-3 rounded-xl font-medium transition-all ${isActive
-                                        ? 'bg-cyan-900/30 text-cyan-400 border border-cyan-500/30'
-                                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                                    ? 'bg-cyan-900/30 text-cyan-400 border border-cyan-500/30'
+                                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                                     }`}
                             >
                                 {item.label}
@@ -81,6 +192,12 @@ export default function AdminLayout() {
                     <Outlet />
                 </div>
             </main>
+
+            {/* Toast Notifications */}
+            <NotificationToast
+                notifications={notifications}
+                onDismiss={dismissNotification}
+            />
         </div>
     )
 }

@@ -27,6 +27,13 @@ def get_admin_stats(
     # Calculate Revenue (Sum of fee_amount for paid bookings)
     total_revenue = db.query(func.sum(Booking.fee_amount)).filter(Booking.payment_status == "approved").scalar() or 0.0
 
+    # Pending Actions Counts
+    pending_users = db.query(func.count(User.id)).filter(User.is_active == False).scalar()
+    pending_verifications = db.query(func.count(User.id)).filter(
+        User.verification_status == "pending", 
+        User.is_verified == False
+    ).scalar()
+
     # Fetch recent users for preview
     recent_users = db.query(User).order_by(User.id.desc()).limit(5).all()
 
@@ -36,6 +43,8 @@ def get_admin_stats(
         "active_rides": active_rides,
         "total_bookings": total_bookings,
         "total_revenue": total_revenue,
+        "pending_users": pending_users,
+        "pending_verifications": pending_verifications,
         "users_preview": recent_users
     }
 

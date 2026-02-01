@@ -72,3 +72,32 @@ def autocomplete_city(q: str):
         })
         
     return formatted_results
+
+@router.get("/reverse")
+def reverse_geocode(lat: float, lng: float):
+    """
+    Obtiene la dirección a partir de coordenadas (lat, lng).
+    """
+    try:
+        url = "https://nominatim.openstreetmap.org/reverse"
+        params = {
+            "lat": lat,
+            "lon": lng,
+            "format": "json",
+            "addressdetails": 1
+        }
+        headers = { "User-Agent": "YoViajo-App/1.0" }
+        
+        response = requests.get(url, params=params, headers=headers, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            return {
+                "display_name": data.get("display_name", "Ubicación seleccionada"),
+                "address": data.get("address", {}),
+                "lat": lat,
+                "lng": lng
+            }
+        else:
+            raise HTTPException(status_code=502, detail="Error en servicio de geocoding")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

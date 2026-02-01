@@ -1,7 +1,7 @@
 import React from 'react'
 import CountdownTimer from './CountdownTimer'
 
-const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onReport, onMatch, user, authFetch, API_URL }) => {
+const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onReport, onMatch, onReview, user, authFetch, API_URL }) => {
   const isMatch = type === 'match_found'
   const isOffer = (type === 'ride' || isDriver) && !isMatch // Legacy fallback
   const isBooking = type === 'booking'
@@ -84,9 +84,14 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
       // 3. PASSENGER MODE
       if (isBooking) {
         const depTime = data.ride_departure_time || data.departure_time
-        const isPast = new Date(depTime) < new Date()
+        // Add 2 hours buffer for "Past" to allow ride completion
+        const rideEndTime = new Date(new Date(depTime).getTime() + 2 * 60 * 60 * 1000)
+        const isPast = rideEndTime < new Date()
 
         if (isPast) {
+          if (onReview) {
+            return { label: '⭐ Calificar', action: () => onReview(data), disabled: false, className: 'bg-yellow-500 text-slate-900 hover:bg-yellow-400 font-black shadow-yellow-500/20' }
+          }
           return { label: '🚨 Reportar Ausencia', action: () => onReport && onReport(data), disabled: false, className: 'bg-orange-600 hover:bg-orange-500' }
         } else {
           return { label: 'Cancelar', action: () => onManage && onManage(data), disabled: false, className: 'bg-red-600 hover:bg-red-500' }

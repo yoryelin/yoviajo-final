@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-// import AdminLayout from '../../layouts/AdminLayout'; // Not needed as wrapper
 import { useAuth } from '../../context/AuthContext';
 import UserDetailModal from '../../components/admin/UserDetailModal';
-
+import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import { API_URL } from '@config/api.js';
 
 const AdminUsers = () => {
-    // REMOVED: const { token } = useAuth();
     const token = localStorage.getItem('token');
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [confirmState, setConfirmState] = useState({ isOpen: false, userId: null, action: null });
     const LIMIT = 20;
 
     const fetchUsers = async () => {
         setLoading(true);
         try {
-
             const response = await fetch(`${API_URL}/admin/users?skip=${page * LIMIT}&limit=${LIMIT}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -36,9 +34,19 @@ const AdminUsers = () => {
         fetchUsers();
     }, [token, page]);
 
-    const handleAction = async (userId, action) => {
+    // Opens the modal instead of immediate action
+    const handleAction = (userId, action) => {
+        setConfirmState({
+            isOpen: true,
+            userId,
+            action
+        });
+    };
+
+    // Executed ONLY when specific logic (Block/Approve) is confirmed
+    const executeAction = async () => {
+        const { userId, action } = confirmState;
         const verb = action === "approve" ? "ACTIVATE" : "BLOCK";
-        if (!confirm(`Are you sure you want to ${verb} this user?`)) return;
 
         try {
             const response = await fetch(`${API_URL}/admin/users/${userId}/${action}`, {
@@ -50,14 +58,17 @@ const AdminUsers = () => {
             });
 
             if (response.ok) {
-
-                // WHATSAPP INTEGRATION (Option B)
+                // WhatsApp Integration (Mirroring original logic)
                 if (action === "approve") {
                     const user = users.find(u => u.id === userId) || selectedUser;
                     if (user && user.phone) {
                         const message = `Hola ${user.name}! 👋\n\nTu cuenta en *YoViajo!* ha sido aprobada por un administrador.\n\nYa puedes ingresar y comenzar a viajar: https://yoviajo-frontend.onrender.com`;
                         const url = `https://wa.me/${user.phone}?text=${encodeURIComponent(message)}`;
-                        window.open(url, '_blank');
+                        try {
+                            window.open(url, '_blank');
+                        } catch (e) {
+                            console.error("Popup blocked?", e);
+                        }
                     }
                 }
 
@@ -77,7 +88,6 @@ const AdminUsers = () => {
         if (!confirm(`Are you sure you want to ${decision.toUpperCase()} this user verification?`)) return;
 
         try {
-
             const response = await fetch(`${API_URL}/admin/users/${userId}/verify`, {
                 method: 'POST',
                 headers: {
@@ -89,7 +99,7 @@ const AdminUsers = () => {
 
             if (response.ok) {
                 alert(`Verification ${decision} successfully.`);
-                fetchUsers(); // Refresh list
+                fetchUsers();
             } else {
                 alert('Action failed.');
             }
@@ -240,6 +250,18 @@ const AdminUsers = () => {
                     onAction={handleAction}
                 />
             )}
+
+            <ConfirmationModal
+                isOpen={confirmState.isOpen}
+                onClose={() => setConfirmState({ ...confirmState, isOpen: false })}
+                onConfirm={executeAction}
+                title={confirmState.action === 'block' ? 'Bloquear Usuario' : 'Aprobar Usuario'}
+                message={confirmState.action === 'block'
+                    ? '¿Estás seguro de que deseas bloquear a este usuario? No podrá acceder a su cuenta.'
+                    : '¿Estás seguro de que deseas aprobar a este usuario? Podrá acceder a la plataforma.'}
+                isDangerous={confirmState.action === 'block'}
+                confirmText={confirmState.action === 'block' ? 'Bloquear' : 'Aprobar'}
+            />
         </>
     );
 };

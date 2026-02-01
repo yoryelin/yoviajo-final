@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './layouts/Layout'
+import InstallPrompt from './components/InstallPrompt'
 import Dashboard from './pages/Dashboard'
 import MyTrips from './pages/MyTrips'
 import Login from './pages/Login'
@@ -33,66 +34,69 @@ export default function App() {
   }
 
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<Landing />} />
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-      <Route path="/register" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-      <Route path="/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/dashboard" />} />
-      <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
+    <>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+        <Route path="/register" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+        <Route path="/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/dashboard" />} />
+        <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
 
-      {/* Public Legal Pages */}
-      <Route path="/terms" element={<TermsPage />} />
-      <Route path="/privacy" element={<PrivacyPage />} />
-      <Route path="/contact" element={<ContactPage />} />
+        {/* Public Legal Pages */}
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
-      {/* Private Routes */}
-      <Route
-        path="/dashboard"
-        element={
-          user ? (
-            <Layout>
-              <Dashboard />
-            </Layout>
-          ) : <Navigate to="/" />
-        }
-      />
+        {/* Private Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            user ? (
+              <Layout>
+                <Dashboard />
+              </Layout>
+            ) : <Navigate to="/" />
+          }
+        />
 
-      <Route
-        path="/my-trips"
-        element={
-          user ? (
-            <Layout>
-              <MyTrips />
-            </Layout>
-          ) : <Navigate to="/" />
-        }
-      />
+        <Route
+          path="/my-trips"
+          element={
+            user ? (
+              <Layout>
+                <MyTrips />
+              </Layout>
+            ) : <Navigate to="/" />
+          }
+        />
 
-      <Route
-        path="/profile"
-        element={
-          user ? (
-            <Layout>
-              <ProfilePage />
-            </Layout>
-          ) : <Navigate to="/" />
-        }
-      />
+        <Route
+          path="/profile"
+          element={
+            user ? (
+              <Layout>
+                <ProfilePage />
+              </Layout>
+            ) : <Navigate to="/" />
+          }
+        />
 
-      {/* Admin Routes with Layout */}
-      <Route path="/admin" element={user ? <AdminLayout /> : <Navigate to="/" />}>
-        <Route index element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="verifications" element={<AdminVerifications />} />
-        <Route path="users" element={<AdminUsers />} />
-        <Route path="rides" element={<AdminRides />} />
-        <Route path="bookings" element={<AdminBookings />} />
-        <Route path="logs" element={<AdminLogs />} />
-      </Route>
+        {/* Admin Routes with Layout */}
+        <Route path="/admin" element={user ? <AdminLayout /> : <Navigate to="/" />}>
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="verifications" element={<AdminVerifications />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="rides" element={<AdminRides />} />
+          <Route path="bookings" element={<AdminBookings />} />
+          <Route path="logs" element={<AdminLogs />} />
+        </Route>
 
-      {/* Catch-all Redirect */}
-      <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} />} />
-    </Routes>
+        {/* Catch-all Redirect */}
+        <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} />} />
+      </Routes>
+      <InstallPrompt />
+    </>
   )
 }

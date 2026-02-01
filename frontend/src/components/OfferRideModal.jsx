@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import CityAutocomplete from './CityAutocomplete'
+import LocationPicker from './common/LocationPicker'
 import { useAuth } from '../context/AuthContext'
 import ConfirmationModal from './ConfirmationModal'
+import { MapPin } from 'lucide-react'
 
 // Haversine Formula for distance estimation (straight line * road factor)
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -35,6 +37,25 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
     })
 
     const [showCancelModal, setShowCancelModal] = useState(false)
+    const [mapPicker, setMapPicker] = useState({ isOpen: false, field: null })
+
+    const handleMapConfirm = (data) => {
+        if (mapPicker.field === 'origin') {
+            setOffer(prev => ({
+                ...prev,
+                origin: data.address,
+                origin_lat: data.lat,
+                origin_lng: data.lng
+            }))
+        } else if (mapPicker.field === 'destination') {
+            setOffer(prev => ({
+                ...prev,
+                destination: data.address,
+                destination_lat: data.lat,
+                destination_lng: data.lng
+            }))
+        }
+    }
 
     // Date Constraints (Local Timezone Fix)
     const tzOffset = (new Date()).getTimezoneOffset() * 60000;
@@ -193,30 +214,54 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                             {/* ... (Existing Fields) ... */}
                             <div className="flex gap-3">
                                 <div className="w-1/2">
-                                    <CityAutocomplete
-                                        label="Origen"
-                                        placeholder="Ej: Córdoba"
-                                        value={offer.origin}
-                                        onChange={(val, coords) => setOffer(prev => ({
-                                            ...prev,
-                                            origin: val,
-                                            origin_lat: coords ? coords.lat : prev.origin_lat,
-                                            origin_lng: coords ? coords.lng : prev.origin_lng
-                                        }))}
-                                    />
+                                    <div className="flex items-end gap-1">
+                                        <div className="flex-1">
+                                            <CityAutocomplete
+                                                label="Origen"
+                                                placeholder="Ej: Córdoba"
+                                                value={offer.origin}
+                                                onChange={(val, coords) => setOffer(prev => ({
+                                                    ...prev,
+                                                    origin: val,
+                                                    origin_lat: coords ? coords.lat : prev.origin_lat,
+                                                    origin_lng: coords ? coords.lng : prev.origin_lng
+                                                }))}
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setMapPicker({ isOpen: true, field: 'origin' })}
+                                            className="mb-[2px] p-3 bg-slate-800 border border-slate-700 rounded-xl hover:bg-cyan-900/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 transition"
+                                            title="Seleccionar en Mapa"
+                                        >
+                                            <MapPin size={20} />
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="w-1/2">
-                                    <CityAutocomplete
-                                        label="Destino"
-                                        placeholder="Ej: Carlos Paz"
-                                        value={offer.destination}
-                                        onChange={(val, coords) => setOffer(prev => ({
-                                            ...prev,
-                                            destination: val,
-                                            destination_lat: coords ? coords.lat : prev.destination_lat,
-                                            destination_lng: coords ? coords.lng : prev.destination_lng
-                                        }))}
-                                    />
+                                    <div className="flex items-end gap-1">
+                                        <div className="flex-1">
+                                            <CityAutocomplete
+                                                label="Destino"
+                                                placeholder="Ej: Carlos Paz"
+                                                value={offer.destination}
+                                                onChange={(val, coords) => setOffer(prev => ({
+                                                    ...prev,
+                                                    destination: val,
+                                                    destination_lat: coords ? coords.lat : prev.destination_lat,
+                                                    destination_lng: coords ? coords.lng : prev.destination_lng
+                                                }))}
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setMapPicker({ isOpen: true, field: 'destination' })}
+                                            className="mb-[2px] p-3 bg-slate-800 border border-slate-700 rounded-xl hover:bg-cyan-900/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 transition"
+                                            title="Seleccionar en Mapa"
+                                        >
+                                            <MapPin size={20} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -304,79 +349,87 @@ const OfferRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish, initia
                             </div>
 
 
-                    <div className="bg-slate-800/50 rounded-xl p-3 flex flex-col justify-center border border-dashed border-slate-700">
-                        <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1 block">Consumo Estimado Total</label>
-                        <div className="flex items-center gap-2">
-                            <span className="text-3xl">⛽</span>
-                            <span className="text-2xl font-black text-white">
-                                {offer.fuel_liters ? Math.round(offer.fuel_liters) : '-'} L
-                            </span>
-                        </div>
-                        <div className="text-[10px] text-slate-500 mt-1">
-                            Referencia Total para el viaje ({offer.distance || '-'} km)
-                        </div>
-                    </div>
-
-                    {/* WOMEN ONLY TOGGLE */}
-                    {userIsFemale && (
-                        <div className="bg-pink-900/10 border border-pink-500/20 rounded-xl p-3 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-pink-500/20 p-2 rounded-lg">
-                                    🌸
+                            <div className="bg-slate-800/50 rounded-xl p-3 flex flex-col justify-center border border-dashed border-slate-700">
+                                <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1 block">Consumo Estimado Total</label>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-3xl">⛽</span>
+                                    <span className="text-2xl font-black text-white">
+                                        {offer.fuel_liters ? Math.round(offer.fuel_liters) : '-'} L
+                                    </span>
                                 </div>
-                                <div>
-                                    <p className="text-pink-200 text-xs font-bold uppercase">Solo Mujeres</p>
-                                    <p className="text-[10px] text-pink-400/70">Viaje exclusivo para pasajeras</p>
+                                <div className="text-[10px] text-slate-500 mt-1">
+                                    Referencia Total para el viaje ({offer.distance || '-'} km)
                                 </div>
                             </div>
-                            <label className="relative inline-flex items-center cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    className="sr-only peer"
-                                    checked={offer.women_only || false}
-                                    onChange={(e) => setOffer({ ...offer, women_only: e.target.checked })}
-                                />
-                                <div className="w-11 h-6 bg-slate-800 border border-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 peer-checked:border-pink-500"></div>
-                            </label>
-                        </div>
-                    )}
 
-                    {/* ACTIONS */}
-                    <div className="flex gap-3 pt-2">
-                        {/* Only show Cancel if initialData exists (Manage Mode) */}
-                        {initialData && (
-                            <button
-                                type="button"
-                                onClick={() => setShowCancelModal(true)}
-                                className="flex-1 bg-red-900/40 hover:bg-red-900/60 text-red-400 border border-red-900/50 font-bold py-4 rounded-xl shadow-lg transition transform active:scale-[0.98] text-sm uppercase tracking-widest"
-                            >
-                                Cancelar Viaje
-                            </button>
-                        )}
+                            {/* WOMEN ONLY TOGGLE */}
+                            {userIsFemale && (
+                                <div className="bg-pink-900/10 border border-pink-500/20 rounded-xl p-3 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-pink-500/20 p-2 rounded-lg">
+                                            🌸
+                                        </div>
+                                        <div>
+                                            <p className="text-pink-200 text-xs font-bold uppercase">Solo Mujeres</p>
+                                            <p className="text-[10px] text-pink-400/70">Viaje exclusivo para pasajeras</p>
+                                        </div>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only peer"
+                                            checked={offer.women_only || false}
+                                            onChange={(e) => setOffer({ ...offer, women_only: e.target.checked })}
+                                        />
+                                        <div className="w-11 h-6 bg-slate-800 border border-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 peer-checked:border-pink-500"></div>
+                                    </label>
+                                </div>
+                            )}
 
-                        <button
-                            type="submit"
-                            className="flex-[2] bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] text-sm uppercase tracking-widest"
-                        >
-                            {initialData ? 'GUARDAR CAMBIOS' : 'CONFIRMAR PUBLICACIÓN'}
-                        </button>
+                            {/* ACTIONS */}
+                            <div className="flex gap-3 pt-2">
+                                {/* Only show Cancel if initialData exists (Manage Mode) */}
+                                {initialData && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowCancelModal(true)}
+                                        className="flex-1 bg-red-900/40 hover:bg-red-900/60 text-red-400 border border-red-900/50 font-bold py-4 rounded-xl shadow-lg transition transform active:scale-[0.98] text-sm uppercase tracking-widest"
+                                    >
+                                        Cancelar Viaje
+                                    </button>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    className="flex-[2] bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black py-4 rounded-xl shadow-lg shadow-cyan-900/20 transition transform active:scale-[0.98] text-sm uppercase tracking-widest"
+                                >
+                                    {initialData ? 'GUARDAR CAMBIOS' : 'CONFIRMAR PUBLICACIÓN'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+
+                </div>
             </div>
 
-            </div>
-        </div>
-
-        <ConfirmationModal
-            isOpen={showCancelModal}
-            onClose={() => setShowCancelModal(false)}
-            onConfirm={handleCancelRide}
-            title="¿Cancelar este viaje?"
-            message="Esta acción cancelará todos los lugares reservados y notificará a los pasajeros."
-            warning={initialData ? getPenaltyWarning() : null}
-            confirmText="Sí, Cancelar Viaje"
-            isDanger={true}
-        />
+            <ConfirmationModal
+                isOpen={showCancelModal}
+                onClose={() => setShowCancelModal(false)}
+                onConfirm={handleCancelRide}
+                title="¿Cancelar este viaje?"
+                message="Esta acción cancelará todos los lugares reservados y notificará a los pasajeros."
+                warning={initialData ? getPenaltyWarning() : null}
+                confirmText="Sí, Cancelar Viaje"
+                isDanger={true}
+            />
+            <LocationPicker
+                isOpen={mapPicker.isOpen}
+                onClose={() => setMapPicker({ ...mapPicker, isOpen: false })}
+                onConfirm={handleMapConfirm}
+                initialAddress={mapPicker.field === 'origin' ? offer.origin : offer.destination}
+                initialLat={mapPicker.field === 'origin' ? offer.origin_lat : offer.destination_lat}
+                initialLng={mapPicker.field === 'origin' ? offer.origin_lng : offer.destination_lng}
+            />
         </>
     )
 }

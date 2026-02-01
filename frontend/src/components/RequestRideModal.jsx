@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import CityAutocomplete from './CityAutocomplete'
+import LocationPicker from './common/LocationPicker'
+import { MapPin } from 'lucide-react'
 
 const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) => {
     const [reqData, setReqData] = useState({
@@ -11,9 +13,28 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
         price: '',
         origin_lat: null,
         origin_lng: null,
-        destination_lat: null,
         destination_lng: null
     })
+
+    const [mapPicker, setMapPicker] = useState({ isOpen: false, field: null })
+
+    const handleMapConfirm = (data) => {
+        if (mapPicker.field === 'origin') {
+            setReqData(prev => ({
+                ...prev,
+                origin: data.address,
+                origin_lat: data.lat,
+                origin_lng: data.lng
+            }))
+        } else if (mapPicker.field === 'destination') {
+            setReqData(prev => ({
+                ...prev,
+                destination: data.address,
+                destination_lat: data.lat,
+                destination_lng: data.lng
+            }))
+        }
+    }
 
     // Date Constraints (Local Timezone Fix)
     const tzOffset = (new Date()).getTimezoneOffset() * 60000; // offset in milliseconds
@@ -75,30 +96,54 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
                     <form className="space-y-5" onSubmit={handleSubmit}>
                         <div className="flex gap-3">
                             <div className="w-1/2">
-                                <CityAutocomplete
-                                    label="Origen"
-                                    placeholder="Ej: Córdoba"
-                                    value={reqData.origin}
-                                    onChange={(val, coords) => setReqData(prev => ({
-                                        ...prev,
-                                        origin: val,
-                                        origin_lat: coords ? coords.lat : prev.origin_lat,
-                                        origin_lng: coords ? coords.lng : prev.origin_lng
-                                    }))}
-                                />
+                                <div className="flex items-end gap-1">
+                                    <div className="flex-1">
+                                        <CityAutocomplete
+                                            label="Origen"
+                                            placeholder="Ej: Córdoba"
+                                            value={reqData.origin}
+                                            onChange={(val, coords) => setReqData(prev => ({
+                                                ...prev,
+                                                origin: val,
+                                                origin_lat: coords ? coords.lat : prev.origin_lat,
+                                                origin_lng: coords ? coords.lng : prev.origin_lng
+                                            }))}
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setMapPicker({ isOpen: true, field: 'origin' })}
+                                        className="mb-[2px] p-3 bg-slate-800 border border-slate-700 rounded-xl hover:bg-pink-900/50 hover:border-pink-500/50 text-slate-400 hover:text-pink-400 transition"
+                                        title="Seleccionar en Mapa"
+                                    >
+                                        <MapPin size={20} />
+                                    </button>
+                                </div>
                             </div>
                             <div className="w-1/2">
-                                <CityAutocomplete
-                                    label="Destino"
-                                    placeholder="Ej: Carlos Paz"
-                                    value={reqData.destination}
-                                    onChange={(val, coords) => setReqData(prev => ({
-                                        ...prev,
-                                        destination: val,
-                                        destination_lat: coords ? coords.lat : prev.destination_lat,
-                                        destination_lng: coords ? coords.lng : prev.destination_lng
-                                    }))}
-                                />
+                                <div className="flex items-end gap-1">
+                                    <div className="flex-1">
+                                        <CityAutocomplete
+                                            label="Destino"
+                                            placeholder="Ej: Carlos Paz"
+                                            value={reqData.destination}
+                                            onChange={(val, coords) => setReqData(prev => ({
+                                                ...prev,
+                                                destination: val,
+                                                destination_lat: coords ? coords.lat : prev.destination_lat,
+                                                destination_lng: coords ? coords.lng : prev.destination_lng
+                                            }))}
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setMapPicker({ isOpen: true, field: 'destination' })}
+                                        className="mb-[2px] p-3 bg-slate-800 border border-slate-700 rounded-xl hover:bg-pink-900/50 hover:border-pink-500/50 text-slate-400 hover:text-pink-400 transition"
+                                        title="Seleccionar en Mapa"
+                                    >
+                                        <MapPin size={20} />
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -162,6 +207,15 @@ const RequestRideModal = ({ isOpen, onClose, authFetch, API_URL, onPublish }) =>
                 </div>
 
             </div >
+
+            <LocationPicker
+                isOpen={mapPicker.isOpen}
+                onClose={() => setMapPicker({ ...mapPicker, isOpen: false })}
+                onConfirm={handleMapConfirm}
+                initialAddress={mapPicker.field === 'origin' ? reqData.origin : reqData.destination}
+                initialLat={mapPicker.field === 'origin' ? reqData.origin_lat : reqData.destination_lat}
+                initialLng={mapPicker.field === 'origin' ? reqData.origin_lng : reqData.destination_lng}
+            />
         </div >
     )
 }

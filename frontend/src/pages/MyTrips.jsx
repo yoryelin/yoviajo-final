@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import TicketCard from '../components/TicketCard'
 import PassengerActionModal from '../components/PassengerActionModal'
+import ReviewModal from '../components/reviews/ReviewModal'
 import { API_URL } from '@config/api.js'
 
 const MyTrips = () => {
@@ -23,6 +24,9 @@ const MyTrips = () => {
     // New: Store bookings for specific rides (for Driver view)
     const [rideBookings, setRideBookings] = useState({})
     const [expandedBookingsId, setExpandedBookingsId] = useState(null)
+
+    // Review Modal State
+    const [reviewModal, setReviewModal] = useState({ isOpen: false, booking: null })
 
     const isDriver = user?.role === 'C'
 
@@ -209,6 +213,26 @@ const MyTrips = () => {
         }
     }
 
+    const handleReviewSubmit = async (reviewData) => {
+        try {
+            const res = await authFetch(`${API_URL}/reviews/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reviewData)
+            })
+            if (res.ok) {
+                alert("¡Gracias por tu calificación!")
+                fetchData() // Refresh to potentially hide the button or update status
+            } else {
+                const err = await res.json()
+                alert(`Error: ${err.detail}`)
+            }
+        } catch (e) {
+            console.error(e)
+            alert("Error al enviar reseña")
+        }
+    }
+
     return (
         <div className="w-full">
             <PassengerActionModal
@@ -217,6 +241,13 @@ const MyTrips = () => {
                 actionType={actionModal.type}
                 booking={actionModal.booking}
                 onConfirm={handleConfirmAction}
+            />
+
+            <ReviewModal
+                isOpen={reviewModal.isOpen}
+                onClose={() => setReviewModal({ ...reviewModal, isOpen: false })}
+                booking={reviewModal.booking}
+                onSubmit={handleReviewSubmit}
             />
 
             <div className="mb-8">
@@ -343,6 +374,7 @@ const MyTrips = () => {
                                                 isManagement={false}
                                                 onManage={(data) => handleActionRequest(data, 'cancel')}
                                                 onReport={(data) => handleActionRequest(data, 'report')}
+                                                onReview={(data) => setReviewModal({ isOpen: true, booking: data })}
                                                 user={user}
                                             />
                                         ))}
