@@ -19,6 +19,7 @@ import AdminBookings from './pages/admin/AdminBookings'
 import AdminLogs from './pages/admin/AdminLogs'
 import AdminLayout from './layouts/AdminLayout'
 import AdminVerifications from './pages/admin/AdminVerifications'
+import MarketingHub from './pages/admin/MarketingHub'
 // Force Frontend Deploy - Admin Route Update
 import { useAuth } from './context/AuthContext'
 
@@ -90,6 +91,7 @@ export default function App() {
           <Route path="users" element={<AdminUsers />} />
           <Route path="rides" element={<AdminRides />} />
           <Route path="bookings" element={<AdminBookings />} />
+          <Route path="marketing" element={<MarketingHub />} />
           <Route path="logs" element={<AdminLogs />} />
         </Route>
 

@@ -135,6 +135,7 @@ export default function AdminLayout() {
         { path: '/admin/verifications', label: '🛡️ Verificaciones' },
         { path: '/admin/users', label: '👥 Usuarios' },
         { path: '/admin/rides', label: '🚗 Viajes' },
+        { path: '/admin/marketing', label: '📢 Marketing' },
     ]
 
     return (
