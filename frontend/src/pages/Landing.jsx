@@ -137,42 +137,12 @@ export default function Landing() {
 
                 </div>
 
-                {/* ESPACIO DERECHA (Con la ilustración del mapa) */}
-                <div className="md:w-1/2 h-[400px] relative mt-12 md:mt-0 flex items-center justify-center">
-                    {/* Aquí simulamos el concepto de Waze/Maps */}
-                    <div className="w-full max-w-md aspect-square bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-white relative transform rotate-3 hover:rotate-0 transition duration-500">
-                        {/* Mapa Fake Interno */}
-                        <div className="absolute inset-0 bg-[#e5e7eb] opacity-50">
-                            <div className="absolute top-10 left-0 w-full h-2 bg-white rotate-12"></div>
-                            <div className="absolute bottom-20 left-0 w-full h-8 bg-white -rotate-6"></div>
-                            <div className="absolute top-0 right-20 w-4 h-full bg-white"></div>
-                        </div>
-
-                        {/* Ruta trazada */}
-                        <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                            <path d="M 80 300 Q 150 200 320 80" fill="none" stroke="#3b82f6" strokeWidth="6" strokeDasharray="10 5" className="animate-pulse" />
-                        </svg>
-
-                        {/* Pin Inicio */}
-                        <div className="absolute bottom-16 left-16 bg-white p-2 rounded-full shadow-lg z-10">
-                            <span className="text-3xl">🏠</span>
-                        </div>
-
-                        {/* Pin Fin */}
-                        <div className="absolute top-12 right-12 bg-white p-2 rounded-full shadow-lg z-10">
-                            <div className="text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
-                                    <path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
+                {/* IMAGEN / MAPA DERECHA (Ahora Animado) */}
+                <div className="md:w-1/2 relative mt-12 md:mt-0 flex justify-center">
+                    <HowItWorksDemo />
                 </div>
 
             </main>
-
-            {/* HOW IT WORKS SECTION */}
-            <HowItWorksDemo />
 
             {/* FOOTER */}
             <footer className="bg-white/90 border-t border-slate-200 py-6 text-center text-slate-400 text-xs font-medium z-10 backdrop-blur-md">
