@@ -20,10 +20,10 @@ export default function HowItWorksDemo() {
             icon: "👋",
             screen: (
                 <div className="p-6 flex flex-col items-center justify-center h-full space-y-4">
-                    <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center text-3xl mb-2">👤</div>
-                    <div className="h-2 bg-slate-100 w-32 rounded"></div>
-                    <div className="h-2 bg-slate-100 w-24 rounded"></div>
-                    <div className="h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl w-full flex items-center justify-center text-white font-bold shadow-lg mt-4 text-sm">
+                    <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center text-3xl mb-2">👤</div>
+                    <div className="h-2 bg-slate-800 w-32 rounded"></div>
+                    <div className="h-2 bg-slate-800 w-24 rounded"></div>
+                    <div className="h-10 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl w-full flex items-center justify-center text-white font-bold shadow-lg mt-4 text-sm border border-cyan-500/30">
                         Crear Cuenta
                     </div>
                 </div>
@@ -35,13 +35,13 @@ export default function HowItWorksDemo() {
             icon: "🔍",
             screen: (
                 <div className="p-4 space-y-3 pt-8">
-                    <div className="h-10 bg-slate-100 rounded-xl w-full animate-pulse flex items-center px-3 text-xs text-slate-400 border border-slate-200">
+                    <div className="h-10 bg-slate-800 rounded-xl w-full animate-pulse flex items-center px-3 text-xs text-slate-400 border border-slate-700">
                         <span className="mr-2">📍</span> Buenos Aires...
                     </div>
-                    <div className="h-10 bg-slate-100 rounded-xl w-full animate-pulse flex items-center px-3 text-xs text-slate-400 border border-slate-200">
+                    <div className="h-10 bg-slate-800 rounded-xl w-full animate-pulse flex items-center px-3 text-xs text-slate-400 border border-slate-700">
                         <span className="mr-2">🏁</span> Mar del Plata...
                     </div>
-                    <div className="h-12 bg-cyan-600 rounded-xl w-full flex items-center justify-center text-white font-bold shadow-lg shadow-cyan-900/20 mt-4">
+                    <div className="h-12 bg-cyan-700 rounded-xl w-full flex items-center justify-center text-white font-bold shadow-lg shadow-cyan-900/50 mt-4 border border-cyan-500/20">
                         Buscar
                     </div>
                 </div>
@@ -54,17 +54,17 @@ export default function HowItWorksDemo() {
             screen: (
                 <div className="p-3 space-y-3 pt-6">
                     {[1, 2].map(i => (
-                        <div key={i} className="bg-white border border-slate-200 p-3 rounded-xl shadow-sm flex gap-3 items-center transform transition-transform hover:scale-105">
-                            <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden relative">
-                                <div className="absolute inset-0 bg-slate-300 animate-pulse"></div>
+                        <div key={i} className="bg-slate-800 border border-slate-700 p-3 rounded-xl shadow-sm flex gap-3 items-center transform transition-transform hover:scale-105">
+                            <div className="w-10 h-10 rounded-full bg-slate-700 overflow-hidden relative">
+                                <div className="absolute inset-0 bg-slate-600 animate-pulse"></div>
                             </div>
                             <div className="flex-1">
-                                <div className="h-2.5 bg-slate-800 w-24 mb-1.5 rounded-full"></div>
+                                <div className="h-2.5 bg-slate-600 w-24 mb-1.5 rounded-full"></div>
                                 <div className="flex gap-1">
-                                    <div className="h-2 bg-yellow-400 w-12 rounded-full"></div>
+                                    <div className="h-2 bg-yellow-500 w-12 rounded-full"></div>
                                 </div>
                             </div>
-                            <div className="text-slate-300">➜</div>
+                            <div className="text-slate-500">➜</div>
                         </div>
                     ))}
                     {/* Finger tap simulation */}
@@ -85,12 +85,12 @@ export default function HowItWorksDemo() {
             icon: "🔒",
             screen: (
                 <div className="p-5 flex flex-col items-center justify-center h-full space-y-6">
-                    <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 w-full text-center">
-                        <div className="text-xs text-slate-400 uppercase font-bold mb-1">Total a Pagar</div>
-                        <div className="text-2xl font-black text-slate-800">$ 4.500</div>
+                    <div className="p-4 bg-slate-800/50 rounded-2xl border border-slate-700 w-full text-center">
+                        <div className="text-4xl mb-2">✅</div>
+                        <div className="text-sm text-slate-300 font-medium">Asiento Disponible</div>
                     </div>
-                    <div className="h-12 bg-green-500 rounded-xl w-full flex items-center justify-center text-white font-bold shadow-lg shadow-green-500/30 text-sm">
-                        💳 Pagar y Reservar
+                    <div className="h-12 bg-green-600 rounded-xl w-full flex items-center justify-center text-white font-bold shadow-lg shadow-green-900/40 text-sm border border-green-500/30">
+                        Confirmar Reserva
                     </div>
                 </div>
             )
@@ -109,7 +109,7 @@ export default function HowItWorksDemo() {
                         🚗💨
                     </motion.div>
                     <div className="font-bold text-xl mb-1">¡Todo listo!</div>
-                    <div className="text-[10px] text-slate-400 bg-slate-800 px-3 py-1 rounded-full">
+                    <div className="text-[10px] text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
                         Te uniste al grupo de WhatsApp
                     </div>
 
@@ -127,22 +127,22 @@ export default function HowItWorksDemo() {
             {/* PHONE SIMULATOR - Always Visible */}
             <div className="relative shrink-0 transform scale-90 md:scale-100 origin-center">
                 {/* Phone Frame */}
-                <div className="w-[260px] h-[520px] bg-slate-900 rounded-[2.5rem] border-[6px] border-slate-900 shadow-2xl relative overflow-hidden ring-4 ring-slate-200/50">
+                <div className="w-[260px] h-[520px] bg-slate-900 rounded-[2.5rem] border-[6px] border-slate-900 shadow-2xl relative overflow-hidden ring-4 ring-slate-800">
                     {/* Dynamic Screen Content */}
-                    <div className="absolute inset-0 bg-white overflow-hidden">
+                    <div className="absolute inset-0 bg-slate-900 overflow-hidden">
                         <div className="h-full w-full flex flex-col">
                             {/* Fake Header */}
-                            <div className="h-12 bg-slate-900 flex items-end pb-2 px-4 justify-between text-white/80 z-20">
-                                <div className="text-[10px] font-bold">9:41</div>
+                            <div className="h-12 bg-slate-900 flex items-end pb-2 px-4 justify-between text-white/80 z-20 border-b border-slate-800">
+                                <div className="text-[10px] font-bold text-slate-400">9:41</div>
                                 <div className="flex gap-1">
-                                    <div className="w-2 h-2 bg-white/20 rounded-full"></div>
-                                    <div className="w-2 h-2 bg-white/20 rounded-full"></div>
-                                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                                    <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+                                    <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                                 </div>
                             </div>
 
                             {/* Screen Area */}
-                            <div className="flex-1 relative bg-slate-50 flex flex-col">
+                            <div className="flex-1 relative bg-slate-900 flex flex-col">
                                 <AnimatePresence mode="wait">
                                     <motion.div
                                         key={step}
@@ -150,7 +150,7 @@ export default function HowItWorksDemo() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.3 }}
-                                        className="h-full w-full absolute inset-0"
+                                        className="h-full w-full absolute inset-0 text-slate-200"
                                     >
                                         {steps[step].screen}
                                     </motion.div>
@@ -158,10 +158,10 @@ export default function HowItWorksDemo() {
                             </div>
 
                             {/* Fake Bottom Nav */}
-                            <div className="h-14 bg-white border-t border-slate-100 flex justify-around items-center px-4 z-20">
-                                <div className="w-5 h-5 rounded-full bg-cyan-100"></div>
-                                <div className="w-5 h-5 rounded-full bg-slate-100"></div>
-                                <div className="w-5 h-5 rounded-full bg-slate-100"></div>
+                            <div className="h-14 bg-slate-900 border-t border-slate-800 flex justify-around items-center px-4 z-20">
+                                <div className="w-5 h-5 rounded-full bg-cyan-900/50 border border-cyan-500/30"></div>
+                                <div className="w-5 h-5 rounded-full bg-slate-800"></div>
+                                <div className="w-5 h-5 rounded-full bg-slate-800"></div>
                             </div>
                         </div>
                     </div>
