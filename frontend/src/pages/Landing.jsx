@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import AnimatedLogo from '../components/AnimatedLogo';
 import { useAuth } from '../context/AuthContext';
+import HowItWorksDemo from '../components/landing/HowItWorksDemo';
 
 export default function Landing() {
     const [showHelp, setShowHelp] = useState(false);
@@ -169,6 +170,9 @@ export default function Landing() {
                 </div>
 
             </main>
+
+            {/* HOW IT WORKS SECTION */}
+            <HowItWorksDemo />
 
             {/* FOOTER */}
             <footer className="bg-white/90 border-t border-slate-200 py-6 text-center text-slate-400 text-xs font-medium z-10 backdrop-blur-md">
