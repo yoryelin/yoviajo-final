@@ -110,7 +110,7 @@ export default function HowItWorksDemo() {
                     </motion.div>
                     <div className="font-bold text-xl mb-1">¡Todo listo!</div>
                     <div className="text-[10px] text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
-                        Te uniste al grupo de WhatsApp
+                        Contacta al conductor
                     </div>
 
                     {/* Confetti */}
