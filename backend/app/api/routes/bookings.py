@@ -104,21 +104,26 @@ def get_bookings(db: Session = Depends(get_db)):
 
 @router.get("/me", response_model=List[BookingResponse])
 def get_my_bookings(
+    history: bool = False,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """
     Obtener mis reservas. Requiere autenticación.
+    Param 'history=True' retorna reservas pasadas.
     """
     try:
         # Mostrar reservas de viajes futuros o recientes (últimas 24hs)
         from datetime import timedelta
         limit_date = datetime.now() - timedelta(hours=24)
         
-        bookings = db.query(Booking).join(Ride).filter(
-            Booking.passenger_id == current_user.id,
-            Ride.departure_time >= limit_date
-        ).all()
+        query = db.query(Booking).join(Ride).filter(Booking.passenger_id == current_user.id)
+        
+        if history:
+             bookings = query.filter(Ride.departure_time < limit_date).order_by(Ride.departure_time.desc()).all()
+        else:
+             bookings = query.filter(Ride.departure_time >= limit_date).order_by(Ride.departure_time.asc()).all()
+
         result = []
         for booking in bookings:
             try:

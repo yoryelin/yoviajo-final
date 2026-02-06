@@ -250,20 +250,27 @@ def cancel_ride(
 
 @router.get("/me", response_model=List[RideResponse])
 def get_my_rides(
+    history: bool = False,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """
     Obtener mis viajes publicados. Requiere autenticación.
+    Param 'history=True' retorna viajes pasados (más de 24hs).
     """
     try:
-        # Mostrar viajes futuros o recientes (últimas 24hs)
-        # Todo lo anterior a ayer queda oculto (Archivado)
+        # Mostrar viajes futuros o recientes (últimas 24hs) vs Historial
         limit_date = datetime.now() - timedelta(hours=24)
-        rides = db.query(Ride).filter(
-            Ride.driver_id == current_user.id,
-            cast(Ride.departure_time, TIMESTAMP) >= limit_date
-        ).all()
+        
+        query = db.query(Ride).filter(Ride.driver_id == current_user.id)
+        
+        if history:
+            # Historial: Viajes antiguos
+            rides = query.filter(cast(Ride.departure_time, TIMESTAMP) < limit_date).order_by(Ride.departure_time.desc()).all()
+        else:
+            # Activos: Futuros o recientes
+            rides = query.filter(cast(Ride.departure_time, TIMESTAMP) >= limit_date).order_by(Ride.departure_time.asc()).all()
+
         result = []
         for ride in rides:
             try:

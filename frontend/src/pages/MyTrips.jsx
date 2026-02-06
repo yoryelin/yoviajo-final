@@ -9,9 +9,12 @@ import { API_URL } from '@config/api.js'
 const MyTrips = () => {
     const { user, authFetch } = useAuth()
     const [myRides, setMyRides] = useState([])
+    const [myHistoryRides, setMyHistoryRides] = useState([]) // New: History
     const [myBookings, setMyBookings] = useState([])
+    const [myHistoryBookings, setMyHistoryBookings] = useState([]) // New: History
     const [myRequests, setMyRequests] = useState([])
     const [loading, setLoading] = useState(true)
+    const [viewMode, setViewMode] = useState('active') // 'active' | 'history'
 
     const [actionModal, setActionModal] = useState({
         isOpen: false,
@@ -66,35 +69,34 @@ const MyTrips = () => {
         setLoading(true)
         console.log("MyTrips: Fetching data...", { isDriver, user })
         try {
-            // 1. Fetch Matches (Coincidencias)
+            // 1. Fetch Matches (Coincidencias) - Only relevant for active view usually
             const resMatches = await authFetch(`${API_URL}/matches`)
             if (resMatches.ok) {
                 const data = await resMatches.json()
-                console.log("MyTrips: Matches fetched:", data)
                 setMatches(data)
             }
 
             if (isDriver) {
-                const res = await authFetch(`${API_URL}/rides/me`)
-                if (res.ok) {
-                    const data = await res.json()
-                    console.log("MyTrips: Rides fetched:", data)
-                    setMyRides(data)
-                } else {
-                    console.error("MyTrips: Error fetching rides", res.status)
-                }
+                // Fetch Active
+                const res = await authFetch(`${API_URL}/rides/me?history=false`)
+                if (res.ok) setMyRides(await res.json())
+
+                // Fetch History
+                const resHist = await authFetch(`${API_URL}/rides/me?history=true`)
+                if (resHist.ok) setMyHistoryRides(await resHist.json())
+
             } else {
-                const resBookings = await authFetch(`${API_URL}/bookings/me`)
-                if (resBookings.ok) {
-                    const data = await resBookings.json()
-                    console.log("MyTrips: Bookings fetched:", data)
-                    setMyBookings(data)
-                }
+                // Fetch Active Bookings
+                const resBookings = await authFetch(`${API_URL}/bookings/me?history=false`)
+                if (resBookings.ok) setMyBookings(await resBookings.json())
+
+                // Fetch History Bookings
+                const resHistBookings = await authFetch(`${API_URL}/bookings/me?history=true`)
+                if (resHistBookings.ok) setMyHistoryBookings(await resHistBookings.json())
 
                 const resRequests = await authFetch(`${API_URL}/requests/me`)
                 if (resRequests.ok) {
                     const data = await resRequests.json()
-                    console.log("MyTrips: Requests fetched:", data)
                     setMyRequests(data)
                 }
             }
@@ -246,46 +248,10 @@ const MyTrips = () => {
         }
     }
 
-    // Helper: Filter old items (24h rule)
-    const shouldShowItem = (item) => {
-        // If cancelled by system/user, maybe still show but marked? 
-        // User asked to REMOVE active ones if > 24h. 
-        // We will filter out anything that is clearly past execution time + 24h.
-
-        let targetTime = null;
-        if (item.departure_time) targetTime = item.departure_time; // Rides / Booking.ride
-        else if (item.ride?.departure_time) targetTime = item.ride.departure_time; // Booking with relation
-        else if (item.time_window_start) targetTime = item.time_window_start; // Requests (using start of window)
-
-        if (!targetTime) return true; // Fallback
-
-        // Check format. If 'HH:MM' (generic time), we can't filter by date properly unless we have the date field too.
-        // Assuming ISO string or date + time. 
-        // Rides have 'departure_time' as ISO8601 usually.
-        // Requests have 'date' and 'time_window_start'.
-
-        let dateObj = new Date(targetTime);
-        if (isNaN(dateObj.getTime())) {
-            // It might be split (Requests)
-            if (item.date && item.time_window_start) {
-                dateObj = new Date(`${item.date}T${item.time_window_start}`);
-            } else {
-                return true;
-            }
-        }
-
-        const now = new Date();
-        const diffHours = (now - dateObj) / (1000 * 60 * 60);
-
-        // If diffHours > 24 (24 hours passed since departure), hide it.
-        if (diffHours > 24) return false;
-
-        return true;
-    }
-
-    const visibleRides = myRides.filter(shouldShowItem);
-    const visibleBookings = myBookings.filter(shouldShowItem);
-    const visibleRequests = myRequests.filter(shouldShowItem);
+    // Select data based on view mode
+    const displayRides = viewMode === 'active' ? myRides : myHistoryRides
+    const displayBookings = viewMode === 'active' ? myBookings : myHistoryBookings
+    // Requests are usually only active, history requests might be implemented later or just ignored for now
 
     return (
         <div className="w-full">
@@ -313,12 +279,30 @@ const MyTrips = () => {
                 initialData={offerModal.rideData}
             />
 
-            <div className="mb-8">
-                <h2 className="text-3xl font-black text-white flex items-center gap-3">
-                    <span className="text-4xl">{isDriver ? '🚖' : '🎒'}</span>
-                    Mis Viajes
-                </h2>
-                <p className="text-slate-400 mt-2">Gestiona tus actividad y revisa el historial.</p>
+            <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 className="text-3xl font-black text-white flex items-center gap-3">
+                        <span className="text-4xl">{isDriver ? '🚖' : '🎒'}</span>
+                        Mis Viajes
+                    </h2>
+                    <p className="text-slate-400 mt-2">Gestiona tus actividad y revisa el historial.</p>
+                </div>
+
+                {/* View Mode Toggles */}
+                <div className="bg-slate-900/50 p-1 rounded-xl flex items-center border border-slate-700/50 self-start md:self-auto">
+                    <button
+                        onClick={() => setViewMode('active')}
+                        className={`px-4 py-2 rounded-lg text-sm font-bold transition ${viewMode === 'active' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        🚀 Activos
+                    </button>
+                    <button
+                        onClick={() => setViewMode('history')}
+                        className={`px-4 py-2 rounded-lg text-sm font-bold transition ${viewMode === 'history' ? 'bg-slate-700 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        📜 Historial
+                    </button>
+                </div>
             </div>
 
             {loading ? (
@@ -331,83 +315,93 @@ const MyTrips = () => {
                     {isDriver && (
                         <section>
                             <h3 className="text-xl font-bold text-cyan-400 mb-6 flex items-center gap-2">
-                                <span>📢</span> Mis Ofertas Publicadas
+                                <span>📢</span> {viewMode === 'active' ? 'Mis Ofertas Publicadas' : 'Historial de Ofertas'}
                             </h3>
-                            {visibleRides.length === 0 ? (
+                            {displayRides.length === 0 ? (
                                 <div className="text-center p-8 border border-dashed border-slate-800 rounded-xl bg-slate-900/50">
-                                    <p className="text-slate-500">No tienes viajes activos recientes.</p>
+                                    <p className="text-slate-500">
+                                        {viewMode === 'active' ? 'No tienes viajes activos recientes.' : 'No tienes viajes pasados en el historial.'}
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="grid gap-6 md:grid-cols-2">
-                                    {visibleRides.map(ride => (
+                                    {displayRides.map(ride => (
                                         <div key={ride.id} className="relative group">
-                                            {ride.matches_count > 0 && ride.status === 'active' && (
+                                            {ride.matches_count > 0 && ride.status === 'active' && viewMode === 'active' && (
                                                 <div className="absolute -top-3 -right-3 z-20 bg-gradient-to-r from-yellow-400 to-orange-500 text-slate-900 text-xs font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
                                                     🔥 {ride.matches_count} pas. esperando
                                                 </div>
                                             )}
-                                            <TicketCard
-                                                type="ride"
-                                                data={ride}
-                                                isManagement={true}
-                                                manageAction={() => handleEditRide(ride)}
-                                                user={user}
-                                            />
-                                            {/* MATCHES DRAWER (DRIVER) */}
-                                            {ride.matches_count > 0 && (
-                                                <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
-                                                    <button
-                                                        onClick={() => setExpandedTicketId(expandedTicketId === ride.id ? null : ride.id)}
-                                                        className="w-full text-center text-xs font-bold text-amber-400 uppercase tracking-widest hover:text-amber-300 transition mb-4 pb-2 border-b border-slate-700"
-                                                    >
-                                                        {expandedTicketId === ride.id ? '▼ Ocultar Candidatos' : `▶ Ver ${ride.matches_count} Pasajero(s)`}
-                                                    </button>
+                                            <div className={`${viewMode === 'history' ? 'opacity-75 grayscale hover:grayscale-0 transition' : ''}`}>
+                                                <TicketCard
+                                                    type="ride"
+                                                    data={ride}
+                                                    isManagement={viewMode === 'active'} // Only editable if active
+                                                    manageAction={() => handleEditRide(ride)}
+                                                    user={user}
+                                                />
+                                            </div>
 
-                                                    {expandedTicketId === ride.id && (
-                                                        <div className="space-y-4 animate-fadeIn">
-                                                            {matches.filter(m => m.ride_id === ride.id).map((match, idx) => (
-                                                                <div key={idx} className="scale-95 origin-top">
-                                                                    <TicketCard
-                                                                        type="match_found"
-                                                                        data={match}
-                                                                        user={user}
-                                                                        onMatch={handleMatchAction}
-                                                                        isDriver={true}
-                                                                    />
+                                            {/* ACTIVE ONLY FEATURES */}
+                                            {viewMode === 'active' && (
+                                                <>
+                                                    {/* MATCHES DRAWER (DRIVER) */}
+                                                    {ride.matches_count > 0 && (
+                                                        <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
+                                                            <button
+                                                                onClick={() => setExpandedTicketId(expandedTicketId === ride.id ? null : ride.id)}
+                                                                className="w-full text-center text-xs font-bold text-amber-400 uppercase tracking-widest hover:text-amber-300 transition mb-4 pb-2 border-b border-slate-700"
+                                                            >
+                                                                {expandedTicketId === ride.id ? '▼ Ocultar Candidatos' : `▶ Ver ${ride.matches_count} Pasajero(s)`}
+                                                            </button>
+
+                                                            {expandedTicketId === ride.id && (
+                                                                <div className="space-y-4 animate-fadeIn">
+                                                                    {matches.filter(m => m.ride_id === ride.id).map((match, idx) => (
+                                                                        <div key={idx} className="scale-95 origin-top">
+                                                                            <TicketCard
+                                                                                type="match_found"
+                                                                                data={match}
+                                                                                user={user}
+                                                                                onMatch={handleMatchAction}
+                                                                                isDriver={true}
+                                                                            />
+                                                                        </div>
+                                                                    ))}
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-
-                                            {/* BOOKINGS DRAWER (DRIVER - Paid Passengers) */}
-                                            {ride.bookings_count > 0 && (
-                                                <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
-                                                    <button
-                                                        onClick={() => toggleBookings(ride.id)}
-                                                        className="w-full text-center text-xs font-bold text-green-400 uppercase tracking-widest hover:text-green-300 transition mb-4 pb-2 border-b border-slate-700"
-                                                    >
-                                                        {expandedBookingsId === ride.id ? '▼ Ocultar Reservas' : `▶ Ver ${ride.bookings_count} Reserva(s) Confirmada(s)`}
-                                                    </button>
-
-                                                    {expandedBookingsId === ride.id && (
-                                                        <div className="space-y-4 animate-fadeIn">
-                                                            {rideBookings[ride.id] ? rideBookings[ride.id].map((booking, idx) => (
-                                                                <div key={idx} className="scale-95 origin-top">
-                                                                    <TicketCard
-                                                                        type="booking"
-                                                                        data={booking}
-                                                                        user={user}
-                                                                        isDriver={true}
-                                                                    />
-                                                                </div>
-                                                            )) : (
-                                                                <div className="text-center py-4 text-slate-500 text-xs">Cargando...</div>
                                                             )}
                                                         </div>
                                                     )}
-                                                </div>
+
+                                                    {/* BOOKINGS DRAWER (DRIVER - Paid Passengers) */}
+                                                    {ride.bookings_count > 0 && (
+                                                        <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
+                                                            <button
+                                                                onClick={() => toggleBookings(ride.id)}
+                                                                className="w-full text-center text-xs font-bold text-green-400 uppercase tracking-widest hover:text-green-300 transition mb-4 pb-2 border-b border-slate-700"
+                                                            >
+                                                                {expandedBookingsId === ride.id ? '▼ Ocultar Reservas' : `▶ Ver ${ride.bookings_count} Reserva(s) Confirmada(s)`}
+                                                            </button>
+
+                                                            {expandedBookingsId === ride.id && (
+                                                                <div className="space-y-4 animate-fadeIn">
+                                                                    {rideBookings[ride.id] ? rideBookings[ride.id].map((booking, idx) => (
+                                                                        <div key={idx} className="scale-95 origin-top">
+                                                                            <TicketCard
+                                                                                type="booking"
+                                                                                data={booking}
+                                                                                user={user}
+                                                                                isDriver={true}
+                                                                            />
+                                                                        </div>
+                                                                    )) : (
+                                                                        <div className="text-center py-4 text-slate-500 text-xs">Cargando...</div>
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </>
                                             )}
                                         </div>
                                     ))}
@@ -421,85 +415,91 @@ const MyTrips = () => {
                         <>
                             <section>
                                 <h3 className="text-xl font-bold text-pink-400 mb-6 flex items-center gap-2">
-                                    <span>🎟️</span> Mis Reservas
+                                    <span>🎟️</span> {viewMode === 'active' ? 'Mis Reservas' : 'Historial de Viajes'}
                                 </h3>
-                                {visibleBookings.length === 0 ? (
+                                {displayBookings.length === 0 ? (
                                     <div className="text-center p-8 border border-dashed border-slate-800 rounded-xl bg-slate-900/50">
-                                        <p className="text-slate-500">No tienes reservas activas recientes.</p>
+                                        <p className="text-slate-500">
+                                            {viewMode === 'active' ? 'No tienes reservas activas recientes.' : 'No tienes viajes realizados aún.'}
+                                        </p>
                                     </div>
                                 ) : (
                                     <div className="grid gap-6 md:grid-cols-2">
-                                        {visibleBookings.map(booking => (
-                                            <TicketCard
-                                                key={booking.id}
-                                                type="booking"
-                                                data={booking}
-                                                isManagement={false}
-                                                onManage={(data) => handleActionRequest(data, 'cancel')}
-                                                onReport={(data) => handleActionRequest(data, 'report')}
-                                                onReview={(data) => setReviewModal({ isOpen: true, booking: data })}
-                                                user={user}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </section>
-
-                            <section>
-                                <h3 className="text-xl font-bold text-purple-400 mb-6 flex items-center gap-2">
-                                    <span>🙋‍♂️</span> Mis Solicitudes
-                                </h3>
-                                {visibleRequests.length === 0 ? (
-                                    <div className="text-center p-8 border border-dashed border-slate-800 rounded-xl bg-slate-900/50">
-                                        <p className="text-slate-500">No tienes solicitudes pendientes recientes.</p>
-                                    </div>
-                                ) : (
-                                    <div className="grid gap-6 md:grid-cols-2">
-                                        {visibleRequests.map(req => (
-                                            <div key={req.id} className="relative">
-                                                {req.matches_count > 0 && (
-                                                    <div className="absolute -top-3 -right-3 z-20 bg-gradient-to-r from-emerald-400 to-green-500 text-slate-900 text-xs font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
-                                                        ✨ {req.matches_count} coincidencias
-                                                    </div>
-                                                )}
+                                        {displayBookings.map(booking => (
+                                            <div key={booking.id} className={`${viewMode === 'history' ? 'opacity-75 grayscale hover:grayscale-0 transition' : ''}`}>
                                                 <TicketCard
-                                                    type="request"
-                                                    data={req}
-                                                    isManagement={true}
+                                                    type="booking"
+                                                    data={booking}
+                                                    isManagement={viewMode === 'active'} // Can't manage past bookings (except review)
+                                                    onManage={(data) => handleActionRequest(data, 'cancel')}
+                                                    onReport={(data) => handleActionRequest(data, 'report')}
+                                                    onReview={(data) => setReviewModal({ isOpen: true, booking: data })}
                                                     user={user}
                                                 />
-                                                {/* MATCHES DRAWER (PASSENGER) */}
-                                                {req.matches_count > 0 && (
-                                                    <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
-                                                        <button
-                                                            onClick={() => setExpandedTicketId(expandedTicketId === req.id ? null : req.id)}
-                                                            className="w-full text-center text-xs font-bold text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition mb-4 pb-2 border-b border-slate-700"
-                                                        >
-                                                            {expandedTicketId === req.id ? '▼ Ocultar Coincidencias' : `▶ Ver ${req.matches_count} Coincidencia(s)`}
-                                                        </button>
-
-                                                        {expandedTicketId === req.id && (
-                                                            <div className="space-y-4 animate-fadeIn">
-                                                                {matches.filter(m => m.request_id === req.id).map((match, idx) => (
-                                                                    <div key={idx} className="scale-95 origin-top">
-                                                                        <TicketCard
-                                                                            type="match_found"
-                                                                            data={match}
-                                                                            user={user}
-                                                                            onMatch={handleMatchAction}
-                                                                            isDriver={false}
-                                                                        />
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
                                             </div>
                                         ))}
                                     </div>
                                 )}
                             </section>
+
+                            {/* REQUESTS - Only in Active Mode */}
+                            {viewMode === 'active' && (
+                                <section>
+                                    <h3 className="text-xl font-bold text-purple-400 mb-6 flex items-center gap-2">
+                                        <span>🙋‍♂️</span> Mis Solicitudes
+                                    </h3>
+                                    {myRequests.length === 0 ? (
+                                        <div className="text-center p-8 border border-dashed border-slate-800 rounded-xl bg-slate-900/50">
+                                            <p className="text-slate-500">No tienes solicitudes pendientes recientes.</p>
+                                        </div>
+                                    ) : (
+                                        <div className="grid gap-6 md:grid-cols-2">
+                                            {myRequests.map(req => (
+                                                <div key={req.id} className="relative">
+                                                    {req.matches_count > 0 && (
+                                                        <div className="absolute -top-3 -right-3 z-20 bg-gradient-to-r from-emerald-400 to-green-500 text-slate-900 text-xs font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
+                                                            ✨ {req.matches_count} coincidencias
+                                                        </div>
+                                                    )}
+                                                    <TicketCard
+                                                        type="request"
+                                                        data={req}
+                                                        isManagement={true}
+                                                        user={user}
+                                                    />
+                                                    {/* MATCHES DRAWER (PASSENGER) */}
+                                                    {req.matches_count > 0 && (
+                                                        <div className="bg-slate-900/80 rounded-xl p-4 mt-2 mb-6 border border-slate-700/50">
+                                                            <button
+                                                                onClick={() => setExpandedTicketId(expandedTicketId === req.id ? null : req.id)}
+                                                                className="w-full text-center text-xs font-bold text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition mb-4 pb-2 border-b border-slate-700"
+                                                            >
+                                                                {expandedTicketId === req.id ? '▼ Ocultar Coincidencias' : `▶ Ver ${req.matches_count} Coincidencia(s)`}
+                                                            </button>
+
+                                                            {expandedTicketId === req.id && (
+                                                                <div className="space-y-4 animate-fadeIn">
+                                                                    {matches.filter(m => m.request_id === req.id).map((match, idx) => (
+                                                                        <div key={idx} className="scale-95 origin-top">
+                                                                            <TicketCard
+                                                                                type="match_found"
+                                                                                data={match}
+                                                                                user={user}
+                                                                                onMatch={handleMatchAction}
+                                                                                isDriver={false}
+                                                                            />
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </section>
+                            )}
                         </>
                     )}
                 </div>
