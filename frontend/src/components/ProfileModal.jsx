@@ -267,8 +267,25 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
                         <input type="file" ref={fileInputRef} onChange={handlePhotoSelect} className="hidden" accept="image/*" />
                     </div>
                     <div>
-                        <h3 className="text-2xl font-black text-white leading-none">{formData.name || 'Usuario'}</h3>
-                        <p className="text-sm text-cyan-400 font-bold uppercase tracking-wider mt-1 mb-2">{user?.role === 'C' ? 'Conductor' : 'Pasajero'}</p>
+                        <h3 className="text-2xl font-black text-white leading-none flex items-center gap-2">
+                            {formData.name || 'Usuario'}
+                            {user?.verification_status === 'verified' && (
+                                <span className="text-sm text-green-400" title="Identidad Verificada">✅</span>
+                            )}
+                        </h3>
+                        <div className="flex flex-col gap-1 mt-1 mb-2">
+                            <p className="text-sm text-cyan-400 font-bold uppercase tracking-wider">{user?.role === 'C' ? 'Conductor' : 'Pasajero'}</p>
+
+                            {/* Verification Badge */}
+                            <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full w-fit ${user.verification_status === 'verified' ? 'bg-green-900/50 text-green-400 border border-green-500/30' :
+                                user.verification_status === 'pending' ? 'bg-yellow-900/50 text-yellow-400 border border-yellow-500/30' :
+                                    'bg-red-900/50 text-red-400 border border-red-500/30'
+                                }`}>
+                                {user.verification_status === 'verified' ? 'Identidad Verificada' :
+                                    user.verification_status === 'pending' ? 'Verificación Pendiente' :
+                                        'No Verificado'}
+                            </span>
+                        </div>
 
                         {/* Stats Badges */}
                         <div className="flex gap-2">
@@ -301,6 +318,68 @@ export default function ProfileModal({ isOpen, onClose, user, API_URL, authFetch
 
                         {activeTab === 'general' && (
                             <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                                {/* VERIFICATION ALERT & UPLOAD */}
+                                {user.verification_status !== 'verified' && (
+                                    <div className={`p-4 rounded-xl border ${user.verification_status === 'pending' ? 'bg-yellow-900/10 border-yellow-500/30' : 'bg-red-900/10 border-red-500/30'}`}>
+                                        <h4 className={`text-sm font-bold uppercase mb-2 ${user.verification_status === 'pending' ? 'text-yellow-400' : 'text-red-400'}`}>
+                                            {user.verification_status === 'pending' ? '⏳ Verificación en Revisión' : '⚠️ Identidad No Verificada'}
+                                        </h4>
+                                        <p className="text-xs text-slate-400 mb-3">
+                                            {user.verification_status === 'pending'
+                                                ? 'Tu documento está siendo revisado por un administrador. Te notificaremos cuando se apruebe.'
+                                                : 'Para garantizar la seguridad de la comunidad, debes subir una foto de tu DNI o Licencia.'}
+                                        </p>
+
+                                        {user.verification_status !== 'pending' && (
+                                            <div className="relative">
+                                                <input
+                                                    type="file"
+                                                    id="verification-doc"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    onChange={async (e) => {
+                                                        const file = e.target.files[0]
+                                                        if (!file) return
+
+                                                        if (!confirm("¿Deseas subir este documento para verificar tu identidad?")) return
+
+                                                        try {
+                                                            setLoading(true)
+                                                            const docData = new FormData()
+                                                            docData.append('file', file)
+                                                            const token = localStorage.getItem('token')
+
+                                                            const res = await fetch(`${API_URL}/users/verify`, {
+                                                                method: 'POST',
+                                                                headers: { 'Authorization': `Bearer ${token}` },
+                                                                body: docData
+                                                            })
+
+                                                            if (res.ok) {
+                                                                alert("✅ Documento enviado correctamente. Aguarda la aprobación.")
+                                                                onUpdate({ ...user, verification_status: 'pending' }) // Optimistic update
+                                                            } else {
+                                                                const err = await res.json()
+                                                                throw new Error(err.detail || "Error al subir documento")
+                                                            }
+                                                        } catch (error) {
+                                                            alert(`❌ Error: ${error.message}`)
+                                                        } finally {
+                                                            setLoading(false)
+                                                        }
+                                                    }}
+                                                />
+                                                <label
+                                                    htmlFor="verification-doc"
+                                                    className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-xs font-bold uppercase tracking-widest rounded-lg cursor-pointer transition shadow-lg shadow-red-900/20"
+                                                >
+                                                    📸 Subir Documento
+                                                </label>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
                                 <div>
                                     <label className={labelClass}>Nombre Completo</label>
                                     <input name="name" value={formData.name} onChange={handleChange} onBlur={handleBlur} className={getInputClass()} placeholder="Tu nombre real" />

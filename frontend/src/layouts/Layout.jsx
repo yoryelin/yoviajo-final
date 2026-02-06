@@ -1,14 +1,34 @@
 // import { useNavigate } from 'react-router-dom' // Unused
 
 import { useAuth } from '../context/AuthContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ProfileModal from '../components/ProfileModal'
+import VerificationNagModal from '../components/VerificationNagModal'
 
 const Layout = ({ children }) => {
     const { user, logout } = useAuth()
     // const navigate = useNavigate() // Unused
 
     const [showProfileModal, setShowProfileModal] = useState(false)
+    const [showNagModal, setShowNagModal] = useState(false)
+
+    useEffect(() => {
+        // Show Nag Modal if unverified and not dismissed in this session
+        if (user && user.verification_status !== 'verified' && user.verification_status !== 'pending') {
+            const hasSeenNag = sessionStorage.getItem('verification_nag_dismissed')
+            if (!hasSeenNag) {
+                // Delay slightly for better UX
+                const timer = setTimeout(() => setShowNagModal(true), 1500)
+                return () => clearTimeout(timer)
+            }
+        }
+    }, [user])
+
+    const handleDismissNag = () => {
+        setShowNagModal(false)
+        sessionStorage.setItem('verification_nag_dismissed', 'true')
+    }
+
     const isDriver = user?.role === 'C'
     const RAW_URL = import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar'
     const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
@@ -57,7 +77,7 @@ const Layout = ({ children }) => {
                             <div className="flex items-center gap-3 bg-slate-900/50 border border-slate-700/50 px-4 py-1.5 rounded-full hover:border-slate-600 transition cursor-default">
                                 <div
                                     className="flex items-center space-x-3 bg-slate-800/50 hover:bg-slate-700/50 p-2 rounded-xl border border-slate-700/50 transition cursor-pointer"
-                                    onClick={() => window.location.href = '/profile'}
+                                    onClick={() => setShowProfileModal(true)}
                                 >
                                     <div className={`w-10 h-10 rounded-full bg-gradient-to-br p-[2px] ${isDriver ? 'from-cyan-400 to-blue-600' : 'from-pink-400 to-rose-600'}`}>
                                         <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
@@ -87,6 +107,31 @@ const Layout = ({ children }) => {
                     )}
                 </div>
             </header >
+
+            {/* --- VERIFICATION BANNER --- */}
+            {user && user.verification_status !== 'verified' && user.verification_status !== 'pending' && (
+                <div className="bg-red-900/50 border-b border-red-500/30 px-4 py-2 flex items-center justify-between backdrop-blur-md sticky top-[80px] z-30 animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-center gap-3">
+                        <span className="text-xl">⚠️</span>
+                        <p className="text-xs md:text-sm font-bold text-white">
+                            Tu identidad no está verificada. <span className="opacity-75 font-normal hidden md:inline">Sube tu DNI para operar con seguridad.</span>
+                        </p>
+                    </div>
+                    <button
+                        onClick={() => setShowProfileModal(true)}
+                        className="bg-red-600 hover:bg-red-500 text-white text-[10px] font-bold uppercase py-1 px-3 rounded-full transition shadow-lg shadow-red-900/40 tracking-wider whitespace-nowrap"
+                    >
+                        Verificar Ahora
+                    </button>
+                </div>
+            )}
+            {user && user.verification_status === 'pending' && (
+                <div className="bg-yellow-900/50 border-b border-yellow-500/30 px-4 py-1 flex items-center justify-center backdrop-blur-md sticky top-[80px] z-30">
+                    <p className="text-[10px] font-bold text-yellow-200 flex items-center gap-2">
+                        ⏳ Tu verificación está en proceso de revisión.
+                    </p>
+                </div>
+            )}
 
             {/* Main Content Injection */}
             <main className="max-w-4xl mx-auto px-4 py-8 mb-auto">
@@ -123,6 +168,15 @@ const Layout = ({ children }) => {
                     })
                 }}
                 onUpdate={() => window.location.reload()}
+            />
+
+            <VerificationNagModal
+                isOpen={showNagModal}
+                onClose={handleDismissNag}
+                onVerify={() => {
+                    setShowNagModal(false)
+                    setShowProfileModal(true) // Switch to Profile Modal for upload
+                }}
             />
         </div >
     )
