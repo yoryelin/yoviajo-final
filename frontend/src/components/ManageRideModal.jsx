@@ -99,7 +99,7 @@ export default function ManageRideModal({ isOpen, onClose, ride, authFetch, API_
                                             </span>
                                         </div>
                                     </div>
-                                    {booking.passenger_phone ? (
+                                    {booking.passenger_phone && booking.status === 'confirmed' ? (
                                         <a
                                             href={`https://wa.me/${booking.passenger_phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${booking.passenger_name.split(' ')[0]}, soy ${ride.driver_name || 'tu conductor'}. Vi tu reserva para el viaje a ${ride.destination}. ¿Todo listo? 🚗`)}`}
                                             target="_blank"
