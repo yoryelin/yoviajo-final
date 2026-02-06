@@ -1,0 +1,368 @@
+[
+    {
+        "label": "Buenos Aires, CABA",
+        "value": "Buenos Aires, CABA",
+        "lat": -34.6037,
+        "lng": -58.3816
+    },
+    {
+        "label": "Córdoba, Córdoba",
+        "value": "Córdoba, Córdoba",
+        "lat": -31.4201,
+        "lng": -64.1888
+    },
+    {
+        "label": "Rosario, Santa Fe",
+        "value": "Rosario, Santa Fe",
+        "lat": -32.9442,
+        "lng": -60.6505
+    },
+    {
+        "label": "Mendoza, Mendoza",
+        "value": "Mendoza, Mendoza",
+        "lat": -32.8908,
+        "lng": -68.8272
+    },
+    {
+        "label": "La Plata, Buenos Aires",
+        "value": "La Plata, Buenos Aires",
+        "lat": -34.9214,
+        "lng": -57.9545
+    },
+    {
+        "label": "Mar del Plata, Buenos Aires",
+        "value": "Mar del Plata, Buenos Aires",
+        "lat": -38.0055,
+        "lng": -57.5426
+    },
+    {
+        "label": "San Miguel de Tucumán, Tucumán",
+        "value": "San Miguel de Tucumán, Tucumán",
+        "lat": -26.8083,
+        "lng": -65.2176
+    },
+    {
+        "label": "Salta, Salta",
+        "value": "Salta, Salta",
+        "lat": -24.7821,
+        "lng": -65.4232
+    },
+    {
+        "label": "Santa Fe, Santa Fe",
+        "value": "Santa Fe, Santa Fe",
+        "lat": -31.6107,
+        "lng": -60.6973
+    },
+    {
+        "label": "San Juan, San Juan",
+        "value": "San Juan, San Juan",
+        "lat": -31.5375,
+        "lng": -68.5364
+    },
+    {
+        "label": "Resistencia, Chaco",
+        "value": "Resistencia, Chaco",
+        "lat": -27.4606,
+        "lng": -58.9839
+    },
+    {
+        "label": "Neuquén, Neuquén",
+        "value": "Neuquén, Neuquén",
+        "lat": -38.9516,
+        "lng": -68.0591
+    },
+    {
+        "label": "Santiago del Estero, Santiago del Estero",
+        "value": "Santiago del Estero, Santiago del Estero",
+        "lat": -27.7951,
+        "lng": -64.2615
+    },
+    {
+        "label": "Corrientes, Corrientes",
+        "value": "Corrientes, Corrientes",
+        "lat": -27.4692,
+        "lng": -58.8306
+    },
+    {
+        "label": "Bahía Blanca, Buenos Aires",
+        "value": "Bahía Blanca, Buenos Aires",
+        "lat": -38.7196,
+        "lng": -62.2724
+    },
+    {
+        "label": "San Salvador de Jujuy, Jujuy",
+        "value": "San Salvador de Jujuy, Jujuy",
+        "lat": -24.1858,
+        "lng": -65.2995
+    },
+    {
+        "label": "Posadas, Misiones",
+        "value": "Posadas, Misiones",
+        "lat": -27.3671,
+        "lng": -55.8961
+    },
+    {
+        "label": "Paraná, Entre Ríos",
+        "value": "Paraná, Entre Ríos",
+        "lat": -31.7310,
+        "lng": -60.5238
+    },
+    {
+        "label": "Formosa, Formosa",
+        "value": "Formosa, Formosa",
+        "lat": -26.1775,
+        "lng": -58.1781
+    },
+    {
+        "label": "San Fernando del Valle de Catamarca, Catamarca",
+        "value": "San Fernando del Valle de Catamarca, Catamarca",
+        "lat": -28.4696,
+        "lng": -65.7852
+    },
+    {
+        "label": "San Luis, San Luis",
+        "value": "San Luis, San Luis",
+        "lat": -33.2950,
+        "lng": -66.3356
+    },
+    {
+        "label": "La Rioja, La Rioja",
+        "value": "La Rioja, La Rioja",
+        "lat": -29.4131,
+        "lng": -66.8558
+    },
+    {
+        "label": "Comodoro Rivadavia, Chubut",
+        "value": "Comodoro Rivadavia, Chubut",
+        "lat": -45.8660,
+        "lng": -67.5027
+    },
+    {
+        "label": "Río Cuarto, Córdoba",
+        "value": "Río Cuarto, Córdoba",
+        "lat": -33.1230,
+        "lng": -64.3478
+    },
+    {
+        "label": "San Rafael, Mendoza",
+        "value": "San Rafael, Mendoza",
+        "lat": -34.6177,
+        "lng": -68.3301
+    },
+    {
+        "label": "Tandil, Buenos Aires",
+        "value": "Tandil, Buenos Aires",
+        "lat": -37.3217,
+        "lng": -59.1332
+    },
+    {
+        "label": "Villa Carlos Paz, Córdoba",
+        "value": "Villa Carlos Paz, Córdoba",
+        "lat": -31.4241,
+        "lng": -64.4978
+    },
+    {
+        "label": "San Carlos de Bariloche, Río Negro",
+        "value": "San Carlos de Bariloche, Río Negro",
+        "lat": -41.1335,
+        "lng": -71.3103
+    },
+    {
+        "label": "Trelew, Chubut",
+        "value": "Trelew, Chubut",
+        "lat": -43.2490,
+        "lng": -65.3051
+    },
+    {
+        "label": "Santa Rosa, La Pampa",
+        "value": "Santa Rosa, La Pampa",
+        "lat": -36.6167,
+        "lng": -64.2833
+    },
+    {
+        "label": "Tigre, Buenos Aires",
+        "value": "Tigre, Buenos Aires",
+        "lat": -34.4260,
+        "lng": -58.5796
+    },
+    {
+        "label": "Zárate, Buenos Aires",
+        "value": "Zárate, Buenos Aires",
+        "lat": -34.0988,
+        "lng": -59.0253
+    },
+    {
+        "label": "Pergamino, Buenos Aires",
+        "value": "Pergamino, Buenos Aires",
+        "lat": -33.8916,
+        "lng": -60.5739
+    },
+    {
+        "label": "Olavarría, Buenos Aires",
+        "value": "Olavarría, Buenos Aires",
+        "lat": -36.8927,
+        "lng": -60.3225
+    },
+    {
+        "label": "Junín, Buenos Aires",
+        "value": "Junín, Buenos Aires",
+        "lat": -34.5838,
+        "lng": -60.9433
+    },
+    {
+        "label": "Necochea, Buenos Aires",
+        "value": "Necochea, Buenos Aires",
+        "lat": -38.5473,
+        "lng": -58.7368
+    },
+    {
+        "label": "Campana, Buenos Aires",
+        "value": "Campana, Buenos Aires",
+        "lat": -34.1687,
+        "lng": -58.9591
+    },
+    {
+        "label": "San Nicolás de los Arroyos, Buenos Aires",
+        "value": "San Nicolás de los Arroyos, Buenos Aires",
+        "lat": -33.3290,
+        "lng": -60.2222
+    },
+    {
+        "label": "Río Gallegos, Santa Cruz",
+        "value": "Río Gallegos, Santa Cruz",
+        "lat": -51.6226,
+        "lng": -69.2181
+    },
+    {
+        "label": "Ushuaia, Tierra del Fuego",
+        "value": "Ushuaia, Tierra del Fuego",
+        "lat": -54.8019,
+        "lng": -68.3030
+    },
+    {
+        "label": "Viedma, Río Negro",
+        "value": "Viedma, Río Negro",
+        "lat": -40.8135,
+        "lng": -62.9967
+    },
+    {
+        "label": "Concordia, Entre Ríos",
+        "value": "Concordia, Entre Ríos",
+        "lat": -31.3930,
+        "lng": -58.0209
+    },
+    {
+        "label": "Gualeguaychú, Entre Ríos",
+        "value": "Gualeguaychú, Entre Ríos",
+        "lat": -33.0039,
+        "lng": -58.5147
+    },
+    {
+        "label": "Villa María, Córdoba",
+        "value": "Villa María, Córdoba",
+        "lat": -32.4075,
+        "lng": -63.2402
+    },
+    {
+        "label": "General Roca, Río Negro",
+        "value": "General Roca, Río Negro",
+        "lat": -39.0267,
+        "lng": -67.5759
+    },
+    {
+        "label": "Cipolletti, Río Negro",
+        "value": "Cipolletti, Río Negro",
+        "lat": -38.9433,
+        "lng": -67.9944
+    },
+    {
+        "label": "Puerto Madryn, Chubut",
+        "value": "Puerto Madryn, Chubut",
+        "lat": -42.7692,
+        "lng": -65.0385
+    },
+    {
+        "label": "San Martín de los Andes, Neuquén",
+        "value": "San Martín de los Andes, Neuquén",
+        "lat": -40.1633,
+        "lng": -71.3491
+    },
+    {
+        "label": "Pinamar, Buenos Aires",
+        "value": "Pinamar, Buenos Aires",
+        "lat": -37.1132,
+        "lng": -56.8624
+    },
+    {
+        "label": "Villa Gesell, Buenos Aires",
+        "value": "Villa Gesell, Buenos Aires",
+        "lat": -37.2639,
+        "lng": -56.9730
+    },
+    {
+        "label": "Puerto Iguazú, Misiones",
+        "value": "Puerto Iguazú, Misiones",
+        "lat": -25.5991,
+        "lng": -54.5760
+    },
+    {
+        "label": "El Calafate, Santa Cruz",
+        "value": "El Calafate, Santa Cruz",
+        "lat": -50.3380,
+        "lng": -72.2648
+    },
+    {
+        "label": "Cafayate, Salta",
+        "value": "Cafayate, Salta",
+        "lat": -26.0731,
+        "lng": -65.9760
+    },
+    {
+        "label": "Tilcara, Jujuy",
+        "value": "Tilcara, Jujuy",
+        "lat": -23.5776,
+        "lng": -65.3509
+    },
+    {
+        "label": "Purmamarca, Jujuy",
+        "value": "Purmamarca, Jujuy",
+        "lat": -23.7441,
+        "lng": -65.4929
+    },
+    {
+        "label": "Merlo, San Luis",
+        "value": "Merlo, San Luis",
+        "lat": -32.3486,
+        "lng": -65.0069
+    },
+    {
+        "label": "Mina Clavero, Córdoba",
+        "value": "Mina Clavero, Córdoba",
+        "lat": -31.7288,
+        "lng": -65.0006
+    },
+    {
+        "label": "La Falda, Córdoba",
+        "value": "La Falda, Córdoba",
+        "lat": -31.0927,
+        "lng": -64.4883
+    },
+    {
+        "label": "Capilla del Monte, Córdoba",
+        "value": "Capilla del Monte, Córdoba",
+        "lat": -30.8556,
+        "lng": -64.5262
+    },
+    {
+        "label": "El Bolsón, Río Negro",
+        "value": "El Bolsón, Río Negro",
+        "lat": -41.9657,
+        "lng": -71.5353
+    },
+    {
+        "label": "Villa La Angostura, Neuquén",
+        "value": "Villa La Angostura, Neuquén",
+        "lat": -40.7627,
+        "lng": -71.6496
+    }
+]

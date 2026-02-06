@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import citiesData from '../data/argentina_cities.json';
 
 export default function CityAutocomplete({ label, value, onChange, placeholder = "Buscar ciudad..." }) {
     const [query, setQuery] = useState(value || '');
     const [suggestions, setSuggestions] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const wrapperRef = useRef(null);
 
@@ -23,40 +23,26 @@ export default function CityAutocomplete({ label, value, onChange, placeholder =
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [wrapperRef]);
 
-    // Debounce search
+    // Local Search Logic (No more API calls!)
     useEffect(() => {
-        const timer = setTimeout(async () => {
-            if (query.length >= 3 && showSuggestions) {
-                setIsLoading(true);
-                try {
-                    let raw = (import.meta.env.VITE_API_URL || 'https://api.yoviajo.com.ar').trim();
-                    if (raw.endsWith('/')) { raw = raw.slice(0, -1); }
-                    const API_URL = raw.endsWith('/api') ? raw : `${raw}/api`;
-                    const res = await fetch(`${API_URL}/geocode/autocomplete?q=${encodeURIComponent(query)}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        setSuggestions(data);
-                    } else {
-                        setSuggestions([]);
-                    }
-                } catch (error) {
-                    console.error("Error fetching cities:", error);
-                    setSuggestions([]);
-                } finally {
-                    setIsLoading(false);
-                }
-            } else {
-                setSuggestions([]);
-            }
-        }, 500);
+        // Only search if user has typed at least 2 characters (faster feedback than 3)
+        if (query.length >= 2 && showSuggestions) {
+            const lowerQuery = query.toLowerCase();
 
-        return () => clearTimeout(timer);
+            const filtered = citiesData.filter(city =>
+                city.label.toLowerCase().includes(lowerQuery)
+            ).slice(0, 8); // Limit to top 8 results for cleaner UI
+
+            setSuggestions(filtered);
+        } else {
+            setSuggestions([]);
+        }
     }, [query, showSuggestions]);
 
     const handleSelect = (item) => {
         setQuery(item.label);
         setShowSuggestions(false);
-        // Propagate changes
+        // Propagate changes with standardized data
         onChange(item.label, { lat: item.lat, lng: item.lng });
     };
 
@@ -64,7 +50,7 @@ export default function CityAutocomplete({ label, value, onChange, placeholder =
         const val = e.target.value;
         setQuery(val);
         setShowSuggestions(true);
-        // Propagate text change even if not selected
+        // Propagate text change even if not selected (allows soft selection or custom input if needed later)
         onChange(val, null);
     };
 
@@ -82,13 +68,14 @@ export default function CityAutocomplete({ label, value, onChange, placeholder =
                     placeholder={placeholder}
                     value={query}
                     onChange={handleChange}
-                    onFocus={() => query.length >= 3 && setShowSuggestions(true)}
+                    onFocus={() => {
+                        if (query.length >= 1) setShowSuggestions(true);
+                        // Optional: Show popular cities if empty? For now, keep it simple.
+                    }}
                 />
-                {isLoading && (
-                    <div className="absolute right-3 top-3">
-                        <div className="animate-spin h-5 w-5 border-2 border-cyan-500 border-t-transparent rounded-full"></div>
-                    </div>
-                )}
+                <div className="absolute right-3 top-3 text-slate-600 pointer-events-none">
+                    🔍
+                </div>
             </div>
 
             {showSuggestions && suggestions.length > 0 && (
@@ -97,18 +84,19 @@ export default function CityAutocomplete({ label, value, onChange, placeholder =
                         <li
                             key={index}
                             onClick={() => handleSelect(item)}
-                            className="p-3 text-sm text-slate-300 hover:bg-slate-800 cursor-pointer border-b border-slate-800 last:border-0 transition-colors"
+                            className="p-3 text-sm text-slate-300 hover:bg-slate-800 cursor-pointer border-b border-slate-800 last:border-0 transition-colors flex justify-between items-center"
                         >
-                            <span className="block font-medium text-white">{item.label.split(',')[0]}</span>
-                            <span className="text-xs text-slate-500">{item.label.split(',').slice(1).join(', ')}</span>
+                            <span className="font-medium text-white">{item.label.split(',')[0]}</span>
+                            <span className="text-xs text-slate-500">{item.label.split(',')[1]}</span>
                         </li>
                     ))}
                 </ul>
             )}
 
-            {showSuggestions && query.length >= 3 && !isLoading && suggestions.length === 0 && (
+            {showSuggestions && query.length >= 3 && suggestions.length === 0 && (
                 <div className="absolute z-50 w-full mt-1 bg-slate-900 border border-slate-700 rounded-lg shadow-xl p-3 text-sm text-slate-500 text-center">
-                    No se encontraron resultados
+                    <p>No encontramos esa ciudad.</p>
+                    <p className="text-xs mt-1">Prueba con una más grande cerca.</p>
                 </div>
             )}
         </div>

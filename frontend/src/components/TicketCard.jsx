@@ -234,8 +234,9 @@ const TicketCard = ({ data, isDriver, isRequest, type, onReserve, onManage, onRe
                 <span className="text-[9px] text-slate-600 font-medium">{data.car_model} {data.car_color ? `• ${data.car_color}` : ''}</span>
               )}
 
-              {/* CONTACT INFO (Checkmate) */}
-              {(data.driver_phone || data.passenger_phone) && (
+              {/* CONTACT INFO (Restricted by Business Rule: Fee First) */}
+              {/* Solo mostrar WhatsApp si es una Reserva Confirmada (isBooking) o si soy el conductor viendo una solicitud */}
+              {(isBooking || (viewerIsDriver && isRequest)) && (data.driver_phone || data.passenger_phone) && (
                 <a
                   href={`https://wa.me/${(data.driver_phone || data.passenger_phone).replace(/\D/g, '')}?text=${encodeURIComponent(`Hola, soy ${user?.username || 'un usuario de YoViajo'}. Te escribo por el viaje a ${data.destination}.`)}`}
                   target="_blank"
