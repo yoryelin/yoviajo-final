@@ -17,7 +17,7 @@ export default function VerificationNagModal({ isOpen, onClose, onVerify }) {
                     </div>
 
                     <div>
-                        <h2 className="text-2xl font-black text-white mb-2">Comunidad Segura</h2>
+                        <h2 className="text-2xl font-black text-white mb-2">Comunidad de Confianza</h2>
                         <p className="text-slate-300 text-sm leading-relaxed">
                             "Nuestra comunidad de viajes se basa en la confianza de todos los usuarios, por lo cual es necesario verificar tu identidad mediante una foto de frente de tu DNI."
                         </p>
