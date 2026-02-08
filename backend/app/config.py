@@ -36,7 +36,12 @@ class Settings(BaseSettings):
     # CORS
     # En producción idealmente se usa una lista estricta, pero para este MVP en Render
     # permitiremos todos o los definidos en env.
-    CORS_ORIGINS: list = ["*"]
+    CORS_ORIGINS: list = [
+        "http://localhost:5173",
+        "https://yoviajo-frontend.onrender.com",
+        "https://yoviajo.com.ar",
+        "https://www.yoviajo.com.ar"
+    ]
 
     # Fuel Standard (Monetization)
     FUEL_PRICE_ARS: float = 1750.0 
