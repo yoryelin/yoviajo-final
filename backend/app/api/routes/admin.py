@@ -97,6 +97,40 @@ def get_all_logs(
 class VerificationRequest(BaseModel):
     status: str # "approved" or "rejected"
 
+class RoleChangeRequest(BaseModel):
+    role: str # "C" or "P"
+
+@router.patch("/users/{user_id}/role")
+def change_user_role(
+    user_id: int,
+    payload: RoleChangeRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    """
+    Cambiar rol de usuario (Corrección de errores de registro).
+    Solo Admin.
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        
+    if payload.role not in ['C', 'P']:
+         raise HTTPException(status_code=400, detail="Rol inválido. Use 'C' (Conductor) o 'P' (Pasajero).")
+         
+    old_role = user.role
+    user.role = payload.role
+    db.commit()
+    
+    # Audit
+    AuditService.log(db, "ROLE_CHANGED", user_id=current_user.id, details={
+        "target_user_id": user.id, 
+        "old_role": old_role,
+        "new_role": user.role
+    })
+    
+    return {"message": f"Rol actualizado: {old_role} -> {user.role}", "new_role": user.role}
+
 @router.post("/users/{user_id}/verify")
 def verify_user(
     user_id: int,

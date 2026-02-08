@@ -43,19 +43,33 @@ const AdminUsers = () => {
         });
     };
 
-    // Executed ONLY when specific logic (Block/Approve) is confirmed
+    // Executed ONLY when specific logic (Block/Approve/SwitchRole) is confirmed
     const executeAction = async () => {
         const { userId, action } = confirmState;
-        const verb = action === "approve" ? "ACTIVATE" : "BLOCK";
+        const verb = action === "approve" ? "ACTIVATE" : action === "block" ? "BLOCK" : "UPDATE";
 
         try {
-            const response = await fetch(`${API_URL}/admin/users/${userId}/${action}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            let response;
+            if (action === 'switch_role') {
+                const user = users.find(u => u.id === userId) || selectedUser;
+                const newRole = user.role === 'C' ? 'P' : 'C';
+                response = await fetch(`${API_URL}/admin/users/${userId}/role`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ role: newRole })
+                });
+            } else {
+                response = await fetch(`${API_URL}/admin/users/${userId}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            }
 
             if (response.ok) {
                 // WhatsApp Integration (Mirroring original logic)
@@ -74,7 +88,17 @@ const AdminUsers = () => {
 
                 alert(`User ${verb}D successfully.`);
                 fetchUsers(); // Refresh list
-                if (selectedUser) setSelectedUser(null);
+
+                // If user detail modal is open, we need to close it or refresh it. 
+                // Since fetchUsers updates the list, if we passed the user object it might be stale.
+                // Simplest is to close it or handle update.
+                if (selectedUser) {
+                    // setSelectedUser(null); // Optional: close modal on success
+                    // Or better, let the list update reflect, but selectedUser local state needs update? 
+                    // fetchUsers updates 'users' array. 'selectedUser' is a separate state object.
+                    // We should probably re-fetch selected user or close modal.
+                    setSelectedUser(null);
+                }
             } else {
                 const err = await response.json();
                 alert(`Action failed: ${err.detail}`);
@@ -255,12 +279,14 @@ const AdminUsers = () => {
                 isOpen={confirmState.isOpen}
                 onClose={() => setConfirmState({ ...confirmState, isOpen: false })}
                 onConfirm={executeAction}
-                title={confirmState.action === 'block' ? 'Bloquear Usuario' : 'Aprobar Usuario'}
+                title={confirmState.action === 'block' ? 'Bloquear Usuario' : confirmState.action === 'switch_role' ? 'Cambiar Rol' : 'Aprobar Usuario'}
                 message={confirmState.action === 'block'
                     ? '¿Estás seguro de que deseas bloquear a este usuario? No podrá acceder a su cuenta.'
-                    : '¿Estás seguro de que deseas aprobar a este usuario? Podrá acceder a la plataforma.'}
+                    : confirmState.action === 'switch_role'
+                        ? '¿Estás seguro de cambiar el rol de este usuario? (Pasajero <-> Conductor)'
+                        : '¿Estás seguro de que deseas aprobar a este usuario? Podrá acceder a la plataforma.'}
                 isDangerous={confirmState.action === 'block'}
-                confirmText={confirmState.action === 'block' ? 'Bloquear' : 'Aprobar'}
+                confirmText={confirmState.action === 'block' ? 'Bloquear' : confirmState.action === 'switch_role' ? 'Cambiar Rol' : 'Aprobar'}
             />
         </>
     );

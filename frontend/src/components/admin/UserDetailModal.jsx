@@ -55,6 +55,16 @@ const UserDetailModal = ({ user, onClose, onAction }) => {
                             <p className="text-xs text-slate-400">
                                 {user.is_active ? 'El usuario puede operar normalmente.' : 'El usuario NO puede iniciar sesión ni operar.'}
                             </p>
+                            {/* ROLE SWITCHER */}
+                            <div className="mt-2 pt-2 border-t border-slate-700/30 flex items-center gap-2">
+                                <span className="text-xs text-slate-400">¿Rol Incorrecto?</span>
+                                <button
+                                    onClick={() => handleAction("switch_role")}
+                                    className="text-[10px] font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-1 rounded border border-slate-600 transition"
+                                >
+                                    Cambiar a {user.role === 'C' ? 'Pasajero' : 'Conductor'}
+                                </button>
+                            </div>
                         </div>
 
                         <div className="flex gap-2">
