@@ -148,10 +148,10 @@ export default function Landing() {
             <footer className="bg-white/90 border-t border-slate-200 py-6 text-center text-slate-400 text-xs font-medium z-10 backdrop-blur-md">
                 <div className="flex justify-center gap-6 mb-2 items-center">
                     <a href="https://www.facebook.com/share/1H63M6mon9/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600 transition" title="Síguenos en Facebook">
-                        <svg fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.791-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
                     </a>
-                    <a href="https://www.instagram.com/yoviajo.com.ar" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-600 transition" title="Síguenos en Instagram">
-                        <svg fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
+                    <a href="https://www.instagram.com/yoviajo.com.ar" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-700 transition" title="Síguenos en Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" /></svg>
                     </a>
                     <Link to="/terms" className="hover:text-slate-600 transition">Términos</Link>
                     <Link to="/privacy" className="hover:text-slate-600 transition">Privacidad</Link>
@@ -182,7 +182,10 @@ export default function Landing() {
                                 <button onClick={() => setShowHelp(false)} className="bg-white/10 hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center transition">✕</button>
                             </div>
                             <div className="p-8 space-y-6 text-slate-600 overflow-y-auto max-h-[70vh]">
-                                <h4 className="font-bold text-slate-900 mb-4 text-center text-lg">Entras, te registras y tu próximo viaje empieza acá:</h4>
+                                <h4 className="font-bold text-slate-900 mb-4 text-center text-lg">
+                                    Entras, te registras y tu próximo viaje empieza acá:
+                                    <span className="block text-sm font-normal text-slate-500 mt-1">(solo mayores de 18 años)</span>
+                                </h4>
                                 <ul className="space-y-4">
                                     <li className="flex gap-3">
                                         <span className="bg-cyan-100 text-cyan-600 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold">1</span>

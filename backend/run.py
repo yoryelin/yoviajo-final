@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-"""
-Script para ejecutar el servidor FastAPI.
-Uso: python run.py
-"""
 import uvicorn
 
 if __name__ == "__main__":

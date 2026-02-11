@@ -76,7 +76,7 @@ const AdminUsers = () => {
                 if (action === "approve") {
                     const user = users.find(u => u.id === userId) || selectedUser;
                     if (user && user.phone) {
-                        const message = `Hola ${user.name}! 👋\n\nTu cuenta en *YoViajo!* ha sido aprobada por un administrador.\n\nYa puedes ingresar y comenzar a viajar: https://yoviajo-frontend.onrender.com`;
+                        const message = `Hola ${user.name}! 👋\n\nTu cuenta en *YoViajo!* ha sido aprobada por un administrador. Ya puedes ingresar y comenzar a viajar: https://www.yoviajo.com.ar\n\nTe recordamos que *YoViajo!* se basa en la confianza entre sus usuarios. Por ello, la verificación de identidad es un requisito muy importante para nosotros. Te invitamos a completar tu perfil subiendo una foto del frente de tu DNI.`;
                         const url = `https://wa.me/${user.phone}?text=${encodeURIComponent(message)}`;
                         try {
                             window.open(url, '_blank');

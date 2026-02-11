@@ -22,7 +22,7 @@ class UserCreate(UserBase):
     role: str = "user"
     
     # Extended
-    birth_date: Optional[date] = None
+    birth_date: date
     address: Optional[str] = None
     
     # Driver Specific
@@ -32,6 +32,18 @@ class UserCreate(UserBase):
     prefs_smoking: bool = False
     prefs_pets: bool = False
     prefs_luggage: bool = True
+
+    @field_validator('birth_date')
+    @classmethod
+    def validate_age(cls, v: date) -> date:
+        today = date.today()
+        # Calculo de edad preciso
+        age = today.year - v.year - ((today.month, today.day) < (v.month, v.day))
+        print(f"DEBUG VALIDATOR: birth_date={v}, today={today}, age={age}")
+        if age < 18:
+            print("DEBUG VALIDATOR: RAISING ERROR")
+            raise ValueError('Debes ser mayor de 18 años para registrarte.')
+        return v
 
     @field_validator('dni')
     @classmethod

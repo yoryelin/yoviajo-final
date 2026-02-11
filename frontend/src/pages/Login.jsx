@@ -68,6 +68,20 @@ export default function Login() {
         return
       }
 
+      // Age Validation (18+)
+      const today = new Date();
+      const birthDate = new Date(formData.birth_date);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      if (age < 18) {
+        setError("Lo sentimos, debes ser mayor de 18 años para registrarte.");
+        setLoading(false);
+        return;
+      }
+
       // Phone Validation (Min 10 digits)
       if (formData.phone.length < 10) {
         setError("El teléfono debe tener al menos 10 números (código de área + número).")
@@ -326,6 +340,7 @@ export default function Login() {
                       value={formData.birth_date}
                       onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
                     />
+                    <span className="text-[10px] text-slate-500 font-bold block mt-1">(Solo mayores de 18 años)</span>
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-400 ml-1 uppercase">Barrio / Zona</label>
