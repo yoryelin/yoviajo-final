@@ -12,17 +12,17 @@ const Layout = ({ children }) => {
     const [showProfileModal, setShowProfileModal] = useState(false)
     const [showNagModal, setShowNagModal] = useState(false)
 
-    useEffect(() => {
-        // Show Nag Modal if unverified and not dismissed in this session
-        if (user && user.verification_status !== 'verified' && user.verification_status !== 'pending') {
-            const hasSeenNag = sessionStorage.getItem('verification_nag_dismissed')
-            if (!hasSeenNag) {
-                // Delay slightly for better UX
-                const timer = setTimeout(() => setShowNagModal(true), 1500)
-                return () => clearTimeout(timer)
-            }
-        }
-    }, [user])
+    // useEffect(() => {
+    //     // Show Nag Modal if unverified and not dismissed in this session
+    //     if (user && user.verification_status !== 'verified' && user.verification_status !== 'pending') {
+    //         const hasSeenNag = sessionStorage.getItem('verification_nag_dismissed')
+    //         if (!hasSeenNag) {
+    //             // Delay slightly for better UX
+    //             const timer = setTimeout(() => setShowNagModal(true), 1500)
+    //             return () => clearTimeout(timer)
+    //         }
+    //     }
+    // }, [user])
 
     const handleDismissNag = () => {
         setShowNagModal(false)
