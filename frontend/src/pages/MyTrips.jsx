@@ -4,6 +4,7 @@ import TicketCard from '../components/TicketCard'
 import PassengerActionModal from '../components/PassengerActionModal'
 import ReviewModal from '../components/reviews/ReviewModal'
 import OfferRideModal from '../components/OfferRideModal'
+import RequestRideModal from '../components/RequestRideModal'
 import { API_URL } from '@config/api.js'
 
 const MyTrips = () => {
@@ -26,6 +27,8 @@ const MyTrips = () => {
         isOpen: false,
         rideData: null
     })
+
+    const [showRequestModal, setShowRequestModal] = useState(false)
 
     const [matches, setMatches] = useState([])
     const [expandedTicketId, setExpandedTicketId] = useState(null)
@@ -504,6 +507,28 @@ const MyTrips = () => {
                     )}
                 </div>
             )}
+            {/* FAB */}
+            <div className="fixed bottom-8 right-8 z-30">
+                {isDriver ? (
+                    <button
+                        onClick={() => { setOfferModal({ isOpen: true, rideData: null }); }} // Reset for new
+                        className="group flex items-center gap-3 bg-cyan-600 hover:bg-cyan-500 text-white font-black py-4 px-6 rounded-full shadow-2xl shadow-cyan-900/50 transition-all hover:scale-105 active:scale-95 animate-bounce-pin"
+                    >
+                        <span className="text-2xl">➕</span>
+                        <span className="uppercase tracking-widest text-sm hidden group-hover:inline-block transition-all">Publicar</span>
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => setShowRequestModal(true)}
+                        className="group flex items-center gap-3 bg-pink-600 hover:bg-pink-500 text-white font-black py-4 px-6 rounded-full shadow-2xl shadow-pink-900/50 transition-all hover:scale-105 active:scale-95 animate-bounce-pin"
+                    >
+                        <span className="text-2xl">➕</span>
+                        <span className="uppercase tracking-widest text-sm hidden group-hover:inline-block transition-all">Solicitar</span>
+                    </button>
+                )}
+            </div>
+
+            <RequestRideModal isOpen={showRequestModal} onClose={() => setShowRequestModal(false)} authFetch={authFetch} API_URL={API_URL} onPublish={fetchData} />
         </div>
     )
 }

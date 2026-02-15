@@ -1,0 +1,2888 @@
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "18507564",
+      "email": "jorge@test.com",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-18T04:23:53.950342"
+  },
+  {
+    "id": 2,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-18T04:25:38.239315"
+  },
+  {
+    "id": 3,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-18T04:27:29.134829"
+  },
+  {
+    "id": 4,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-18T04:33:46.529466"
+  },
+  {
+    "id": 5,
+    "user_id": 2,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "88888888",
+      "email": "pablo@test.com",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-18T14:14:11.898464"
+  },
+  {
+    "id": 6,
+    "user_id": 2,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "88888888",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-18T14:14:26.799931"
+  },
+  {
+    "id": 7,
+    "user_id": 2,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "88888888",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-18T14:18:01.393990"
+  },
+  {
+    "id": 8,
+    "user_id": 2,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "88888888",
+      "role": "C"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-18T14:57:05.803600"
+  },
+  {
+    "id": 9,
+    "user_id": 2,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "88888888",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-18T15:03:42.201361"
+  },
+  {
+    "id": 10,
+    "user_id": 2,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "88888888",
+      "role": "C"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-18T15:05:13.298279"
+  },
+  {
+    "id": 11,
+    "user_id": 2,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "88888888",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-18T15:17:03.598508"
+  },
+  {
+    "id": 12,
+    "user_id": 2,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 1,
+      "origin": "miramar",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-18T15:25:14.737912"
+  },
+  {
+    "id": 13,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-18T15:26:24.292559"
+  },
+  {
+    "id": 14,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 1,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-18T15:28:01.745356"
+  },
+  {
+    "id": 15,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-18T21:34:37.403340"
+  },
+  {
+    "id": 16,
+    "user_id": 6,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "09876543",
+      "email": "yomanejo@test.com",
+      "role": "C"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-18T21:38:58.117277"
+  },
+  {
+    "id": 17,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-18T21:39:16.415706"
+  },
+  {
+    "id": 18,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 2,
+      "origin": "miramar",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-18T21:40:13.171845"
+  },
+  {
+    "id": 19,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-18T21:45:01.008890"
+  },
+  {
+    "id": 20,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-18T22:32:03.166540"
+  },
+  {
+    "id": 21,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-18T22:33:21.769200"
+  },
+  {
+    "id": 22,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 3,
+      "origin": "miramar",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-18T22:34:21.403612"
+  },
+  {
+    "id": 23,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-18T22:43:28.270608"
+  },
+  {
+    "id": 24,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-18T22:46:10.866000"
+  },
+  {
+    "id": 25,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 4,
+      "origin": "miramar",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-18T23:57:45.466624"
+  },
+  {
+    "id": 26,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-18T23:59:25.649637"
+  },
+  {
+    "id": 27,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 5,
+      "origin": "miramar",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-19T00:00:19.774149"
+  },
+  {
+    "id": 28,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-19T00:03:13.447388"
+  },
+  {
+    "id": 29,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-19T00:08:08.747569"
+  },
+  {
+    "id": 30,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-19T00:14:13.066628"
+  },
+  {
+    "id": 31,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-19T00:22:32.873258"
+  },
+  {
+    "id": 32,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-19T00:28:47.463460"
+  },
+  {
+    "id": 33,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-19T00:47:04.469786"
+  },
+  {
+    "id": 34,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 6,
+      "origin": "miramar",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-19T00:56:51.132070"
+  },
+  {
+    "id": 35,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 7,
+      "origin": "miramar",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-19T01:25:00.325919"
+  },
+  {
+    "id": 36,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-19T02:14:14.861742"
+  },
+  {
+    "id": 37,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.17.6.131",
+    "timestamp": "2026-01-19T02:18:31.669329"
+  },
+  {
+    "id": 38,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-19T02:23:31.924512"
+  },
+  {
+    "id": 39,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.17.6.131",
+    "timestamp": "2026-01-19T02:23:55.304550"
+  },
+  {
+    "id": 40,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-19T02:24:33.106848"
+  },
+  {
+    "id": 41,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 8,
+      "origin": "Miramar, Partido de General Alvarado, Buenos Aires, Argentina",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-19T02:25:34.572171"
+  },
+  {
+    "id": 42,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-19T02:28:04.711172"
+  },
+  {
+    "id": 43,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-19T04:27:36.187346"
+  },
+  {
+    "id": 44,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-19T04:27:55.278977"
+  },
+  {
+    "id": 45,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-19T04:28:38.777184"
+  },
+  {
+    "id": 46,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.19.133.67",
+    "timestamp": "2026-01-19T15:37:50.029421"
+  },
+  {
+    "id": 47,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-19T20:35:35.317196"
+  },
+  {
+    "id": 48,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-19T20:37:47.512930"
+  },
+  {
+    "id": 49,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-19T22:01:19.954965"
+  },
+  {
+    "id": 50,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-19T22:02:05.059395"
+  },
+  {
+    "id": 51,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-19T23:56:45.668378"
+  },
+  {
+    "id": 52,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T00:05:05.484912"
+  },
+  {
+    "id": 53,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T00:06:40.045495"
+  },
+  {
+    "id": 54,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.18.255.68",
+    "timestamp": "2026-01-20T00:08:00.811988"
+  },
+  {
+    "id": 55,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T00:08:10.588330"
+  },
+  {
+    "id": 56,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T00:30:03.840989"
+  },
+  {
+    "id": 57,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T00:46:41.566396"
+  },
+  {
+    "id": 58,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T00:51:36.403475"
+  },
+  {
+    "id": 59,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T00:56:34.865131"
+  },
+  {
+    "id": 60,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T01:16:09.872512"
+  },
+  {
+    "id": 61,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T01:17:56.164931"
+  },
+  {
+    "id": 62,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T01:18:48.401990"
+  },
+  {
+    "id": 63,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T01:26:57.508919"
+  },
+  {
+    "id": 64,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T01:38:15.183849"
+  },
+  {
+    "id": 65,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-20T03:07:16.304816"
+  },
+  {
+    "id": 66,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T03:07:28.005011"
+  },
+  {
+    "id": 67,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-20T14:07:19.367165"
+  },
+  {
+    "id": 68,
+    "user_id": 7,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "39777664",
+      "email": "quicasturismo@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-20T16:25:37.681508"
+  },
+  {
+    "id": 69,
+    "user_id": 7,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "39777664",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-20T16:25:48.305236"
+  },
+  {
+    "id": 70,
+    "user_id": 8,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "12656499",
+      "email": "jorgemorton59@hotmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.17.102.129",
+    "timestamp": "2026-01-20T16:48:24.229933"
+  },
+  {
+    "id": 71,
+    "user_id": 8,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "12656499",
+      "role": "P"
+    },
+    "ip_address": "10.17.102.129",
+    "timestamp": "2026-01-20T16:48:37.328667"
+  },
+  {
+    "id": 72,
+    "user_id": 9,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "30214102",
+      "email": "juancitolegarreta@yahoo.com.ar",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-20T19:34:46.465163"
+  },
+  {
+    "id": 73,
+    "user_id": 9,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "30214102",
+      "role": "P"
+    },
+    "ip_address": "10.23.50.196",
+    "timestamp": "2026-01-20T19:34:58.461497"
+  },
+  {
+    "id": 74,
+    "user_id": 10,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "17385648",
+      "email": "raul@actiongroup.com.ar",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-20T21:31:17.549256"
+  },
+  {
+    "id": 75,
+    "user_id": 10,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "17385648",
+      "role": "P"
+    },
+    "ip_address": "10.16.171.68",
+    "timestamp": "2026-01-20T21:31:29.240046"
+  },
+  {
+    "id": 76,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 8,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-20T23:43:09.875479"
+  },
+  {
+    "id": 77,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.23.24.197",
+    "timestamp": "2026-01-21T03:01:28.165351"
+  },
+  {
+    "id": 78,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.17.134.69",
+    "timestamp": "2026-01-21T03:05:42.460985"
+  },
+  {
+    "id": 79,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 9,
+      "origin": "Salta, Capital, Salta, Argentina",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-21T03:07:50.841554"
+  },
+  {
+    "id": 80,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.21.136.129",
+    "timestamp": "2026-01-21T03:08:17.276283"
+  },
+  {
+    "id": 81,
+    "user_id": 1,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 9,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-21T03:08:30.976949"
+  },
+  {
+    "id": 82,
+    "user_id": 11,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "39029146",
+      "email": "beaf.forestal@hotmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.17.112.67",
+    "timestamp": "2026-01-21T10:13:15.185713"
+  },
+  {
+    "id": 83,
+    "user_id": 11,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "39029146",
+      "role": "P"
+    },
+    "ip_address": "10.23.216.197",
+    "timestamp": "2026-01-21T10:13:28.464952"
+  },
+  {
+    "id": 84,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.22.167.5",
+    "timestamp": "2026-01-21T22:42:37.198768"
+  },
+  {
+    "id": 85,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.17.78.195",
+    "timestamp": "2026-01-21T23:54:37.091788"
+  },
+  {
+    "id": 86,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-22T20:33:32.832876"
+  },
+  {
+    "id": 87,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.16.5.193",
+    "timestamp": "2026-01-22T20:48:33.028429"
+  },
+  {
+    "id": 88,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.20.2.68",
+    "timestamp": "2026-01-22T20:48:40.231685"
+  },
+  {
+    "id": 89,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.23.38.5",
+    "timestamp": "2026-01-22T20:49:39.127704"
+  },
+  {
+    "id": 90,
+    "user_id": 1,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.19.117.3",
+    "timestamp": "2026-01-22T21:03:19.645055"
+  },
+  {
+    "id": 91,
+    "user_id": 12,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "18507564",
+      "email": "jormelgarejo@hotmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.19.117.3",
+    "timestamp": "2026-01-22T23:41:03.356913"
+  },
+  {
+    "id": 92,
+    "user_id": 13,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "26063070",
+      "email": "vargasanalucia826@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-23T00:04:04.436751"
+  },
+  {
+    "id": 93,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.16.5.193",
+    "timestamp": "2026-01-23T01:49:16.346787"
+  },
+  {
+    "id": 94,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.23.114.129",
+    "timestamp": "2026-01-23T01:49:23.341224"
+  },
+  {
+    "id": 95,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.16.5.193",
+    "timestamp": "2026-01-23T01:51:07.617196"
+  },
+  {
+    "id": 96,
+    "user_id": 14,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "20456768",
+      "email": "bettymelgarejo19@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.20.2.68",
+    "timestamp": "2026-01-23T04:32:20.934068"
+  },
+  {
+    "id": 97,
+    "user_id": 14,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "20456768",
+      "role": "P"
+    },
+    "ip_address": "10.20.2.68",
+    "timestamp": "2026-01-23T04:32:43.217285"
+  },
+  {
+    "id": 98,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 10,
+      "origin": "Mar del Plata, Partido de General Pueyrredón, Buenos Aires, Argentina",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-23T04:39:31.520303"
+  },
+  {
+    "id": 99,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.19.117.3",
+    "timestamp": "2026-01-23T04:40:08.829290"
+  },
+  {
+    "id": 100,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.19.117.3",
+    "timestamp": "2026-01-23T19:48:41.762228"
+  },
+  {
+    "id": 101,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.19.117.3",
+    "timestamp": "2026-01-23T19:49:24.882028"
+  },
+  {
+    "id": 102,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.20.79.68",
+    "timestamp": "2026-01-23T21:18:34.471583"
+  },
+  {
+    "id": 103,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.22.167.5",
+    "timestamp": "2026-01-23T21:24:07.071701"
+  },
+  {
+    "id": 104,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.21.157.65",
+    "timestamp": "2026-01-23T22:53:05.486997"
+  },
+  {
+    "id": 105,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.21.157.65",
+    "timestamp": "2026-01-23T22:53:50.170576"
+  },
+  {
+    "id": 106,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.21.32.131",
+    "timestamp": "2026-01-23T23:13:58.158160"
+  },
+  {
+    "id": 107,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-23T23:14:29.629701"
+  },
+  {
+    "id": 108,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.21.218.197",
+    "timestamp": "2026-01-24T02:00:51.175385"
+  },
+  {
+    "id": 109,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.20.225.193",
+    "timestamp": "2026-01-24T13:49:31.446820"
+  },
+  {
+    "id": 110,
+    "user_id": 12,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769265240/yoviajo/avatars/aqww6xhdhyovrsa7ziaj.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-24T14:34:00.523909"
+  },
+  {
+    "id": 111,
+    "user_id": 12,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769265558/yoviajo/avatars/didbl0ybj7lax06lholv.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-24T14:39:18.937915"
+  },
+  {
+    "id": 112,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.18.99.67",
+    "timestamp": "2026-01-24T15:50:32.793978"
+  },
+  {
+    "id": 113,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.16.92.129",
+    "timestamp": "2026-01-24T19:12:21.311330"
+  },
+  {
+    "id": 114,
+    "user_id": 12,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769281966/yoviajo/avatars/ydfcwfbzmonitwwafs0i.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-24T19:12:46.699913"
+  },
+  {
+    "id": 115,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.18.99.67",
+    "timestamp": "2026-01-24T19:26:31.919350"
+  },
+  {
+    "id": 116,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.20.162.193",
+    "timestamp": "2026-01-24T19:27:01.405711"
+  },
+  {
+    "id": 117,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.18.190.65",
+    "timestamp": "2026-01-24T21:03:59.438875"
+  },
+  {
+    "id": 118,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.21.157.65",
+    "timestamp": "2026-01-24T21:05:30.042856"
+  },
+  {
+    "id": 119,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-24T21:42:42.612025"
+  },
+  {
+    "id": 120,
+    "user_id": 14,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "20456768",
+      "role": "P"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-24T21:50:48.833606"
+  },
+  {
+    "id": 121,
+    "user_id": 14,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "20456768",
+      "role": "P"
+    },
+    "ip_address": "10.21.218.197",
+    "timestamp": "2026-01-24T21:55:24.239232"
+  },
+  {
+    "id": 122,
+    "user_id": 14,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "20456768",
+      "role": "P"
+    },
+    "ip_address": "10.18.190.65",
+    "timestamp": "2026-01-24T21:55:34.434164"
+  },
+  {
+    "id": 123,
+    "user_id": 15,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "18118137",
+      "email": "marcelo_pannunzio@yahoo.com.ar",
+      "role": "C"
+    },
+    "ip_address": "10.16.92.129",
+    "timestamp": "2026-01-24T22:01:48.355527"
+  },
+  {
+    "id": 124,
+    "user_id": 14,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "20456768",
+      "role": "P"
+    },
+    "ip_address": "10.18.99.67",
+    "timestamp": "2026-01-24T23:48:54.034783"
+  },
+  {
+    "id": 125,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.22.167.5",
+    "timestamp": "2026-01-25T00:12:38.227220"
+  },
+  {
+    "id": 126,
+    "user_id": 8,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "12656499",
+      "role": "P"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-25T00:17:32.432615"
+  },
+  {
+    "id": 127,
+    "user_id": 8,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "12656499",
+      "role": "P"
+    },
+    "ip_address": "10.16.5.193",
+    "timestamp": "2026-01-25T00:17:44.531660"
+  },
+  {
+    "id": 128,
+    "user_id": 8,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "12656499",
+      "role": "P"
+    },
+    "ip_address": "10.16.5.193",
+    "timestamp": "2026-01-25T00:17:58.767861"
+  },
+  {
+    "id": 129,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.22.167.5",
+    "timestamp": "2026-01-27T20:59:21.621925"
+  },
+  {
+    "id": 130,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.16.5.193",
+    "timestamp": "2026-01-27T21:04:19.082043"
+  },
+  {
+    "id": 131,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 11,
+      "origin": "Buenos Aires, Comuna 1, Ciudad Autónoma de Buenos Aires, Argentina",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-27T21:05:39.473079"
+  },
+  {
+    "id": 132,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.16.31.3",
+    "timestamp": "2026-01-27T21:15:52.088138"
+  },
+  {
+    "id": 133,
+    "user_id": 16,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "90548765",
+      "email": "test_D_qVcGoGIb@yoviajo.com",
+      "role": "C"
+    },
+    "ip_address": "10.22.9.194",
+    "timestamp": "2026-01-27T22:14:11.522115"
+  },
+  {
+    "id": 134,
+    "user_id": 16,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "90548765",
+      "role": "C"
+    },
+    "ip_address": "10.19.117.3",
+    "timestamp": "2026-01-27T22:14:12.192863"
+  },
+  {
+    "id": 135,
+    "user_id": 17,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "76772244",
+      "email": "test_P_Jgfe0KWr@yoviajo.com",
+      "role": "P"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-27T22:14:12.887225"
+  },
+  {
+    "id": 136,
+    "user_id": 17,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "76772244",
+      "role": "P"
+    },
+    "ip_address": "10.17.134.133",
+    "timestamp": "2026-01-27T22:14:13.519311"
+  },
+  {
+    "id": 137,
+    "user_id": 18,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "74575234",
+      "email": "test_D_ncZP2RJ7@yoviajo.com",
+      "role": "C"
+    },
+    "ip_address": "10.23.38.5",
+    "timestamp": "2026-01-27T22:18:19.479304"
+  },
+  {
+    "id": 138,
+    "user_id": 18,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "74575234",
+      "role": "C"
+    },
+    "ip_address": "10.21.218.197",
+    "timestamp": "2026-01-27T22:18:20.308613"
+  },
+  {
+    "id": 139,
+    "user_id": 19,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "15150340",
+      "email": "test_P_TVmBPR9a@yoviajo.com",
+      "role": "P"
+    },
+    "ip_address": "10.21.157.65",
+    "timestamp": "2026-01-27T22:18:21.282119"
+  },
+  {
+    "id": 140,
+    "user_id": 19,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "15150340",
+      "role": "P"
+    },
+    "ip_address": "10.17.134.133",
+    "timestamp": "2026-01-27T22:18:21.898388"
+  },
+  {
+    "id": 141,
+    "user_id": 20,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "53382974",
+      "email": "test_D_kdQCPdAw@yoviajo.com",
+      "role": "C"
+    },
+    "ip_address": "10.22.167.5",
+    "timestamp": "2026-01-27T22:19:02.099069"
+  },
+  {
+    "id": 142,
+    "user_id": 20,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "53382974",
+      "role": "C"
+    },
+    "ip_address": "10.16.92.129",
+    "timestamp": "2026-01-27T22:19:02.790528"
+  },
+  {
+    "id": 143,
+    "user_id": 21,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "17301900",
+      "email": "test_P_XwEGTEmf@yoviajo.com",
+      "role": "P"
+    },
+    "ip_address": "10.21.157.65",
+    "timestamp": "2026-01-27T22:19:03.480404"
+  },
+  {
+    "id": 144,
+    "user_id": 21,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "17301900",
+      "role": "P"
+    },
+    "ip_address": "10.20.2.68",
+    "timestamp": "2026-01-27T22:19:04.170472"
+  },
+  {
+    "id": 145,
+    "user_id": 22,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "44158697",
+      "email": "caropiazzam@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-27T22:47:19.194251"
+  },
+  {
+    "id": 146,
+    "user_id": 22,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "44158697",
+      "role": "P"
+    },
+    "ip_address": "10.22.167.5",
+    "timestamp": "2026-01-27T22:47:29.487525"
+  },
+  {
+    "id": 147,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 12,
+      "origin": "Mar del Plata, Partido de General Pueyrredón, Buenos Aires, Argentina",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-27T22:54:45.568926"
+  },
+  {
+    "id": 148,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 12,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-27T22:56:38.309875"
+  },
+  {
+    "id": 149,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 12,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-27T23:33:04.260607"
+  },
+  {
+    "id": 150,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 12,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-27T23:37:04.354484"
+  },
+  {
+    "id": 151,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 12,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-28T00:07:15.170663"
+  },
+  {
+    "id": 152,
+    "user_id": 23,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "15403278",
+      "email": "test_D_PyW8v4Px@yoviajo.com",
+      "role": "C"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-28T00:26:36.477771"
+  },
+  {
+    "id": 153,
+    "user_id": 23,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "15403278",
+      "role": "C"
+    },
+    "ip_address": "10.18.120.131",
+    "timestamp": "2026-01-28T00:26:37.095048"
+  },
+  {
+    "id": 154,
+    "user_id": 24,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "74731743",
+      "email": "test_P_KQy5WrMf@yoviajo.com",
+      "role": "P"
+    },
+    "ip_address": "10.18.120.131",
+    "timestamp": "2026-01-28T00:26:37.780337"
+  },
+  {
+    "id": 155,
+    "user_id": 24,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "74731743",
+      "role": "P"
+    },
+    "ip_address": "10.22.9.194",
+    "timestamp": "2026-01-28T00:26:38.407721"
+  },
+  {
+    "id": 156,
+    "user_id": 25,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "74852103",
+      "email": "test_D_Vhj3utO7@yoviajo.com",
+      "role": "C"
+    },
+    "ip_address": "10.21.218.197",
+    "timestamp": "2026-01-28T00:38:04.314806"
+  },
+  {
+    "id": 157,
+    "user_id": 25,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "74852103",
+      "role": "C"
+    },
+    "ip_address": "10.20.2.68",
+    "timestamp": "2026-01-28T00:38:04.986185"
+  },
+  {
+    "id": 158,
+    "user_id": 26,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "59931986",
+      "email": "test_P_4qj4vXqg@yoviajo.com",
+      "role": "P"
+    },
+    "ip_address": "10.22.167.5",
+    "timestamp": "2026-01-28T00:38:05.701364"
+  },
+  {
+    "id": 159,
+    "user_id": 26,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "59931986",
+      "role": "P"
+    },
+    "ip_address": "10.22.9.194",
+    "timestamp": "2026-01-28T00:38:06.381587"
+  },
+  {
+    "id": 160,
+    "user_id": 27,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "74079741",
+      "email": "test_D_2slw1VHQ@yoviajo.com",
+      "role": "C"
+    },
+    "ip_address": "10.21.157.65",
+    "timestamp": "2026-01-28T00:48:38.092444"
+  },
+  {
+    "id": 161,
+    "user_id": 27,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "74079741",
+      "role": "C"
+    },
+    "ip_address": "10.16.5.193",
+    "timestamp": "2026-01-28T00:48:45.587070"
+  },
+  {
+    "id": 162,
+    "user_id": 28,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "67589540",
+      "email": "test_P_EmUtUBqD@yoviajo.com",
+      "role": "P"
+    },
+    "ip_address": "10.20.2.68",
+    "timestamp": "2026-01-28T00:48:50.317316"
+  },
+  {
+    "id": 163,
+    "user_id": 28,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "67589540",
+      "role": "P"
+    },
+    "ip_address": "10.16.92.129",
+    "timestamp": "2026-01-28T00:48:51.083209"
+  },
+  {
+    "id": 164,
+    "user_id": 29,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "42226144",
+      "email": "melgarejocandelaria@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.18.120.131",
+    "timestamp": "2026-01-28T14:12:51.009448"
+  },
+  {
+    "id": 165,
+    "user_id": 29,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "42226144",
+      "role": "P"
+    },
+    "ip_address": "10.18.120.131",
+    "timestamp": "2026-01-28T14:13:23.590384"
+  },
+  {
+    "id": 166,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 12,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-28T16:56:28.599563"
+  },
+  {
+    "id": 167,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 12,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T00:02:01.100188"
+  },
+  {
+    "id": 168,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.18.19.3",
+    "timestamp": "2026-01-29T00:07:36.343158"
+  },
+  {
+    "id": 169,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.20.26.66",
+    "timestamp": "2026-01-29T01:11:41.147721"
+  },
+  {
+    "id": 170,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 13,
+      "origin": "Municipio de Paso de los Libres, Departamento Paso de los Libres, Corrientes, Argentina",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T01:13:21.919299"
+  },
+  {
+    "id": 171,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 12,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T02:49:54.182453"
+  },
+  {
+    "id": 172,
+    "user_id": 30,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "30794068",
+      "email": "miguelluqk@hotmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.23.38.5",
+    "timestamp": "2026-01-29T12:50:18.023153"
+  },
+  {
+    "id": 173,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.21.223.196",
+    "timestamp": "2026-01-29T20:57:47.727977"
+  },
+  {
+    "id": 174,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769720349/yoviajo/avatars/vi8atjglleegql8ibul5.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T20:59:09.817564"
+  },
+  {
+    "id": 175,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769720358/yoviajo/avatars/vvmgtm6xdajcmadscfl3.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T20:59:19.348855"
+  },
+  {
+    "id": 176,
+    "user_id": 6,
+    "action": "RIDE_CREATED",
+    "details": {
+      "ride_id": 14,
+      "origin": "Mar del Plata, Partido de General Pueyrredón, Buenos Aires, Argentina",
+      "women_only": false
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T21:03:36.936583"
+  },
+  {
+    "id": 177,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.20.141.130",
+    "timestamp": "2026-01-29T21:28:02.424005"
+  },
+  {
+    "id": 178,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 12,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T22:07:10.943543"
+  },
+  {
+    "id": 179,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.18.18.65",
+    "timestamp": "2026-01-29T22:31:09.258567"
+  },
+  {
+    "id": 180,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769725935/yoviajo/avatars/zbrcy6qyoroffncguww3.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T22:32:16.478205"
+  },
+  {
+    "id": 181,
+    "user_id": 6,
+    "action": "PROFILE_UPDATED",
+    "details": {
+      "phone": "37775654399",
+      "birth_date": "1970-03-20",
+      "address": "belgrano",
+      "car_model": "Renault Kangoo",
+      "car_plate": "ORM 536",
+      "car_color": "rojo",
+      "prefs_smoking": false,
+      "prefs_pets": false,
+      "prefs_luggage": true
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T22:33:31.308530"
+  },
+  {
+    "id": 182,
+    "user_id": 6,
+    "action": "PROFILE_UPDATED",
+    "details": {
+      "phone": "37775654399",
+      "birth_date": "1970-03-20",
+      "address": "belgrano",
+      "car_model": "Renault Kangoo",
+      "car_plate": "ORM 536",
+      "car_color": "rojo",
+      "prefs_smoking": false,
+      "prefs_pets": false,
+      "prefs_luggage": true
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T22:33:33.068039"
+  },
+  {
+    "id": 183,
+    "user_id": 6,
+    "action": "PROFILE_UPDATED",
+    "details": {
+      "phone": "37775654399",
+      "birth_date": "1970-03-20",
+      "address": "belgrano",
+      "car_model": "Renault Kangoo",
+      "car_plate": "ORM 536",
+      "car_color": "rojo",
+      "prefs_smoking": false,
+      "prefs_pets": false,
+      "prefs_luggage": true
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T22:49:49.802711"
+  },
+  {
+    "id": 184,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.21.218.197",
+    "timestamp": "2026-01-29T23:00:22.672715"
+  },
+  {
+    "id": 185,
+    "user_id": 6,
+    "action": "PROFILE_UPDATED",
+    "details": {
+      "phone": "37775654399",
+      "birth_date": "1970-03-20",
+      "address": "belgrano",
+      "car_model": "Renault Kangoo",
+      "car_plate": "ORM 536",
+      "car_color": "rojo",
+      "prefs_smoking": false,
+      "prefs_pets": false,
+      "prefs_luggage": true
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T23:00:40.794697"
+  },
+  {
+    "id": 186,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769727657/yoviajo/avatars/cgevldijtgd9r2lotete.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T23:00:58.834680"
+  },
+  {
+    "id": 187,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769727668/yoviajo/avatars/elitcosn09iv3aa25wr9.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-29T23:01:09.602550"
+  },
+  {
+    "id": 188,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.17.134.133",
+    "timestamp": "2026-01-30T04:26:18.965111"
+  },
+  {
+    "id": 189,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769747194/yoviajo/avatars/tkjpnuh2pysa3bp7ja4y.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-30T04:26:35.166816"
+  },
+  {
+    "id": 190,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.19.117.3",
+    "timestamp": "2026-01-30T15:39:02.684281"
+  },
+  {
+    "id": 191,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.23.38.5",
+    "timestamp": "2026-01-30T15:39:33.170887"
+  },
+  {
+    "id": 192,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769787655/yoviajo/avatars/pg2zkfuqjhqvrvskejez.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-30T15:40:56.712740"
+  },
+  {
+    "id": 193,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769788440/yoviajo/avatars/ltzkgqsgm4yyv5vcrysx.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-30T15:54:00.663126"
+  },
+  {
+    "id": 194,
+    "user_id": 22,
+    "action": "BOOKING_CREATED",
+    "details": {
+      "ride_id": 14,
+      "seats": 1
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-30T16:31:19.942705"
+  },
+  {
+    "id": 195,
+    "user_id": 22,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "44158697",
+      "role": "P"
+    },
+    "ip_address": "10.21.218.197",
+    "timestamp": "2026-01-30T16:33:24.819577"
+  },
+  {
+    "id": 196,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.17.0.3",
+    "timestamp": "2026-01-30T16:37:44.540919"
+  },
+  {
+    "id": 197,
+    "user_id": 6,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769792855/yoviajo/avatars/dhe778yhy8mb6wmbjcro.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-30T17:07:35.818858"
+  },
+  {
+    "id": 198,
+    "user_id": 6,
+    "action": "PROFILE_UPDATED",
+    "details": {
+      "phone": "37775654399",
+      "birth_date": "1970-03-20",
+      "address": "belgrano",
+      "car_model": "Renault Kangoo",
+      "car_plate": "ORM 536",
+      "car_color": "rojo",
+      "prefs_smoking": false,
+      "prefs_pets": false,
+      "prefs_luggage": true
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-30T17:07:43.090305"
+  },
+  {
+    "id": 199,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.17.212.7",
+    "timestamp": "2026-01-30T23:41:57.691156"
+  },
+  {
+    "id": 200,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.16.68.67",
+    "timestamp": "2026-01-30T23:43:43.989668"
+  },
+  {
+    "id": 201,
+    "user_id": 12,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769816699/yoviajo/avatars/wymhedz7zxkupy4lj9jp.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-30T23:45:00.461106"
+  },
+  {
+    "id": 202,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.22.77.193",
+    "timestamp": "2026-01-30T23:45:54.400310"
+  },
+  {
+    "id": 203,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.22.77.193",
+    "timestamp": "2026-01-31T00:52:06.106585"
+  },
+  {
+    "id": 204,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.18.219.132",
+    "timestamp": "2026-01-31T01:17:25.473908"
+  },
+  {
+    "id": 205,
+    "user_id": 12,
+    "action": "PROFILE_UPDATED",
+    "details": {
+      "phone": "1151655403",
+      "birth_date": "1967-05-19",
+      "address": "merlo",
+      "car_model": "",
+      "car_plate": "",
+      "car_color": "",
+      "prefs_smoking": false,
+      "prefs_pets": false,
+      "prefs_luggage": true,
+      "role": "C"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-31T01:17:40.932048"
+  },
+  {
+    "id": 206,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.20.243.197",
+    "timestamp": "2026-01-31T01:19:33.529743"
+  },
+  {
+    "id": 207,
+    "user_id": 22,
+    "action": "PROFILE_PHOTO_UPDATED",
+    "details": {
+      "url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769825785/yoviajo/avatars/tglslyymreqrs9v44a1s.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-31T02:16:25.670979"
+  },
+  {
+    "id": 208,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.18.219.132",
+    "timestamp": "2026-01-31T13:09:29.295988"
+  },
+  {
+    "id": 209,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "P"
+    },
+    "ip_address": "10.20.227.133",
+    "timestamp": "2026-01-31T14:16:11.603215"
+  },
+  {
+    "id": 210,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.20.227.133",
+    "timestamp": "2026-01-31T15:00:54.623847"
+  },
+  {
+    "id": 211,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.18.77.66",
+    "timestamp": "2026-01-31T18:21:13.209591"
+  },
+  {
+    "id": 212,
+    "user_id": 31,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "27286790",
+      "email": "cocheriapasodeloslibres@outlook.com",
+      "role": "C"
+    },
+    "ip_address": "10.18.219.132",
+    "timestamp": "2026-01-31T22:55:39.383722"
+  },
+  {
+    "id": 213,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 31
+    },
+    "ip_address": null,
+    "timestamp": "2026-01-31T23:57:08.220226"
+  },
+  {
+    "id": 214,
+    "user_id": 12,
+    "action": "VERIFICATION_REQUESTED",
+    "details": {
+      "doc_url": "https://res.cloudinary.com/dyufmokh1/image/upload/v1769908886/yoviajo/kyc/df36zxzpuk811fvpmui2.jpg"
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-01T01:21:26.396522"
+  },
+  {
+    "id": 215,
+    "user_id": 12,
+    "action": "VERIFICATION_DECIDED",
+    "details": {
+      "target_user_id": 12,
+      "decision": "approved"
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-01T01:23:07.985722"
+  },
+  {
+    "id": 216,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.22.253.198",
+    "timestamp": "2026-02-01T16:10:26.245290"
+  },
+  {
+    "id": 217,
+    "user_id": 6,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "09876543",
+      "role": "C"
+    },
+    "ip_address": "10.17.141.133",
+    "timestamp": "2026-02-02T00:59:46.944204"
+  },
+  {
+    "id": 218,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.19.185.65",
+    "timestamp": "2026-02-02T05:17:28.532483"
+  },
+  {
+    "id": 219,
+    "user_id": 12,
+    "action": "USER_BLOCKED",
+    "details": {
+      "target_user_id": 28
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-02T05:18:25.395889"
+  },
+  {
+    "id": 220,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.20.244.193",
+    "timestamp": "2026-02-02T16:54:35.046185"
+  },
+  {
+    "id": 221,
+    "user_id": 32,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "77149719",
+      "email": "test_D_UAUroE65@yoviajo.com",
+      "role": "C"
+    },
+    "ip_address": "10.23.55.132",
+    "timestamp": "2026-02-05T23:14:15.358692"
+  },
+  {
+    "id": 222,
+    "user_id": 33,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "54806078",
+      "email": "test_P_RbIRqa0z@yoviajo.com",
+      "role": "P"
+    },
+    "ip_address": "10.23.53.67",
+    "timestamp": "2026-02-05T23:14:16.277413"
+  },
+  {
+    "id": 223,
+    "user_id": 34,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "37308258",
+      "email": "nicomartino13@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.23.53.67",
+    "timestamp": "2026-02-06T20:26:29.033906"
+  },
+  {
+    "id": 224,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 34
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-06T21:23:59.933896"
+  },
+  {
+    "id": 225,
+    "user_id": 34,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "37308258",
+      "role": "P"
+    },
+    "ip_address": "10.19.89.196",
+    "timestamp": "2026-02-06T21:27:03.630408"
+  },
+  {
+    "id": 226,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.20.26.133",
+    "timestamp": "2026-02-08T17:20:48.160657"
+  },
+  {
+    "id": 227,
+    "user_id": 35,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "47537734",
+      "email": "santiagochavez202020@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.18.159.197",
+    "timestamp": "2026-02-08T17:59:15.594297"
+  },
+  {
+    "id": 228,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 35
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-09T01:55:28.835711"
+  },
+  {
+    "id": 229,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.20.184.133",
+    "timestamp": "2026-02-09T02:04:29.521074"
+  },
+  {
+    "id": 230,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.20.184.133",
+    "timestamp": "2026-02-09T16:30:36.462000"
+  },
+  {
+    "id": 231,
+    "user_id": 36,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "41755594",
+      "email": "milagroslilianaayelenmunoz@gmail.com",
+      "role": "[object Object]"
+    },
+    "ip_address": "10.21.242.5",
+    "timestamp": "2026-02-10T14:24:17.236199"
+  },
+  {
+    "id": 232,
+    "user_id": 37,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "18572781",
+      "email": "idmasdb@gmail.com",
+      "role": "C"
+    },
+    "ip_address": "10.21.81.197",
+    "timestamp": "2026-02-10T14:47:59.944886"
+  },
+  {
+    "id": 233,
+    "user_id": 38,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "51705192",
+      "email": "laudame2011@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.21.81.197",
+    "timestamp": "2026-02-10T15:14:48.913559"
+  },
+  {
+    "id": 234,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 38
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-10T15:52:26.072539"
+  },
+  {
+    "id": 235,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 37
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-10T15:53:35.189479"
+  },
+  {
+    "id": 236,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 36
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-10T15:55:46.671754"
+  },
+  {
+    "id": 237,
+    "user_id": 36,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "41755594",
+      "role": "[object Object]"
+    },
+    "ip_address": "10.17.198.66",
+    "timestamp": "2026-02-10T15:57:20.426400"
+  },
+  {
+    "id": 238,
+    "user_id": 39,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "24273605",
+      "email": "gracielasiviero@hotmail.com",
+      "role": "[object Object]"
+    },
+    "ip_address": "10.20.6.132",
+    "timestamp": "2026-02-10T16:00:11.037274"
+  },
+  {
+    "id": 239,
+    "user_id": 37,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18572781",
+      "role": "C"
+    },
+    "ip_address": "10.19.38.5",
+    "timestamp": "2026-02-10T16:04:15.224149"
+  },
+  {
+    "id": 240,
+    "user_id": 37,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18572781",
+      "role": "C"
+    },
+    "ip_address": "10.22.91.131",
+    "timestamp": "2026-02-10T16:05:11.323645"
+  },
+  {
+    "id": 241,
+    "user_id": 38,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "51705192",
+      "role": "P"
+    },
+    "ip_address": "10.16.69.131",
+    "timestamp": "2026-02-10T16:47:39.860868"
+  },
+  {
+    "id": 242,
+    "user_id": 38,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "51705192",
+      "role": "P"
+    },
+    "ip_address": "10.22.91.131",
+    "timestamp": "2026-02-10T16:47:46.926483"
+  },
+  {
+    "id": 243,
+    "user_id": 38,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "51705192",
+      "role": "P"
+    },
+    "ip_address": "10.16.69.131",
+    "timestamp": "2026-02-10T16:48:13.826993"
+  },
+  {
+    "id": 244,
+    "user_id": 40,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "33126368",
+      "email": "rodriguezvanesadelcarmen@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.21.242.5",
+    "timestamp": "2026-02-10T17:06:17.635375"
+  },
+  {
+    "id": 245,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 40
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-10T19:51:49.557996"
+  },
+  {
+    "id": 246,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 39
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-10T19:52:31.548127"
+  },
+  {
+    "id": 247,
+    "user_id": 41,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "25054516",
+      "email": "matisiviero76@gmail.com",
+      "role": "C"
+    },
+    "ip_address": "10.21.242.6",
+    "timestamp": "2026-02-11T00:46:40.936061"
+  },
+  {
+    "id": 248,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.17.185.193",
+    "timestamp": "2026-02-11T00:48:46.822617"
+  },
+  {
+    "id": 249,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 41
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-11T00:49:06.316456"
+  },
+  {
+    "id": 250,
+    "user_id": 39,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "24273605",
+      "role": "[object Object]"
+    },
+    "ip_address": "10.16.7.129",
+    "timestamp": "2026-02-11T01:31:23.021022"
+  },
+  {
+    "id": 251,
+    "user_id": 42,
+    "action": "USER_REGISTERED",
+    "details": {
+      "dni": "28198660",
+      "email": "arielkarlitos24@gmail.com",
+      "role": "P"
+    },
+    "ip_address": "10.23.122.193",
+    "timestamp": "2026-02-11T02:50:38.331681"
+  },
+  {
+    "id": 252,
+    "user_id": 41,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "25054516",
+      "role": "C"
+    },
+    "ip_address": "10.18.95.5",
+    "timestamp": "2026-02-11T06:50:48.024261"
+  },
+  {
+    "id": 253,
+    "user_id": 37,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18572781",
+      "role": "C"
+    },
+    "ip_address": "10.17.226.133",
+    "timestamp": "2026-02-11T09:42:28.556309"
+  },
+  {
+    "id": 254,
+    "user_id": 12,
+    "action": "USER_ACTIVATED",
+    "details": {
+      "target_user_id": 42
+    },
+    "ip_address": null,
+    "timestamp": "2026-02-11T17:28:13.881086"
+  },
+  {
+    "id": 255,
+    "user_id": 42,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "28198660",
+      "role": "P"
+    },
+    "ip_address": "10.21.233.4",
+    "timestamp": "2026-02-11T17:39:47.582855"
+  },
+  {
+    "id": 256,
+    "user_id": 12,
+    "action": "USER_LOGIN",
+    "details": {
+      "dni": "18507564",
+      "role": "admin"
+    },
+    "ip_address": "10.23.203.1",
+    "timestamp": "2026-02-12T04:00:03.937199"
+  }
+]

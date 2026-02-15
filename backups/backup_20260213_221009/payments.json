@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "booking_id": 1,
+    "external_id": "2b6f81ec-73c6-40f7-90eb-c96e03f9b68c",
+    "payment_url": null,
+    "status": "pending",
+    "amount": 0.0,
+    "currency": "ARS",
+    "created_at": "2026-01-18T15:28:02.218008",
+    "updated_at": "2026-01-18T15:28:02.218010"
+  },
+  {
+    "id": 2,
+    "booking_id": 26,
+    "external_id": "143448072203",
+    "payment_url": null,
+    "status": "approved",
+    "amount": 5000.0,
+    "currency": "ARS",
+    "created_at": "2026-01-30T16:32:04.564206",
+    "updated_at": "2026-01-30T16:32:04.566737"
+  }
+]

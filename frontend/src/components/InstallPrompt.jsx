@@ -45,7 +45,7 @@ export default function InstallPrompt() {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-slate-800 border border-slate-700 p-4 rounded-lg shadow-xl z-[9999] flex items-center justify-between animate-in slide-in-from-bottom-5">
+        <div className="fixed bottom-28 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-slate-800 border border-slate-700 p-4 rounded-lg shadow-xl z-[9999] flex items-center justify-between animate-in slide-in-from-bottom-5">
             <div className="flex-1 mr-4">
                 <h3 className="text-white font-medium text-sm mb-1">Instala YoViajo!</h3>
                 <p className="text-slate-400 text-xs">
