@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
     const API_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`
 
     return (
-        <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-cyan-500 selection:text-white overflow-x-hidden pb-32">
+        <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-cyan-500 selection:text-white overflow-x-hidden flex flex-col">
             {/* --- HEADER --- */}
             <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-2xl py-4">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -134,7 +134,7 @@ const Layout = ({ children }) => {
             )}
 
             {/* Main Content Injection */}
-            <main className="max-w-4xl mx-auto px-4 py-8 mb-auto">
+            <main className="max-w-4xl mx-auto px-4 py-8 flex-grow w-full pb-24">
                 {children}
             </main>
 
