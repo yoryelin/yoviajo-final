@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import AnimatedLogo from '../components/AnimatedLogo';
 import { useAuth } from '../context/AuthContext';
 import HowItWorksDemo from '../components/landing/HowItWorksDemo';
+import ChatBot from '../components/ChatBot';
 
 export default function Landing() {
     const [showHelp, setShowHelp] = useState(false);
@@ -229,6 +230,9 @@ export default function Landing() {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* CHATBOT */}
+            <ChatBot />
 
             <style>{`
         @keyframes shine {

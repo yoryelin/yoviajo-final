@@ -164,7 +164,12 @@ def verify_user(
         "decision": payload.status
     })
     
-    return {"message": msg, "user_status": user.verification_status}
+    return {
+        "message": msg, 
+        "user_status": user.verification_status,
+        "user_name": user.name,
+        "user_phone": user.phone
+    }
 
 @router.post("/users/{user_id}/approve")
 def approve_user_access(

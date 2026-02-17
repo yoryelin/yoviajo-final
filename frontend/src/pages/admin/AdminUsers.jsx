@@ -122,6 +122,20 @@ const AdminUsers = () => {
             });
 
             if (response.ok) {
+                // WhatsApp Integration for Verification
+                if (decision === "approved") {
+                    const data = await response.json();
+                    if (data.user_phone) {
+                        const message = `Hola ${data.user_name || 'Usuario'}! 👋\n\nTu identidad fue verificada por el sistema. Ya eres un usuario verificado y puedes ver la notificación en tu perfil. 🛡️✅`;
+                        const url = `https://wa.me/${data.user_phone}?text=${encodeURIComponent(message)}`;
+                        try {
+                            window.open(url, '_blank');
+                        } catch (e) {
+                            console.error("Popup blocked?", e);
+                        }
+                    }
+                }
+
                 alert(`Verification ${decision} successfully.`);
                 fetchUsers();
             } else {
