@@ -5,10 +5,17 @@ const FAQ_DATA = {
     start: {
         text: "¡Hola! 👋 Soy el asistente virtual de YoViajo. ¿En qué puedo ayudarte hoy?",
         options: [
+            { label: "📋 Requisitos de Registro", next: "requirements" },
             { label: "🚘 Soy Conductor", next: "driver" },
             { label: "🙋‍♂️ Soy Pasajero", next: "passenger" },
             { label: "🛡️ Seguridad", next: "safety" },
             { label: "💸 Pagos", next: "payments" },
+        ]
+    },
+    requirements: {
+        text: "Para ser parte de nuestra comunidad necesitas:\n\n✅ Ser mayor de 18 años.\n✅ DNI vigente (validamos tu identidad).\n✅ Email y Celular con WhatsApp.\n\n🚗 **Si eres Conductor:**\n✅ Licencia de conducir vigente.\n✅ Vehículo con seguro y VTV al día.",
+        options: [
+            { label: "⬅️ Volver al inicio", next: "start" }
         ]
     },
     driver: {
