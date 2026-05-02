@@ -183,3 +183,40 @@ def debug_payment_history(
     except Exception as e:
         return {"error": str(e)}
 
+@router.post("/simulate")
+def simulate_payment(
+    request: PaymentRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    SIMULACIÓN DE PAGO: Para demos, presentaciones y MVP sin MP productivo.
+    Confirma la reserva y desbloquea los datos de contacto.
+    """
+    booking = db.query(Booking).filter(Booking.id == request.booking_id).first()
+    if not booking:
+        raise HTTPException(status_code=404, detail="Reserva no encontrada")
+    
+    # 1. Actualizar estado del pago y de la reserva
+    booking.payment_status = "paid"
+    booking.status = BookingStatus.CONFIRMED.value
+    booking.updated_at = datetime.utcnow()
+    
+    # 2. Registrar el pago en la base de datos
+    new_payment = Payment(
+        booking_id=booking.id,
+        external_id=f"SIM-{booking.id}-{datetime.now().timestamp()}",
+        status="approved",
+        amount=booking.fee_amount,
+        currency="ARS",
+        created_at=datetime.utcnow()
+    )
+    db.add(new_payment)
+    db.commit()
+    db.refresh(booking)
+    
+    return {
+        "status": "success", 
+        "message": "Simulación exitosa: Reserva confirmada.",
+        "booking_id": booking.id
+    }

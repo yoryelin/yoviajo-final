@@ -22,5 +22,5 @@ COPY . .
 EXPOSE 8003
 
 # Command to run the application
-# Use shell form to allow expansion if needed, but array form is preferred
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8003"]
+# Use shell form to allow environment variable expansion ($PORT)
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8003}

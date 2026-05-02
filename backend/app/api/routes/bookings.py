@@ -227,12 +227,15 @@ def create_booking(
         seats_booked=booking.seats_booked,
         status=BookingStatus.AWAITING_PAYMENT.value,
         payment_status="unpaid",
-        fee_amount=5000.0 # Fixed Fee explicit assignment
+        fee_amount=5000.0
     )
     
     db.add(new_booking)
     db.commit()
     db.refresh(new_booking)
+    
+    # Lógica de simulación para desarrollo/concurso si MP falla o no se desea usar producción
+    # Si se desea forzar pago exitoso para testeo, se puede habilitar aquí
     
     # AUDIT LOG
     AuditService.log(db, "BOOKING_CREATED", user_id=current_user.id, details={"ride_id": booking.ride_id, "seats": booking.seats_booked})

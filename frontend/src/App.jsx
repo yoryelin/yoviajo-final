@@ -20,6 +20,7 @@ import AdminLogs from './pages/admin/AdminLogs'
 import AdminLayout from './layouts/AdminLayout'
 import AdminVerifications from './pages/admin/AdminVerifications'
 import MarketingHub from './pages/admin/MarketingHub'
+import SecurityPage from './pages/SecurityPage'
 // Force Frontend Deploy - Admin Route Update
 import { useAuth } from './context/AuthContext'
 
@@ -47,6 +48,8 @@ export default function App() {
         {/* Public Legal Pages */}
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/security" element={<SecurityPage />} />
+        <Route path="/seguridad" element={<SecurityPage />} />
         <Route path="/contact" element={<ContactPage />} />
 
         {/* Private Routes */}

@@ -96,7 +96,7 @@ from app.api.routes import reviews
 app.include_router(reviews.router)
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def read_root():
     """
     Endpoint raíz.

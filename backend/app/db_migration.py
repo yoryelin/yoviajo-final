@@ -180,7 +180,133 @@ def run_migrations():
                 except Exception as e:
                     logger.error(f"❌ Failed to add 'driver_license' to users: {e}")
 
-            # 12. DATA FIX: Ensure 'juan pablo' is a Driver (C)
+            # 12. Check 'gender' in 'users'
+            try:
+                connection.execute(text("SELECT gender FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'gender' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN gender VARCHAR DEFAULT 'O'"))
+                    connection.commit()
+                    logger.info("✅ Added 'gender' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'gender' to users: {e}")
+
+            # 13. Check 'is_verified' in 'users'
+            try:
+                connection.execute(text("SELECT is_verified FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'is_verified' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN is_verified BOOLEAN DEFAULT FALSE"))
+                    connection.commit()
+                    logger.info("✅ Added 'is_verified' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'is_verified' to users: {e}")
+
+            # 14. Check 'car_color' in 'users'
+            try:
+                connection.execute(text("SELECT car_color FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'car_color' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN car_color VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'car_color' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'car_color' to users: {e}")
+
+            # 15. Check 'phone_verified' in 'users'
+            try:
+                connection.execute(text("SELECT phone_verified FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'phone_verified' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN phone_verified BOOLEAN DEFAULT FALSE"))
+                    connection.commit()
+                    logger.info("✅ Added 'phone_verified' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'phone_verified' to users: {e}")
+
+            # 16. Check 'email_verified' in 'users'
+            try:
+                connection.execute(text("SELECT email_verified FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'email_verified' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT FALSE"))
+                    connection.commit()
+                    logger.info("✅ Added 'email_verified' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'email_verified' to users: {e}")
+
+            # 17. Check 'birth_date' in 'users'
+            try:
+                connection.execute(text("SELECT birth_date FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'birth_date' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN birth_date DATE DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'birth_date' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'birth_date' to users: {e}")
+
+            # 18. Check 'address' in 'users'
+            try:
+                connection.execute(text("SELECT address FROM users LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'address' missing in 'users'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE users ADD COLUMN address VARCHAR DEFAULT NULL"))
+                    connection.commit()
+                    logger.info("✅ Added 'address' column to users.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'address' to users: {e}")
+
+            # 19. Check 'fuel_liters_total' in 'rides'
+            try:
+                connection.execute(text("SELECT fuel_liters_total FROM rides LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'fuel_liters_total' missing in 'rides'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE rides ADD COLUMN fuel_liters_total FLOAT DEFAULT 0.0"))
+                    connection.commit()
+                    logger.info("✅ Added 'fuel_liters_total' column to rides.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'fuel_liters_total' to rides: {e}")
+
+            # 20. Check 'price_per_seat_liters' in 'rides'
+            try:
+                connection.execute(text("SELECT price_per_seat_liters FROM rides LIMIT 1"))
+            except Exception:
+                logger.warning("⚠️ Column 'price_per_seat_liters' missing in 'rides'. Adding it...")
+                try:
+                    try: connection.rollback()
+                    except: pass
+                    connection.execute(text("ALTER TABLE rides ADD COLUMN price_per_seat_liters FLOAT DEFAULT 0.0"))
+                    connection.commit()
+                    logger.info("✅ Added 'price_per_seat_liters' column to rides.")
+                except Exception as e:
+                    logger.error(f"❌ Failed to add 'price_per_seat_liters' to rides: {e}")
+
+            # 21. DATA FIX: Ensure 'juan pablo' is a Driver (C)
             try:
                 connection.execute(text("UPDATE users SET role = 'C' WHERE lower(name) LIKE '%juan pablo%' AND role != 'C'"))
                 connection.commit()

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YoViajo! - Proyecto Concejo Deliberante</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #ff007f;
+            --dark: #1a1a2e;
+            --text: #2d3436;
+            --bg: #ffffff;
+        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+        }
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 10mm auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            box-sizing: border-box;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+        .logo span { color: var(--primary); }
+        .tagline {
+            font-size: 14px;
+            color: #636e72;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        h1 {
+            font-size: 38px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+        h2 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-top: 30px;
+            border-left: 5px solid var(--secondary);
+            padding-left: 15px;
+        }
+        .hero-box {
+            background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .item {
+            background: #f1f2f6;
+            padding: 20px;
+            border-radius: 8px;
+            border-top: 3px solid var(--primary);
+        }
+        .item strong { color: var(--dark); display: block; margin-bottom: 5px; }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #dfe6e9;
+            font-size: 12px;
+            color: #b2bec3;
+            text-align: center;
+        }
+        .btn-print {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 30px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);
+            z-index: 100;
+        }
+        @media print {
+            .btn-print { display: none; }
+            body { background: white; }
+            .page { margin: 0; box-shadow: none; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="btn-print" onclick="window.print()">GENERAR PDF / IMPRIMIR</button>
+
+    <div class="page">
+        <div class="header">
+            <div class="logo">Yo<span>Viajo</span>!</div>
+            <div class="tagline">Propuesta Legislativa Regional</div>
+        </div>
+
+        <div class="hero-box">
+            <h1>Movilidad Inteligente para el Desarrollo Local</h1>
+            <p>Proyecto de optimización de transporte interurbano y regional para el beneficio de la comunidad.</p>
+        </div>
+
+        <p><strong>Sr. Presidente y Miembros del Honorable Concejo Deliberante:</strong></p>
+        
+        <p>Ante el incremento de costos operativos y la necesidad de modernizar las opciones de transporte en nuestra ciudad, presentamos <strong>YoViajo!</strong>: una plataforma de economía colaborativa diseñada para transformar la movilidad regional.</p>
+
+        <h2>1. El Propósito</h2>
+        <p>YoViajo! permite formalizar y dar seguridad a la práctica del carpooling (comparto de vehículos). El objetivo es conectar a vecinos que realizan trayectos similares para reducir costos, mejorar el tránsito y fomentar la seguridad ciudadana a través de la tecnología.</p>
+
+        <div class="highlight-grid">
+            <div class="item">
+                <strong>💡 Modernización Smart City</strong>
+                Posiciona al municipio como pionero en soluciones digitales sostenibles.
+            </div>
+            <div class="item">
+                <strong>📉 Alivio al Bolsillo</strong>
+                Reduce hasta un 60% el costo de traslado para el ciudadano.
+            </div>
+            <div class="item">
+                <strong>🛡️ Seguridad Digital</strong>
+                Validación de identidad y sistema de reputación comunitario.
+            </div>
+            <div class="item">
+                <strong>🌱 Sustentabilidad</strong>
+                Menos autos con un solo ocupante = Menos contaminación.
+            </div>
+        </div>
+
+        <h2>2. Impacto Social Estratégico</h2>
+        <ul>
+            <li><strong>Educación:</strong> Garantiza que ningún estudiante pierda días de clase por limitaciones de transporte o presupuesto.</li>
+            <li><strong>Salud:</strong> Facilita traslados para turnos médicos y gestiones en ciudades cabecera de forma ágil.</li>
+            <li><strong>Comercio:</strong> Fomenta el intercambio laboral y profesional entre localidades vecinas.</li>
+        </ul>
+
+        <h2>3. Marco Operativo y Legal</h2>
+        <p>Es fundamental aclarar que YoViajo! no es un servicio de transporte profesional de pasajeros. Se basa en el concepto de <strong>comparto de gastos de un viaje preexistente</strong>. No existe vinculación laboral, sino una red de colaboración vecinal intermediada por una plataforma segura.</p>
+
+        <div class="footer">
+            YoViajo! - Uniendo Personas, Conectando Destinos | www.yoviajo.com.ar | 2026
+        </div>
+    </div>
+
+</body>
+</html>

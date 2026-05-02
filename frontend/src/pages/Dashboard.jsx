@@ -105,6 +105,11 @@ export default function Dashboard() {
         setShowReserveModal(true)
     }
 
+    const handleReserveSuccess = (bookingData) => {
+        setCurrentBookingForPayment(bookingData)
+        setShowPaymentModal(true)
+    }
+
     const handleMatch = async (matchData) => {
         // Lógica para "Solicitar Unirme" (Pasajero)
         if (!isDriver) {
@@ -273,7 +278,14 @@ export default function Dashboard() {
                 initialData={selectedRideForEdit} // NEW: Pass data
             />
             <RequestRideModal isOpen={showRequestModal} onClose={() => setShowRequestModal(false)} authFetch={authFetch} API_URL={API_URL} onPublish={fetchData} />
-            <ReserveRideModal isOpen={showReserveModal} ride={selectedRideForReservation} onClose={() => { setShowReserveModal(false); setSelectedRideForReservation(null) }} authFetch={authFetch} API_URL={API_URL} onReserveSuccess={fetchData} />
+            <ReserveRideModal 
+                isOpen={showReserveModal} 
+                ride={selectedRideForReservation} 
+                onClose={() => { setShowReserveModal(false); setSelectedRideForReservation(null) }} 
+                authFetch={authFetch} 
+                API_URL={API_URL} 
+                onReserveSuccess={handleReserveSuccess} 
+            />
             <PaymentModal
                 booking={currentBookingForPayment}
                 onClose={() => { setShowPaymentModal(false); setCurrentBookingForPayment(null); }}

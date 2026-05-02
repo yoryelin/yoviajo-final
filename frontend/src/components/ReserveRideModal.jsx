@@ -47,12 +47,13 @@ export default function ReserveRideModal({ isOpen, onClose, ride, authFetch, API
 
             const bookingData = await bookingRes.json()
 
-            // PASO 2: Redirección al "Candado" 🔒 (MercadoPago)
-            if (bookingData.payment_init_point) {
-                window.location.href = bookingData.payment_init_point
-            } else {
-                throw new Error('Error: No se pudo generar el link de pago (MP)')
+            // MODO DEMOSTRACIÓN / MVP (Simulación Interna)
+            // En lugar de redirigir a MP Real, llamamos a la función de éxito en el dashboard
+            // para que abra el modal de pago simulado.
+            if (onReserveSuccess) {
+                onReserveSuccess(bookingData)
             }
+            onClose()
 
         } catch (e) {
             console.error(e)
