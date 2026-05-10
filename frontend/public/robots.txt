@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Allow: /seguridad
+Allow: /terms
+Allow: /privacy
+Allow: /contact
+
+Disallow: /dashboard
+Disallow: /my-trips
+Disallow: /profile
+Disallow: /admin/
+Disallow: /admin/*
+
+Sitemap: https://yoviajo.com.ar/sitemap.xml
