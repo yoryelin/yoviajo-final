@@ -4,12 +4,26 @@ import { useNavigate, Link } from 'react-router-dom';
 import AnimatedLogo from '../components/AnimatedLogo';
 import { useAuth } from '../context/AuthContext';
 import HowItWorksDemo from '../components/landing/HowItWorksDemo';
+import Experiences from '../components/landing/Experiences';
 import ChatBot from '../components/ChatBot';
+import { API_URL } from '@config/api';
+import { useEffect } from 'react';
 
 export default function Landing() {
     const [showHelp, setShowHelp] = useState(false);
     const navigate = useNavigate();
     const { user } = useAuth();
+
+    useEffect(() => {
+        // Registrar visita si no se ha registrado en esta sesión
+        if (!sessionStorage.getItem('yoviajo_visit_recorded')) {
+            fetch(`${API_URL}/public/visit`, { method: 'POST' })
+                .then(() => {
+                    sessionStorage.setItem('yoviajo_visit_recorded', 'true');
+                })
+                .catch(err => console.error("Error recording visit:", err));
+        }
+    }, []);
 
     // Animación del brillo en el texto
     const shineVariant = {
@@ -144,6 +158,9 @@ export default function Landing() {
                 </div>
 
             </main>
+
+            {/* SECCION DE EXPERIENCIAS */}
+            <Experiences />
 
             {/* FOOTER */}
             <footer className="bg-white/90 border-t border-slate-200 py-6 text-center text-slate-400 text-xs font-medium z-10 backdrop-blur-md">

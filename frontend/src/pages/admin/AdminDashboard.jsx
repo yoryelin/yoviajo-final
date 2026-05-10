@@ -76,7 +76,14 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-bold text-white">Dashboard General</h1>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <span className="text-6xl">👁️</span>
+                    </div>
+                    <span className="text-slate-400 text-sm font-bold uppercase">Visitas Web</span>
+                    <span className="text-4xl font-black text-white">{stats?.total_visits || 0}</span>
+                </div>
                 <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col gap-2">
                     <span className="text-slate-400 text-sm font-bold uppercase">Total Usuarios</span>
                     <span className="text-4xl font-black text-white">{stats?.total_users}</span>

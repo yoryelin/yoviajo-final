@@ -6,6 +6,7 @@ from app.database import get_db
 from app.api.deps import get_current_admin_user
 from app.models import User, Ride, Booking, RideRequest
 from app.models.audit import AuditLog
+from app.models.stats import VisitCounter
 from app.schemas import UserResponse, RideResponse, BookingResponse
 from app.services.audit_service import AuditService
 from pydantic import BaseModel
@@ -23,6 +24,9 @@ def get_admin_stats(
     total_rides = db.query(func.count(Ride.id)).scalar()
     active_rides = db.query(func.count(Ride.id)).filter(Ride.status == "active").scalar()
     total_bookings = db.query(func.count(Booking.id)).scalar()
+    
+    visit_record = db.query(VisitCounter).first()
+    total_visits = visit_record.total_visits if visit_record else 0
     
     # Calculate Revenue (Sum of fee_amount for paid bookings)
     total_revenue = db.query(func.sum(Booking.fee_amount)).filter(Booking.payment_status == "approved").scalar() or 0.0
@@ -45,6 +49,7 @@ def get_admin_stats(
         "total_revenue": total_revenue,
         "pending_users": pending_users,
         "pending_verifications": pending_verifications,
+        "total_visits": total_visits,
         "users_preview": recent_users
     }
 

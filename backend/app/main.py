@@ -7,7 +7,8 @@ from app.config import settings
 from app.database import engine, Base
 from app.models import User, Ride, RideRequest
 from app.models.audit import AuditLog
-from app.api.routes import auth, rides, requests, geocode, bookings, reports, users
+from app.models.stats import VisitCounter
+from app.api.routes import auth, rides, requests, geocode, bookings, reports, users, public
 
 # Configurar Logging
 from app.core.logger import setup_logging
@@ -79,6 +80,7 @@ app.include_router(requests.router)
 app.include_router(bookings.router)
 app.include_router(reports.router)
 app.include_router(geocode.router)
+app.include_router(public.router)
 
 from app.api.routes import matches
 app.include_router(matches.router)
