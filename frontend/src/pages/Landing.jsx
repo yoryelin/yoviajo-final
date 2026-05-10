@@ -109,7 +109,7 @@ export default function Landing() {
                     </div>
 
                     <div className="space-y-2">
-                        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">
+                        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">
                             <span
                                 className="block bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-500 to-slate-900 bg-[length:200%_auto]"
                                 style={{
@@ -123,12 +123,12 @@ export default function Landing() {
                             >
                                 Uniendo destinos
                             </span>
-                        </h2>
+                        </h1>
                     </div>
 
-                    <p className="text-lg text-slate-600 max-w-md mx-auto md:mx-0 leading-relaxed">
-                        La forma más inteligente de viajar. Comparte tu auto, reduce costos y viaja seguro con nuestra comunidad verificada.
-                    </p>
+                    <h2 className="text-lg text-slate-600 max-w-md mx-auto md:mx-0 leading-relaxed font-normal">
+                        La forma más inteligente de hacer <strong>carpooling en Argentina</strong>. Comparte tu auto, reduce costos y viaja seguro con nuestra comunidad verificada. Ideal para <strong>viajes larga distancia</strong>.
+                    </h2>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
                         <motion.button
@@ -161,6 +161,19 @@ export default function Landing() {
 
             {/* SECCION DE EXPERIENCIAS */}
             <Experiences />
+
+            {/* SEO HIDDEN / SUBTLE TEXT */}
+            <section className="bg-slate-50 border-t border-slate-200 py-8">
+                <div className="container mx-auto px-6 text-center text-slate-500 text-xs leading-relaxed max-w-4xl">
+                    <p>
+                        <strong>YoViajo!</strong> es la app líder para <strong>compartir auto</strong> y organizar <strong>viajes compartidos en Argentina</strong>. 
+                        Nuestra comunidad facilita el transporte colaborativo para que puedas <strong>viajar barato</strong> y <strong>viajar seguro</strong>. 
+                        Ya sea que busques <strong>viajes a la costa</strong>, organizar <strong>viajes compartidos a la costa</strong> en verano, 
+                        o necesites <strong>viajes compartidos en Corrientes</strong>, <strong>viajes compartidos en Misiones</strong> y otras provincias, 
+                        aquí podrás <strong>compartir gastos de viaje</strong> de manera justa y transparente.
+                    </p>
+                </div>
+            </section>
 
             {/* FOOTER */}
             <footer className="bg-white/90 border-t border-slate-200 py-6 text-center text-slate-400 text-xs font-medium z-10 backdrop-blur-md">
